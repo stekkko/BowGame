@@ -25,6 +25,11 @@ public class GUI {
         stage.addActor(label);
     }
 
+    public void setScore(int n) {
+        score = n;
+        label.setText("Zombies killed: " + score);
+    }
+
     public void addScore(int n) {
         score += n;
         label.setText("Zombies killed: " + score);
@@ -38,5 +43,6 @@ public class GUI {
 
     public void dispose() {
         stage.dispose();
+        skin.dispose();
     }
 }

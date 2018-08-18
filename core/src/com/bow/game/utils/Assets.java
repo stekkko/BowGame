@@ -9,6 +9,7 @@ public class Assets {
     public Assets() {
         manager = new AssetManager();
         manager.load("atlasBow.atlas", TextureAtlas.class);
+        manager.load("atlasHP.atlas", TextureAtlas.class);
         manager.finishLoading();
     }
 

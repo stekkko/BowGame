@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
+import com.bow.game.view.GameScreen;
 
 
 public abstract class GameObject {
@@ -31,6 +32,22 @@ public abstract class GameObject {
         sprite.setPosition(bounds.getX(), bounds.getY());
         sprite.setRotation(bounds.getRotation());
         sprite.draw(batch);
+    }
+
+    public void handle() {
+        this.setPosition(this.getX() + this.getSpeedX() * GameScreen.deltaCff, this.getY() + this.getSpeedY() * GameScreen.deltaCff);
+    }
+
+    public void setSprite(TextureRegion textureRegion) {
+        float width = this.getWidth();
+        float height = this.getHeight();
+        sprite = new Sprite(textureRegion);
+        sprite.setSize(width, height);
+        sprite.setOrigin(width / 2f, height / 2f);
+    }
+
+    public TextureRegion getSprite() {
+        return this.sprite;
     }
 
     public float getX() {

@@ -20,6 +20,7 @@ public class BowGame extends Game {
 		gameScreen = new GameScreen();
 		menuScreen = new MainMenuScreen();
 		((GameScreen) gameScreen).setTextureAtlas(assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
+		((GameScreen) gameScreen).setHPTextureAtlas(assets.getManager().get("atlasHP.atlas", TextureAtlas.class));
 		this.setScreen(menuScreen);
 	}
 

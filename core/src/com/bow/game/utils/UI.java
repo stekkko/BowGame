@@ -23,7 +23,7 @@ public class UI {
         label = new Label("Tap screen to play!", skin.get("default", Label.LabelStyle.class));
         label.setAlignment(Align.center);
         label.setPosition(400, 300, Align.center);
-        label.setFontScale(.3f);
+        label.setFontScale(1f);
         stage.addActor(label);
 
     }
@@ -36,5 +36,6 @@ public class UI {
 
     public void dispose() {
         stage.dispose();
+        skin.dispose();
     }
 }
