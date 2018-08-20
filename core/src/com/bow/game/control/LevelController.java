@@ -69,8 +69,6 @@ public class LevelController {
         bloodExample = new Blood(textureAtlas.findRegion("blood"), 0f, 0f, 2f, 2f);
         brokenWallExample = new Wall(textureAtlas.findRegion("wall2"), 0, 0, 2f * 28.96f, 2f);
         fullWallExample = new Wall(textureAtlas.findRegion("wall1"), 0, 0, 2f * 28.96f, 2f);
-
-//        for (Zombie zombie : zombies) zombie.spawn(width, random);
     }
 
 
@@ -89,6 +87,7 @@ public class LevelController {
                 if (wall.isBroken()) {
                     gui.setScore(0);
                     wall.repair(fullWallExample.getSprite());
+                    zombies.clear();
                 }
                 else {
                     wall.brake(brokenWallExample.getSprite());
@@ -135,7 +134,7 @@ public class LevelController {
             }
         }
         if (bloodMap.size() > 200) {
-            bloodMap.remove(bloodMap.size() - 1);
+            bloodMap.remove(0);
         }
 
 //        for (Blood blood : bloodMap) blood.handle();
