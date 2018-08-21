@@ -10,14 +10,12 @@ public class Enemy extends GameObject {
     private float maxHealthPoints;
     private int percentHealthPoints;
     public HealthBar healthBar;
-    private TextureAtlas HPtextureAtlas;
 
     public Enemy(TextureRegion texture, TextureAtlas HPtextureAtlas, float x, float y, float width, float height, float maxHealthPoints) {
         super(texture, x, y, width, height);
         this.maxHealthPoints = maxHealthPoints;
         this.healthPoints = maxHealthPoints;
         this.percentHealthPoints = 100;
-        this.HPtextureAtlas = HPtextureAtlas;
         this.healthBar = new HealthBar(HPtextureAtlas.findRegion("100"), x, y + height, width, width * 0.07843f);
     }
 
@@ -32,10 +30,6 @@ public class Enemy extends GameObject {
         if (healthPoints < 0) healthPoints = 0;
     }
 
-    public TextureAtlas getHPtextureAtlas() {
-        return HPtextureAtlas;
-    }
-
     @Override
     public void handle() {
         super.handle();
@@ -47,7 +41,8 @@ public class Enemy extends GameObject {
         if (healthPoints < maxHealthPoints) healthBar.show();
         if (percentHealthPoints != (int) (100f * healthPoints / maxHealthPoints)) {
             percentHealthPoints = (int) (100f * healthPoints / maxHealthPoints);
-            healthBar.setSprite(HPtextureAtlas.findRegion(Integer.toString(percentHealthPoints)));
+            healthBar.setHealth(percentHealthPoints);
+            healthBar.setNeedUpdate(true);
         }
     }
 

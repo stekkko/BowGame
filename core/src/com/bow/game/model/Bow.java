@@ -30,7 +30,7 @@ public class Bow extends GameObject {
         arrow.handle();
 
         if (!isLoaded()) {
-            time += GameScreen.deltaCff * 300f;
+            time += GameScreen.deltaCff * 290f;
             if (time > arrowLoadInterval) {
                 loaded = true;
                 time = 0;

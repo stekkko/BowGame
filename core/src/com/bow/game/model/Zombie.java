@@ -21,8 +21,19 @@ public class Zombie extends Enemy {
         float maxMmin = width - this.getWidth();
         this.setPosition(random.nextFloat() * maxMmin + min, height / 2);
         this.healthBar.setPosition(this.getX(), this.getY() - this.healthBar.getHeight());
-        this.setSpeedY(-3f + random.nextFloat() * 2);
+        this.setSpeedY(-3f + random.nextFloat());
+    }
 
+    @Override
+    public void handle() {
+        super.handle();
+    }
+
+    public void update(TextureAtlas HPtextureAtlas) {
+        if (healthBar.isNeedUpdate()) {
+            healthBar.update(HPtextureAtlas);
+            healthBar.setNeedUpdate(false);
+        }
     }
 
     @Override

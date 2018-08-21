@@ -6,49 +6,63 @@ filter: Nearest,Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 2, 2
+  xy: 1028, 1042
   size: 26, 146
   orig: 26, 146
   offset: 0, 0
   index: -1
 blood
   rotate: false
-  xy: 1028, 1211
+  xy: 129, 159
   size: 125, 125
   orig: 125, 125
   offset: 0, 0
   index: -1
 bow
   rotate: false
-  xy: 1028, 1338
+  xy: 1028, 1332
   size: 258, 84
   orig: 258, 84
   offset: 0, 0
   index: -1
 grass
   rotate: false
-  xy: 2, 398
+  xy: 2, 392
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
 wall1
   rotate: false
-  xy: 2, 345
+  xy: 2, 339
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 wall2
   rotate: false
-  xy: 2, 292
+  xy: 2, 286
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 zombie
   rotate: false
-  xy: 2, 150
+  xy: 2, 144
+  size: 125, 140
+  orig: 125, 140
+  offset: 0, 0
+  index: -1
+zombie33
+  rotate: false
+  xy: 2, 2
+  size: 125, 140
+  orig: 125, 140
+  offset: 0, 0
+  index: -1
+zombie66
+  rotate: false
+  xy: 1028, 1190
   size: 125, 140
   orig: 125, 140
   offset: 0, 0
