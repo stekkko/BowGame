@@ -6,10 +6,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
+import com.bow.game.BowGame;
 import com.bow.game.model.Arrow;
 import com.bow.game.model.Background;
 import com.bow.game.model.Blood;
 import com.bow.game.model.Bow;
+import com.bow.game.model.Button;
 import com.bow.game.model.Wall;
 import com.bow.game.model.Zombie;
 import com.bow.game.utils.GUI;
@@ -21,6 +23,7 @@ import java.util.Random;
 public class LevelController {
 
     public static Random random;
+    private BowGame game;
 
     private Background background;
     private ArrayList<Zombie> zombies;
@@ -29,31 +32,32 @@ public class LevelController {
     private ArrayList<Arrow> arrows;
     private Wall wall;
     private ArrayList<Blood> bloodMap;
+    private Button pauseButton;
 
     private Sound hitSound;
     private Sound bricksSound;
     private Sound shootSound;
-    private Music music;
+    public Music music;
 
-    private Blood bloodExample;
-    private Zombie zombie66;
-    private Zombie zombie33;
-    private Wall brokenWallExample;
-    private Wall fullWallExample;
+    private TextureAtlas textureAtlas;
     private TextureAtlas HPtextureAtlas;
     private GUI gui;
 
     private float spawnInterval;
     private float spawnRate;
     private float time;
+
     private float width = GameScreen.cameraWidth;
     private float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-    public LevelController(TextureAtlas textureAtlas, TextureAtlas HPtextueAtlas, GUI gui, int zombieCount, float zombieHp) {
+    public LevelController(BowGame game, TextureAtlas textureAtlas, TextureAtlas HPtextueAtlas, GUI gui, int zombieCount, float zombieHp) {
+
+        this.game = game;
 
         random = new Random();
         this.gui = gui;
         this.HPtextureAtlas = HPtextueAtlas;
+        this.textureAtlas = textureAtlas;
 
         spawnInterval = 100f;
         spawnRate = 25f;
@@ -72,18 +76,12 @@ public class LevelController {
                 -width, height / 2, 3f, 3f * 1.12f, zombieHp));
         wall = new Wall(textureAtlas.findRegion("wall1"),
                 -width / 2, 4f -height / 2, 2f * 28.96f, 2f);
+        pauseButton = new Button(textureAtlas.findRegion("pauseButton"),
+                width / 2 - 2f * 1.275f - 0.5f, height / 2 - 2.5f, 2f * 1.275f, 2f);
 
 
         background = new Background(textureAtlas.findRegion("grass"),
                 -width / 2, -height / 2, height * 1f, height);
-
-        bloodExample = new Blood(textureAtlas.findRegion("blood"), 0f, 0f, 2f, 2f);
-        brokenWallExample = new Wall(textureAtlas.findRegion("wall2"), 0, 0, 2f * 28.96f, 2f);
-        fullWallExample = new Wall(textureAtlas.findRegion("wall1"), 0, 0, 2f * 28.96f, 2f);
-        zombie66 = new Zombie(textureAtlas.findRegion("zombie66"), HPtextueAtlas,
-                0, 0, 3f, 3f * 1.12f, zombieHp);
-        zombie33 = new Zombie(textureAtlas.findRegion("zombie33"), HPtextueAtlas,
-                0, 0, 3f, 3f * 1.12f, zombieHp);
 
         hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.ogg"));
         shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot.ogg"));
@@ -91,43 +89,42 @@ public class LevelController {
         music = Gdx.audio.newMusic(Gdx.files.internal("bensound-instinct.mp3"));
         music.setLooping(true);
         music.setVolume(0.18f);
-        music.play();
+        if (game.isMusicAllowed()) {
+            music.play();
+        }
     }
 
 
     public void handle() {
         for (Arrow arrow : arrows) arrow.handle();
+        for (Zombie zombie : zombies) {
+            zombie.handle();
+            zombie.update(HPtextureAtlas);
+        }
+        bow.handle();
+        wall.handle();
+        pauseButton.handle();
+
         for (Arrow arrow : arrows) {
             if (arrow.isReadyToDelete() || arrow.getY() > height / 2) {
                 arrows.remove(arrow);
                 break;
             }
         }
-        for (Zombie zombie : zombies) {
-            zombie.handle();
-            zombie.update(HPtextureAtlas);
-            if (zombie.healthBar.getHealth() < 66) {
-                if (zombie.healthBar.getHealth() > 33) {
-                    zombie.setSprite(zombie66.getSprite());
-                }
-                else {
-                    zombie.setSprite(zombie33.getSprite());
-                }
-            }
-        }
+
         for (Zombie zombie : zombies) {
             if (Intersector.overlapConvexPolygons(zombie.getBounds(), wall.getBounds())) {
                 zombies.remove(zombie);
-                bricksSound.play(0.6f);
+                if (game.isSoundsAllowed()) bricksSound.play(0.6f);
                 if (wall.isBroken()) {
                     gui.setScore(0);
-                    wall.repair(fullWallExample.getSprite());
+                    wall.repair(textureAtlas.findRegion("wall1"));
                     spawnRate = 25f;
                     zombies.clear();
                     bloodMap.clear();
                 }
                 else {
-                    wall.brake(brokenWallExample.getSprite());
+                    wall.brake(textureAtlas.findRegion("wall2"));
                 }
                 break;
             }
@@ -138,7 +135,7 @@ public class LevelController {
             }
         }
         time += GameScreen.deltaCff * spawnRate;
-        spawnRate += GameScreen.deltaCff * 0.01f;
+        spawnRate += GameScreen.deltaCff * 0.02f;
         if (time > spawnInterval) {
             for (int i = 0; i < 2; i++) {
                 zombies.add(zombiesInStash.get(zombiesInStash.size() - 1));
@@ -148,27 +145,45 @@ public class LevelController {
             time = 0;
         }
 
-        bow.handle();
-        wall.handle();
-
         if (Gdx.input.isTouched()) {
-            bow.setPosition(-width / 2 -bow.getWidth() / 2 + width * Gdx.input.getX() / Gdx.graphics.getWidth(), bow.getY());
+            float x = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
+            float y = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
 
-            if (bow.isLoaded()) {
-                arrows.add(new Arrow(bow.getArrow().getSprite(),
-                        bow.getArrow().getX(), bow.getArrow().getY(), bow.getArrow().getWidth(), bow.getArrow().getHeight()));
-                arrows.get(arrows.size() - 1).shoot();
-                bow.shoot();
-                shootSound.play(0.09f);
+            if (pauseButton.getBounds().contains(x, y)) {
+                pauseButton.setToggled(true);
+            }
+            else {
+                bow.setPosition(-width / 2 - bow.getWidth() / 2 + width * Gdx.input.getX() / Gdx.graphics.getWidth(), bow.getY());
+                if (bow.isLoaded()) {
+                    arrows.add(new Arrow(bow.getArrow().getSprite(),
+                            bow.getArrow().getX(), bow.getArrow().getY(), bow.getArrow().getWidth(), bow.getArrow().getHeight()));
+                    arrows.get(arrows.size() - 1).shoot();
+                    bow.shoot();
+                    if (game.isSoundsAllowed()) shootSound.play(0.09f);
+                }
+            }
+        }
+        else {
+            if (pauseButton.isToggled()) {
+                pauseButton.setToggled(false);
+                game.gameScreen.pause();
+                game.setScreen(game.menuScreen);
             }
         }
         for (Arrow arrow : arrows) {
             for (Zombie zombie : zombies) {
                 if (Intersector.overlapConvexPolygons(zombie.getBounds(), arrow.getBounds())) {
-                    bloodMap.add(new Blood(bloodExample.getSprite(),
+                    bloodMap.add(new Blood(textureAtlas.findRegion("blood"),
                             zombie.getX() - 0.5f + random.nextFloat(), zombie.getY(), zombie.getWidth(), zombie.getWidth()));
+                    if (zombie.healthBar.getHealth() > 66 && zombie.healthBar.getHealth() <= 66 + arrow.getDamage()) {
+                        zombie.setSprite(textureAtlas.findRegion("zombie66"));
+                    }
+                    else if (zombie.healthBar.getHealth() > 33 && zombie.healthBar.getHealth() <= 33 + arrow.getDamage()) {
+                        zombie.setSprite(textureAtlas.findRegion("zombie33"));
+                    }
+                    zombie.repel(arrow.getRepelDist());
                     zombie.damage(arrow.getDamage());
-                    hitSound.play(0.8f);
+                    if (game.isSoundsAllowed()) hitSound.play(0.8f);
                     arrow.delete();
                 }
             }
@@ -176,8 +191,6 @@ public class LevelController {
         if (bloodMap.size() > 200) {
             bloodMap.remove(0);
         }
-
-//        for (Blood blood : bloodMap) blood.handle();
     }
 
     public void draw(SpriteBatch batch) {
@@ -187,11 +200,15 @@ public class LevelController {
         wall.draw(batch);
         bow.draw(batch);
         for (Arrow arrow : arrows) arrow.draw(batch);
+        pauseButton.draw(batch);
     }
 
     public void dispose() {
+        game.dispose();
         gui.dispose();
         HPtextureAtlas.dispose();
+        textureAtlas.dispose();
+
         hitSound.dispose();
         shootSound.dispose();
         bricksSound.dispose();

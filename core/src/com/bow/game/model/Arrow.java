@@ -10,12 +10,14 @@ public class Arrow extends GameObject {
     private boolean shooted;
     private boolean readyToDelete;
     private float damage;
+    private float repelDist;
 
     public Arrow(TextureRegion texture, float x, float y, float width, float height) {
         super(texture, x, y, width, height);
         shooted = false;
         readyToDelete = false;
         damage = 21f;
+        repelDist = 0.3f;
     }
 
     public void shoot() {
@@ -33,6 +35,10 @@ public class Arrow extends GameObject {
 
     public float getDamage() {
         return damage;
+    }
+
+    public float getRepelDist() {
+        return repelDist;
     }
 
     public boolean isShooted() {

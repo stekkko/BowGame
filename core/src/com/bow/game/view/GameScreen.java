@@ -8,31 +8,41 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.bow.game.BowGame;
 import com.bow.game.control.LevelController;
 import com.bow.game.utils.GUI;
 
 public class GameScreen implements Screen {
-    public TextureAtlas textureAtlas;
-    private TextureAtlas HPtextureAtlas;
+    private BowGame game;
     private SpriteBatch batch;
-    public GUI gui;
+    private GUI gui;
     private LevelController levelController;
+
+    private boolean paused;
 
     private OrthographicCamera camera;
 
     public static final float cameraWidth = 20f;
     public static float deltaCff;
 
+    public GameScreen(BowGame game, TextureAtlas textureAtlas, TextureAtlas HPtextureAtlas) {
+        this.game = game;
+        gui = new GUI();
+        levelController = new LevelController(game, textureAtlas, HPtextureAtlas, gui, 500, 100f);
+        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        paused = true;
+    }
+
     @Override
     public void show() {
         batch = new SpriteBatch();
-        gui = new GUI();
-        levelController = new LevelController(textureAtlas, HPtextureAtlas, gui, 500, 100f);
+        if (game.isMusicAllowed()) levelController.music.play();
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        paused = false;
     }
 
     public void handle() {
-        levelController.handle();
+        if (!paused) levelController.handle();
     }
 
     @Override
@@ -59,27 +69,21 @@ public class GameScreen implements Screen {
         camera.update();
     }
 
-    public void setTextureAtlas(TextureAtlas textureAtlas) {
-        this.textureAtlas = textureAtlas;
-    }
-
-    public void setHPTextureAtlas(TextureAtlas textureAtlas) {
-        this.HPtextureAtlas = textureAtlas;
-    }
-
     @Override
     public void pause() {
-
+        paused = true;
+        levelController.music.pause();
     }
 
     @Override
     public void resume() {
-
+        paused = false;
+        if (game.isMusicAllowed()) levelController.music.play();
     }
 
     @Override
     public void hide() {
-
+        pause();
     }
 
     @Override
@@ -87,7 +91,6 @@ public class GameScreen implements Screen {
         levelController.dispose();
         batch.dispose();
         gui.dispose();
-        HPtextureAtlas.dispose();
-        textureAtlas.dispose();
+        game.dispose();
     }
 }

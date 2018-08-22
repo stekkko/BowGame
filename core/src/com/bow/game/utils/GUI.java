@@ -2,6 +2,7 @@ package com.bow.game.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
@@ -23,6 +24,7 @@ public class GUI {
         label.setPosition(0, Gdx.graphics.getHeight(), Align.topLeft);
         label.setFontScale(0.7f);
         stage.addActor(label);
+
     }
 
     public void setScore(int n) {

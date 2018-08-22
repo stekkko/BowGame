@@ -24,6 +24,10 @@ public class Zombie extends Enemy {
         this.setSpeedY(-3f + random.nextFloat());
     }
 
+    public void repel(float dist) {
+        this.setPosition(this.getX(), this.getY() + dist);
+    }
+
     @Override
     public void handle() {
         super.handle();

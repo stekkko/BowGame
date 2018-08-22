@@ -6,63 +6,119 @@ filter: Nearest,Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 1028, 1042
+  xy: 2, 2
   size: 26, 146
   orig: 26, 146
   offset: 0, 0
   index: -1
 blood
   rotate: false
-  xy: 129, 159
+  xy: 1155, 1333
   size: 125, 125
   orig: 125, 125
   offset: 0, 0
   index: -1
 bow
   rotate: false
-  xy: 1028, 1332
+  xy: 1028, 1460
   size: 258, 84
   orig: 258, 84
   offset: 0, 0
   index: -1
+goButton
+  rotate: false
+  xy: 1288, 1504
+  size: 116, 40
+  orig: 116, 40
+  offset: 0, 0
+  index: -1
 grass
   rotate: false
-  xy: 2, 392
+  xy: 2, 520
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
+menuBack
+  rotate: false
+  xy: 2, 292
+  size: 192, 120
+  orig: 192, 120
+  offset: 0, 0
+  index: -1
+musicButtonOff
+  rotate: false
+  xy: 129, 250
+  size: 51, 40
+  orig: 51, 40
+  offset: 0, 0
+  index: -1
+musicButtonOn
+  rotate: false
+  xy: 1028, 1134
+  size: 51, 40
+  orig: 51, 40
+  offset: 0, 0
+  index: -1
+pauseButton
+  rotate: false
+  xy: 1288, 1462
+  size: 51, 40
+  orig: 51, 40
+  offset: 0, 0
+  index: -1
+playButton
+  rotate: false
+  xy: 196, 372
+  size: 116, 40
+  orig: 116, 40
+  offset: 0, 0
+  index: -1
+soundButtonOff
+  rotate: false
+  xy: 30, 108
+  size: 51, 40
+  orig: 51, 40
+  offset: 0, 0
+  index: -1
+soundButtonOn
+  rotate: false
+  xy: 1155, 1291
+  size: 51, 40
+  orig: 51, 40
+  offset: 0, 0
+  index: -1
 wall1
   rotate: false
-  xy: 2, 339
+  xy: 2, 467
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 wall2
   rotate: false
-  xy: 2, 286
+  xy: 2, 414
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 zombie
   rotate: false
-  xy: 2, 144
+  xy: 2, 150
   size: 125, 140
   orig: 125, 140
   offset: 0, 0
   index: -1
 zombie33
   rotate: false
-  xy: 2, 2
+  xy: 1028, 1176
   size: 125, 140
   orig: 125, 140
   offset: 0, 0
   index: -1
 zombie66
   rotate: false
-  xy: 1028, 1190
+  xy: 1028, 1318
   size: 125, 140
   orig: 125, 140
   offset: 0, 0

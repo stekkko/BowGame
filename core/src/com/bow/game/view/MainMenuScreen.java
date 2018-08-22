@@ -5,22 +5,40 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.bow.game.BowGame;
+import com.bow.game.control.MainMenuController;
+import com.bow.game.model.Background;
+import com.bow.game.model.Button;
 import com.bow.game.utils.UI;
 
 public class MainMenuScreen implements Screen {
 
+    private BowGame game;
     private OrthographicCamera camera;
     private SpriteBatch batch;
-    private UI ui;
+    private MainMenuController mainMenuController;
+    private boolean paused;
 
+    public static final float cameraWidth = 20f;
     public static float deltaCff;
+
+    public MainMenuScreen(BowGame game, TextureAtlas textureAtlas) {
+        this.game = game;
+        mainMenuController = new MainMenuController(game, textureAtlas);
+        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        paused = true;
+    }
 
     @Override
     public void show() {
         batch = new SpriteBatch();
-        ui = new UI();
-
+        paused = false;
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+
+    public void handle() {
+        if (!paused) mainMenuController.handle();
     }
 
     @Override
@@ -33,35 +51,37 @@ public class MainMenuScreen implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        handle();
+        mainMenuController.draw(batch);
         batch.end();
-        ui.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        float aspectRatio = (float) height  / width;
-        camera = new OrthographicCamera(20f, 20f * aspectRatio);
+        float aspectRatio = (float) height / width;
+        camera = new OrthographicCamera(cameraWidth, cameraWidth * aspectRatio);
         camera.update();
     }
 
     @Override
     public void pause() {
-
+        paused = true;
     }
 
     @Override
     public void resume() {
-
+        paused = false;
     }
 
     @Override
     public void hide() {
-
+        pause();
     }
 
     @Override
     public void dispose() {
-        ui.dispose();
         batch.dispose();
+        game.dispose();
+        mainMenuController.dispose();
     }
 }
