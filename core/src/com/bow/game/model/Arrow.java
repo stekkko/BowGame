@@ -3,26 +3,26 @@ package com.bow.game.model;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
-import com.bow.game.view.GameScreen;
 
 public class Arrow extends GameObject {
 
-    private boolean shooted;
     private boolean readyToDelete;
     private float damage;
     private float repelDist;
+    private float critChance;
+    private float critDamage;
 
     public Arrow(TextureRegion texture, float x, float y, float width, float height) {
         super(texture, x, y, width, height);
-        shooted = false;
         readyToDelete = false;
-        damage = 21f;
+        critChance = 0.1f;
+        critDamage = 100f;
+        damage = 34f;
         repelDist = 0.3f;
     }
 
     public void shoot() {
-        shooted = true;
-        speedY = 24f;
+        speedY = 25f;
     }
 
     public void delete() {
@@ -33,16 +33,20 @@ public class Arrow extends GameObject {
         return readyToDelete;
     }
 
+    public float getCritChance() {
+        return critChance;
+    }
+
+    public float getCritDamage() {
+        return critDamage;
+    }
+
     public float getDamage() {
         return damage;
     }
 
     public float getRepelDist() {
         return repelDist;
-    }
-
-    public boolean isShooted() {
-        return shooted;
     }
 
     @Override

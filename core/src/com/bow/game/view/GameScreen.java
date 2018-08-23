@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.bow.game.BowGame;
 import com.bow.game.control.LevelController;
 import com.bow.game.utils.GUI;
@@ -41,10 +40,6 @@ public class GameScreen implements Screen {
         paused = false;
     }
 
-    public void handle() {
-        if (!paused) levelController.handle();
-    }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.4f, 0.1f, 1);
@@ -56,7 +51,7 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        handle();
+        if (!paused) levelController.handle();
         levelController.draw(batch);
         batch.end();
         gui.draw();

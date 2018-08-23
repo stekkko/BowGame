@@ -1,6 +1,7 @@
 package com.bow.game.control;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
@@ -11,6 +12,8 @@ import com.bow.game.view.MainMenuScreen;
 public class MainMenuController {
     private BowGame game;
     private TextureAtlas textureAtlas;
+
+    private Sound buttonSound;
 
     private Background background;
     private Button playButton;
@@ -32,6 +35,7 @@ public class MainMenuController {
                 -2f * 2.9f, -5f, 4f * 1.275f, 4f);
         soundButton = new Button(textureAtlas.findRegion("soundButtonOn"),
                 2f * 2.9f - 4f * 1.275f, -5f, 4f * 1.275f, 4f);
+        buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
     }
 
     public void handle() {
@@ -51,6 +55,7 @@ public class MainMenuController {
         else {
             if (playButton.isToggled()) {
                 playButton.setToggled(false);
+                if (game.isSoundsAllowed()) buttonSound.play();
                 game.menuScreen.pause();
                 game.setScreen(game.gameScreen);
             }
@@ -64,6 +69,7 @@ public class MainMenuController {
                     musicButton.setSprite(textureAtlas.findRegion("musicButtonOn"));
                 }
                 musicButton.setToggled(false);
+                if (game.isSoundsAllowed()) buttonSound.play();
             }
             if (soundButton.isToggled()) {
                 if (game.isSoundsAllowed()) {
@@ -75,6 +81,7 @@ public class MainMenuController {
                     soundButton.setSprite(textureAtlas.findRegion("soundButtonOn"));
                 }
                 soundButton.setToggled(false);
+                if (game.isSoundsAllowed()) buttonSound.play();
             }
         }
 
@@ -88,6 +95,7 @@ public class MainMenuController {
     }
 
     public void dispose() {
+        buttonSound.dispose();
         game.dispose();
         textureAtlas.dispose();
     }

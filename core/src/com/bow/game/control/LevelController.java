@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class LevelController {
 
-    public static Random random;
+    private static Random random;
     private BowGame game;
 
     private Background background;
@@ -33,10 +33,12 @@ public class LevelController {
     private Wall wall;
     private ArrayList<Blood> bloodMap;
     private Button pauseButton;
+    private Background wallFloor;
 
     private Sound hitSound;
     private Sound bricksSound;
     private Sound shootSound;
+    private Sound buttonSound;
     public Music music;
 
     private TextureAtlas textureAtlas;
@@ -76,6 +78,8 @@ public class LevelController {
                 -width, height / 2, 3f, 3f * 1.12f, zombieHp));
         wall = new Wall(textureAtlas.findRegion("wall1"),
                 -width / 2, 4f -height / 2, 2f * 28.96f, 2f);
+        wallFloor = new Background(textureAtlas.findRegion("wallFloor"),
+                -width / 2, - height / 2, 5f * 5.875f, 5f);
         pauseButton = new Button(textureAtlas.findRegion("pauseButton"),
                 width / 2 - 2f * 1.275f - 0.5f, height / 2 - 2.5f, 2f * 1.275f, 2f);
 
@@ -86,6 +90,7 @@ public class LevelController {
         hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.ogg"));
         shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot.ogg"));
         bricksSound = Gdx.audio.newSound(Gdx.files.internal("bricks.ogg"));
+        buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
         music = Gdx.audio.newMusic(Gdx.files.internal("bensound-instinct.mp3"));
         music.setLooping(true);
         music.setVolume(0.18f);
@@ -103,6 +108,7 @@ public class LevelController {
         }
         bow.handle();
         wall.handle();
+        wallFloor.handle();
         pauseButton.handle();
 
         for (Arrow arrow : arrows) {
@@ -137,7 +143,7 @@ public class LevelController {
         time += GameScreen.deltaCff * spawnRate;
         spawnRate += GameScreen.deltaCff * 0.02f;
         if (time > spawnInterval) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 3; i++) {
                 zombies.add(zombiesInStash.get(zombiesInStash.size() - 1));
                 zombiesInStash.remove(zombiesInStash.size() - 1);
                 zombies.get(zombies.size() - 1).spawn(width, random);
@@ -165,6 +171,7 @@ public class LevelController {
         }
         else {
             if (pauseButton.isToggled()) {
+                if (game.isSoundsAllowed()) buttonSound.play();
                 pauseButton.setToggled(false);
                 game.gameScreen.pause();
                 game.setScreen(game.menuScreen);
@@ -173,16 +180,19 @@ public class LevelController {
         for (Arrow arrow : arrows) {
             for (Zombie zombie : zombies) {
                 if (Intersector.overlapConvexPolygons(zombie.getBounds(), arrow.getBounds())) {
-                    bloodMap.add(new Blood(textureAtlas.findRegion("blood"),
-                            zombie.getX() - 0.5f + random.nextFloat(), zombie.getY(), zombie.getWidth(), zombie.getWidth()));
-                    if (zombie.healthBar.getHealth() > 66 && zombie.healthBar.getHealth() <= 66 + arrow.getDamage()) {
+                    float damage = random.nextFloat() < arrow.getCritChance() ? arrow.getCritDamage() : arrow.getDamage();
+                    if (zombie.healthBar.getHealth() > 66 && zombie.healthBar.getHealth() <= 66 + damage) {
                         zombie.setSprite(textureAtlas.findRegion("zombie66"));
                     }
-                    else if (zombie.healthBar.getHealth() > 33 && zombie.healthBar.getHealth() <= 33 + arrow.getDamage()) {
+                    else if (zombie.healthBar.getHealth() > 33 && zombie.healthBar.getHealth() <= 33 + damage) {
                         zombie.setSprite(textureAtlas.findRegion("zombie33"));
                     }
                     zombie.repel(arrow.getRepelDist());
-                    zombie.damage(arrow.getDamage());
+                    zombie.damage(damage);
+
+                    bloodMap.add(new Blood(textureAtlas.findRegion("blood"),
+                            zombie.getX() - 0.5f + random.nextFloat(), zombie.getY(), zombie.getWidth(), zombie.getWidth()));
+
                     if (game.isSoundsAllowed()) hitSound.play(0.8f);
                     arrow.delete();
                 }
@@ -195,6 +205,7 @@ public class LevelController {
 
     public void draw(SpriteBatch batch) {
         background.draw(batch);
+        wallFloor.draw(batch);
         for (Blood blood : bloodMap) blood.draw(batch);
         for (Zombie zombie : zombies) zombie.draw(batch);
         wall.draw(batch);

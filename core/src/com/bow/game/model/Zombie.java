@@ -21,7 +21,7 @@ public class Zombie extends Enemy {
         float maxMmin = width - this.getWidth();
         this.setPosition(random.nextFloat() * maxMmin + min, height / 2);
         this.healthBar.setPosition(this.getX(), this.getY() - this.healthBar.getHeight());
-        this.setSpeedY(-3f + random.nextFloat());
+        this.setSpeedY(-2f + random.nextFloat() * 0.5f);
     }
 
     public void repel(float dist) {
@@ -38,6 +38,17 @@ public class Zombie extends Enemy {
             healthBar.update(HPtextureAtlas);
             healthBar.setNeedUpdate(false);
         }
+    }
+
+    @Override
+    public void damage(float value) {
+        super.damage(value);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        healthBar.setPosition(x, y - this.healthBar.getHeight());
     }
 
     @Override

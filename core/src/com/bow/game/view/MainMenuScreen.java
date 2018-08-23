@@ -8,9 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
 import com.bow.game.control.MainMenuController;
-import com.bow.game.model.Background;
-import com.bow.game.model.Button;
-import com.bow.game.utils.UI;
 
 public class MainMenuScreen implements Screen {
 
@@ -37,10 +34,6 @@ public class MainMenuScreen implements Screen {
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    public void handle() {
-        if (!paused) mainMenuController.handle();
-    }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -51,7 +44,7 @@ public class MainMenuScreen implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        handle();
+        if (!paused) mainMenuController.handle();
         mainMenuController.draw(batch);
         batch.end();
     }
