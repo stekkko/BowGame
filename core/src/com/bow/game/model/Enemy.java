@@ -3,9 +3,12 @@ package com.bow.game.model;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.bow.game.model.GameObject;
+import com.bow.game.model.HealthBar;
 
 public class Enemy extends GameObject {
 
+//    TODO
     private float healthPoints;
     private float maxHealthPoints;
     private int percentHealthPoints;
@@ -46,7 +49,15 @@ public class Enemy extends GameObject {
         }
     }
 
+    public float getPerHealthPoints() {
+        return percentHealthPoints;
+    }
+
     public float getHealthPoints() {
+        return healthPoints;
+    }
+
+    public float getMaxHealthPoints() {
         return healthPoints;
     }
 }

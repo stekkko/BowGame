@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
 import com.bow.game.control.MainMenuController;
+import com.bow.game.control.PauseMenuController;
 
 public class MainMenuScreen implements Screen {
 
@@ -15,6 +16,8 @@ public class MainMenuScreen implements Screen {
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private MainMenuController mainMenuController;
+
+    //TODO
     private boolean paused;
 
     public static final float cameraWidth = 20f;

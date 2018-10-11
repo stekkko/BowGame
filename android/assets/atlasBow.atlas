@@ -6,126 +6,168 @@ filter: Nearest,Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 516, 474
+  xy: 478, 220
   size: 26, 146
   orig: 26, 146
   offset: 0, 0
   index: -1
 blood
   rotate: false
-  xy: 129, 159
+  xy: 1359, 755
   size: 125, 125
   orig: 125, 125
   offset: 0, 0
   index: -1
+boss1
+  rotate: false
+  xy: 2, 19
+  size: 347, 347
+  orig: 347, 347
+  offset: 0, 0
+  index: -1
+boss2
+  rotate: false
+  xy: 516, 533
+  size: 347, 347
+  orig: 347, 347
+  offset: 0, 0
+  index: -1
 bow
   rotate: false
-  xy: 2, 286
+  xy: 865, 796
   size: 258, 84
   orig: 258, 84
   offset: 0, 0
   index: -1
+dog
+  rotate: false
+  xy: 1613, 769
+  size: 48, 135
+  orig: 48, 135
+  offset: 0, 0
+  index: -1
+exitButton
+  rotate: false
+  xy: 516, 369
+  size: 232, 80
+  orig: 232, 80
+  offset: 0, 0
+  index: -1
 goButton
   rotate: false
-  xy: 710, 844
-  size: 116, 40
-  orig: 116, 40
+  xy: 865, 632
+  size: 232, 80
+  orig: 232, 80
   offset: 0, 0
   index: -1
 grass
   rotate: false
-  xy: 2, 372
+  xy: 2, 368
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
+mainMenuButton
+  rotate: false
+  xy: 516, 451
+  size: 329, 80
+  orig: 329, 80
+  offset: 0, 0
+  index: -1
 menuBack
   rotate: false
-  xy: 516, 764
+  xy: 865, 510
   size: 192, 120
   orig: 192, 120
   offset: 0, 0
   index: -1
 musicButtonOff
   rotate: false
-  xy: 1953, 950
-  size: 51, 40
-  orig: 51, 40
+  xy: 1767, 824
+  size: 102, 80
+  orig: 102, 80
   offset: 0, 0
   index: -1
 musicButtonOn
   rotate: false
-  xy: 643, 722
-  size: 51, 40
-  orig: 51, 40
+  xy: 1871, 824
+  size: 102, 80
+  orig: 102, 80
   offset: 0, 0
   index: -1
 pauseButton
   rotate: false
-  xy: 262, 288
-  size: 51, 40
-  orig: 51, 40
+  xy: 1663, 824
+  size: 102, 80
+  orig: 102, 80
   offset: 0, 0
   index: -1
 playButton
   rotate: false
-  xy: 262, 330
-  size: 116, 40
-  orig: 116, 40
+  xy: 865, 714
+  size: 232, 80
+  orig: 232, 80
+  offset: 0, 0
+  index: -1
+resumeButton
+  rotate: false
+  xy: 1125, 800
+  size: 232, 80
+  orig: 232, 80
   offset: 0, 0
   index: -1
 soundButtonOff
   rotate: false
-  xy: 544, 580
-  size: 51, 40
-  orig: 51, 40
+  xy: 351, 2
+  size: 102, 80
+  orig: 102, 80
   offset: 0, 0
   index: -1
 soundButtonOn
   rotate: false
-  xy: 129, 117
-  size: 51, 40
-  orig: 51, 40
+  xy: 750, 369
+  size: 102, 80
+  orig: 102, 80
   offset: 0, 0
   index: -1
 wall1
   rotate: false
-  xy: 2, 939
+  xy: 2, 935
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 wall2
   rotate: false
-  xy: 2, 886
+  xy: 2, 882
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 wallFloor
   rotate: false
-  xy: 1481, 910
+  xy: 1481, 906
   size: 470, 80
   orig: 470, 80
   offset: 0, 0
   index: -1
 zombie
   rotate: false
-  xy: 2, 144
+  xy: 1486, 764
   size: 125, 140
   orig: 125, 140
   offset: 0, 0
   index: -1
 zombie33
   rotate: false
-  xy: 516, 622
+  xy: 351, 84
   size: 125, 140
   orig: 125, 140
   offset: 0, 0
   index: -1
 zombie66
   rotate: false
-  xy: 2, 2
+  xy: 351, 226
   size: 125, 140
   orig: 125, 140
   offset: 0, 0

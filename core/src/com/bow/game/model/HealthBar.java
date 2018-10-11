@@ -30,6 +30,8 @@ public class HealthBar extends GameObject {
         shown = true;
     }
 
+    public void hide() { shown = false; }
+
     public boolean isNeedUpdate() {
         return needUpdate;
     }

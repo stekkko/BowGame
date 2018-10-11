@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion '27.0.3'
-    compileSdkVersion 25
+    buildToolsVersion '28.0.3'
+    compileSdkVersion 28
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -19,8 +19,8 @@ android {
     }
     defaultConfig {
         applicationId "com.bow.game"
-        minSdkVersion 9
-        targetSdkVersion 25
+        minSdkVersion 14
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }

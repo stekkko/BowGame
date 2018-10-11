@@ -1,6 +1,7 @@
 package com.bow.game.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,10 +16,11 @@ public class GUI {
     private int score;
 
     public GUI() {
+
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         skin = new Skin(Gdx.files.internal("skin.json"));
         score = 0;
-        label = new Label("Zombies killed: " + score, skin.get("default", Label.LabelStyle.class));
+        label = new Label("Score: " + score, skin.get("default", Label.LabelStyle.class));
         label.setAlignment(Align.left);
         label.setPosition(0, Gdx.graphics.getHeight(), Align.topLeft);
         label.setFontScale(0.7f);
@@ -26,14 +28,18 @@ public class GUI {
 
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public void setScore(int n) {
         score = n;
-        label.setText("Zombies killed: " + score);
+        label.setText("Score: " + score);
     }
 
     public void addScore(int n) {
         score += n;
-        label.setText("Zombies killed: " + score);
+        label.setText("Score: " + score);
     }
 
     public void draw() {

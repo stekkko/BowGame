@@ -7,44 +7,43 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
 import com.bow.game.model.Background;
 import com.bow.game.model.Button;
-import com.bow.game.view.MainMenuScreen;
 import com.bow.game.view.PauseMenuScreen;
 
-public class MainMenuController {
+public class PauseMenuController {
     private BowGame game;
     private TextureAtlas textureAtlas;
 
     private Sound buttonSound;
 
     private Background background;
-    private Button playButton;
+    private Button resumeButton;
     private Button musicButton;
     private Button soundButton;
-    private Button exitButton;
+    private Button exitMainMenuButton;
 
-    private float width = MainMenuScreen.cameraWidth;
+    private float width = PauseMenuScreen.cameraWidth;
     private float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-    public MainMenuController(BowGame game, TextureAtlas textureAtlas) {
+    public PauseMenuController(BowGame game, TextureAtlas textureAtlas) {
         this.game = game;
         this.textureAtlas = textureAtlas;
 
         background = new Background(textureAtlas.findRegion("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
-        playButton = new Button(textureAtlas.findRegion("playButton"),
+        resumeButton = new Button(textureAtlas.findRegion("resumeButton"),
                 -2f * 2.9f, 0, 4f * 2.9f, 4f);
         musicButton = new Button(textureAtlas.findRegion("musicButtonOn"),
                 -2f * 2.9f, -5f, 4f * 1.275f, 4f);
         soundButton = new Button(textureAtlas.findRegion("soundButtonOn"),
                 2f * 2.9f - 4f * 1.275f, -5f, 4f * 1.275f, 4f);
-        exitButton = new Button(textureAtlas.findRegion("exitButton"),
+        exitMainMenuButton = new Button(textureAtlas.findRegion("mainMenuButton"),
                 -2f * 2.9f, -10f, 4f * 2.9f, 4f);
         buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
     }
 
     public void handle() {
         background.handle();
-        playButton.handle();
+        resumeButton.handle();
         musicButton.handle();
         soundButton.handle();
 
@@ -52,17 +51,17 @@ public class MainMenuController {
             float x = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             float y = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
 
-            playButton.setToggled(playButton.getBounds().contains(x, y));
+            resumeButton.setToggled(resumeButton.getBounds().contains(x, y));
             musicButton.setToggled(musicButton.getBounds().contains(x, y));
             soundButton.setToggled(soundButton.getBounds().contains(x, y));
-            exitButton.setToggled(exitButton.getBounds().contains(x, y));
+            exitMainMenuButton.setToggled(exitMainMenuButton.getBounds().contains(x, y));
         }
         else {
-            if (playButton.isToggled()) {
-                playButton.setToggled(false);
+            if (resumeButton.isToggled()) {
+                resumeButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
                 game.menuScreen.pause();
-                game.setScreen(game.levelSelector);
+                game.setScreen(game.gameScreen);
             }
             if (musicButton.isToggled()) {
                 if (game.isMusicAllowed()) {
@@ -88,11 +87,11 @@ public class MainMenuController {
                 soundButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
             }
-            if (exitButton.isToggled()) {
-                exitButton.setToggled(false);
+            if (exitMainMenuButton.isToggled()) {
+                exitMainMenuButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
-                game.menuScreen.pause();
-                game.dispose();
+                game.pauseScreen.pause();
+                game.setScreen(game.menuScreen);
             }
         }
 
@@ -100,10 +99,10 @@ public class MainMenuController {
 
     public void draw(SpriteBatch batch) {
         background.draw(batch);
-        playButton.draw(batch);
+        resumeButton.draw(batch);
         musicButton.draw(batch);
         soundButton.draw(batch);
-        exitButton.draw(batch);
+        exitMainMenuButton.draw(batch);
     }
 
     public void dispose() {

@@ -6,12 +6,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.utils.Assets;
 import com.bow.game.view.GameScreen;
+import com.bow.game.view.LevelSelector;
 import com.bow.game.view.MainMenuScreen;
+import com.bow.game.view.PauseMenuScreen;
 
 public class BowGame extends Game {
 	public Screen gameScreen;
 	public Screen menuScreen;
+	public Screen pauseScreen;
+	public Screen levelSelector;
 	private Assets assets;
+
+	//TODO
+    //Settings
 	private boolean musicAllowed;
 	private boolean soundsAllowed;
 
@@ -23,8 +30,15 @@ public class BowGame extends Game {
 				assets.getManager().get("atlasHP.atlas", TextureAtlas.class));
 		menuScreen = new MainMenuScreen(this,
 				assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
+		pauseScreen = new PauseMenuScreen(this,
+                assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
+		levelSelector = new LevelSelector(this,
+                assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
+        //TODO
+        //Settings
 		musicAllowed = true;
 		soundsAllowed = true;
+
 		this.setScreen(menuScreen);
 	}
 
