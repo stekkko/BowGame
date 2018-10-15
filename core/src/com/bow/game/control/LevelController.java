@@ -45,7 +45,6 @@ public class LevelController {
     private Button pauseButton;
     private Spell spell;
     private Background wallFloor;
-    private Crosshair crosshair;
     private ArrayList<Explosion> explosions;
 
     private Sound scream;
@@ -111,7 +110,6 @@ public class LevelController {
         wallFloor.handle();
         pauseButton.handle();
         spell.handle();
-        crosshair.handle();
 
         for (Ammo ammo : ammunition) {
             if (ammo.isReadyToDelete() || ammo.getY() > height / 2) {
@@ -137,14 +135,15 @@ public class LevelController {
         if (Gdx.input.isTouched()) {
             xp = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             yp = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
+
             pauseButton.setToggled(pauseButton.getBounds().contains(xp, yp));
             if (spell.getBounds().contains(xp, yp)) spell.setToggled(true);
-            if (spell.isToggled() && spell.getBounds().contains(jtx, jty)) {
-                crosshair.setPosition(xp - crosshair.getWidth() / 2, yp - crosshair.getHeight() / 2);
-                crosshair.setDrawn(true);
+            if (spell.isToggled() && spell.getBounds().contains(jtx, jty) && !spell.isOnCD()) {
+                spell.getCrosshair().setPosition(xp - spell.getCrosshair().getWidth() / 2, yp - spell.getCrosshair().getHeight() / 2);
+                spell.getCrosshair().setDrawn(true);
             }
 
-            if (!crosshair.isDrawn()) {
+            if (!spell.getCrosshair().isDrawn()) {
                 weapon.setPosition(xp - weapon.getWidth() / 2, weapon.getY());
                 if (weapon.isLoaded() && weapon.isReadyToShoot()) {
                     weapon.shoot();
@@ -167,7 +166,7 @@ public class LevelController {
                 spell.setOnCD(true);
                 explosions.add(new Explosion(textureAtlas.findRegion("explosion"), xp -4.5f, yp -4.5f, 9f, 9f, 100f));
             }
-            crosshair.setDrawn(false);
+            spell.getCrosshair().setDrawn(false);
         }
     }
 
@@ -349,7 +348,6 @@ public class LevelController {
         weapon.draw(batch);
         for (Ammo ammo : ammunition) ammo.draw(batch);
         for (Explosion ex : explosions) ex.draw(batch);
-        crosshair.draw(batch);
         pauseButton.draw(batch);
         spell.draw(batch);
     }
@@ -377,7 +375,7 @@ public class LevelController {
                 - 4f, height / 2, 8f, 8f, 800f, (float) Integer.MAX_VALUE);
         if (game.getGamemode() == 1) {
             Ammo ammoInWeapon = new Arrow(textureAtlas.findRegion("arrow"),
-                    2.25f, -height / 2, 0.5f, 0.5f * 5.6153f, 3f, 0.05f, 10f, 0.3f, 25f);
+                    2.25f, -height / 2, 0.5f, 0.5f * 5.6153f, 25f, 0.05f, 100f, 0.3f, 25f);
             weapon = new Bow(textureAtlas.findRegion("bow"),
                     0f, -height / 2, 5f, 5f * 0.3255f, ammoInWeapon, 0.3f);
         }
@@ -393,12 +391,13 @@ public class LevelController {
                 -width / 2, - height / 2, 5f * 5.875f, 5f);
         pauseButton = new Button(textureAtlas.findRegion("pauseButton"),
                 width / 2 - 2f * 1.275f - 0.5f, height / 2 - 2.5f, 2f * 1.275f, 2f);
-        spell = new Spell(textureAtlas.findRegion("exSpellButton"),
-                -width / 2, -2f, 4f, 4f);
-        background = new Background(textureAtlas.findRegion("grass"),
-                -width / 2, -height / 2, height, height);
-        crosshair = new Crosshair(textureAtlas.findRegion("crosshair"),
+        Crosshair crosshair = new Crosshair(textureAtlas.findRegion("crosshair"),
                 0, 0, 9f, 9f);
+        spell = new Spell(textureAtlas.findRegion("exSpellButton"),
+                -width / 2, -2f, 4f, 4f, crosshair);
+        background = new Background(textureAtlas.findRegion("grass"),
+                -width / 2, -height / 2, height * 1f, height);
+
     }
 
     private void initSounds() {
