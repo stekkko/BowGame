@@ -17,8 +17,10 @@ public abstract class Ammo extends GameObject {
         readyToDelete = false;
     }
 
-    public Ammo copy() {
-        return this;
+    protected abstract Ammo copy();
+
+    public static Ammo copy(Ammo ammo) {
+        return ammo.copy();
     }
 
     public void shoot() {

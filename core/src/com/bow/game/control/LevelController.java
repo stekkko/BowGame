@@ -150,7 +150,7 @@ public class LevelController {
                 weapon.setPosition(xp - weapon.getWidth() / 2, weapon.getY());
                 if (weapon.isLoaded() && weapon.isReadyToShoot()) {
                     weapon.shoot();
-                    ammunition.add(weapon.getAmmo().copy());
+                    ammunition.add(Ammo.copy(weapon.getAmmo()));
                     ammunition.get(ammunition.size() - 1).shoot();
                     if (game.isSoundsAllowed()) shootSound.play(0.09f);
                 }
@@ -418,8 +418,8 @@ public class LevelController {
                 -width / 2, 4f -height / 2, 2f * 28.96f, 2f, 1500f, width);
 
 
-        knights.add(new Knight(textureAtlas.findRegion("zombie"),HPtextureAtlas,
-                0 ,7f -height /2, 4f,2f,250,50f));
+        knights.add(new Knight(textureAtlas.findRegion("knight"),HPtextureAtlas,
+                0 ,7f -height /2, 4f,4f * 0.906f,250,50f));
         wallFloor = new Background(textureAtlas.findRegion("wallFloor"),
                 -width / 2, - height / 2, 5f * 5.875f, 5f);
         pauseButton = new Button(textureAtlas.findRegion("pauseButton"),
