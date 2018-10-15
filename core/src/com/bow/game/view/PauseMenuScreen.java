@@ -27,12 +27,13 @@ public class PauseMenuScreen implements Screen {
         this.game = game;
         pauseMenuController = new PauseMenuController(game, textureAtlas);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        paused = true;
+        paused = false;
     }
 
     @Override
     public void show() {
         batch = new SpriteBatch();
+        pauseMenuController.sync();
         paused = false;
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
@@ -66,6 +67,7 @@ public class PauseMenuScreen implements Screen {
 
     @Override
     public void resume() {
+        pauseMenuController.sync();
         paused = false;
     }
 

@@ -8,7 +8,6 @@ import com.bow.game.BowGame;
 import com.bow.game.model.Background;
 import com.bow.game.model.Button;
 import com.bow.game.view.MainMenuScreen;
-import com.bow.game.view.PauseMenuScreen;
 
 public class MainMenuController {
     private BowGame game;
@@ -33,9 +32,9 @@ public class MainMenuController {
                 -width / 2,  -height / 2, 1.6f * height, height);
         playButton = new Button(textureAtlas.findRegion("playButton"),
                 -2f * 2.9f, 0, 4f * 2.9f, 4f);
-        musicButton = new Button(textureAtlas.findRegion("musicButtonOn"),
+        musicButton = new Button(textureAtlas.findRegion(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"),
                 -2f * 2.9f, -5f, 4f * 1.275f, 4f);
-        soundButton = new Button(textureAtlas.findRegion("soundButtonOn"),
+        soundButton = new Button(textureAtlas.findRegion(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"),
                 2f * 2.9f - 4f * 1.275f, -5f, 4f * 1.275f, 4f);
         exitButton = new Button(textureAtlas.findRegion("exitButton"),
                 -2f * 2.9f, -10f, 4f * 2.9f, 4f);
@@ -91,11 +90,16 @@ public class MainMenuController {
             if (exitButton.isToggled()) {
                 exitButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
-                game.menuScreen.pause();
-                game.dispose();
+//                TODO exit button
+                game.getScreen().dispose();
+
             }
         }
+    }
 
+    public void sync() {
+        musicButton.setSprite(textureAtlas.findRegion(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"));
+        soundButton.setSprite(textureAtlas.findRegion(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"));
     }
 
     public void draw(SpriteBatch batch) {

@@ -32,9 +32,9 @@ public class PauseMenuController {
                 -width / 2,  -height / 2, 1.6f * height, height);
         resumeButton = new Button(textureAtlas.findRegion("resumeButton"),
                 -2f * 2.9f, 0, 4f * 2.9f, 4f);
-        musicButton = new Button(textureAtlas.findRegion("musicButtonOn"),
+        musicButton = new Button(textureAtlas.findRegion(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"),
                 -2f * 2.9f, -5f, 4f * 1.275f, 4f);
-        soundButton = new Button(textureAtlas.findRegion("soundButtonOn"),
+        soundButton = new Button(textureAtlas.findRegion(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"),
                 2f * 2.9f - 4f * 1.275f, -5f, 4f * 1.275f, 4f);
         exitMainMenuButton = new Button(textureAtlas.findRegion("mainMenuButton"),
                 -2f * 2.9f, -10f, 4f * 2.9f, 4f);
@@ -60,7 +60,7 @@ public class PauseMenuController {
             if (resumeButton.isToggled()) {
                 resumeButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
-                game.menuScreen.pause();
+                game.pauseScreen.pause();
                 game.setScreen(game.gameScreen);
             }
             if (musicButton.isToggled()) {
@@ -95,6 +95,11 @@ public class PauseMenuController {
             }
         }
 
+    }
+
+    public void sync() {
+        musicButton.setSprite(textureAtlas.findRegion(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"));
+        soundButton.setSprite(textureAtlas.findRegion(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"));
     }
 
     public void draw(SpriteBatch batch) {

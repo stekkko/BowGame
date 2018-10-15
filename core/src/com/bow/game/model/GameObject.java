@@ -9,13 +9,13 @@ import com.bow.game.view.GameScreen;
 
 
 public abstract class GameObject {
-    Sprite sprite;
-    Polygon bounds;
+    private Sprite sprite;
+    private Polygon bounds;
 
     float speedX;
     float speedY;
 
-    public GameObject(TextureRegion texture, float x, float y, float width, float height) {
+    GameObject(TextureRegion texture, float x, float y, float width, float height) {
         sprite = new Sprite(texture);
         sprite.setSize(width, height);
         sprite.setOrigin(width / 2f, height / 2f);
@@ -72,6 +72,11 @@ public abstract class GameObject {
 
     public void setPosition(float x, float y) {
         bounds.setPosition(x, y);
+    }
+
+    public void setSpeed(float speedX, float speedY) {
+        setSpeedX(speedX);
+        setSpeedY(speedY);
     }
 
     public void setSpeedX(float speedX) {

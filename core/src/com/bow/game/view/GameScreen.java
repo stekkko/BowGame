@@ -27,7 +27,6 @@ public class GameScreen implements Screen {
     public GameScreen(BowGame game, TextureAtlas textureAtlas, TextureAtlas HPtextureAtlas) {
         this.game = game;
         gui = new GUI();
-        //TODO
         levelController = new LevelController(game, textureAtlas, HPtextureAtlas, gui);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = true;

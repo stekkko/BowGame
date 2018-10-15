@@ -55,6 +55,7 @@ public class LevelSelectorController {
                 playCampaignButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
                 game.levelSelector.pause();
+                game.setGamemode(1);
                 game.setScreen(game.gameScreen);
                 game.gameScreen.resume();
             }
@@ -62,6 +63,7 @@ public class LevelSelectorController {
                 playEndlessButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
                 game.levelSelector.pause();
+                game.setGamemode(2);
                 game.setScreen(game.gameScreen);
                 game.gameScreen.resume();
             }
