@@ -92,6 +92,7 @@ public class MainMenuController {
                 if (game.isSoundsAllowed()) buttonSound.play();
                 System.gc();
                 System.exit(0);
+
             }
         }
     }
