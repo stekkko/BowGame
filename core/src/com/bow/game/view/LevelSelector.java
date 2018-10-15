@@ -18,7 +18,6 @@ public class LevelSelector implements Screen {
     private SpriteBatch batch;
     private LevelSelectorController levelSelectorController;
 
-    //TODO
     private boolean paused;
 
     public static final float cameraWidth = 20f;
@@ -28,7 +27,7 @@ public class LevelSelector implements Screen {
         this.game = game;
         levelSelectorController = new LevelSelectorController(game, textureAtlas);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        paused = true;
+        paused = false;
     }
 
     @Override

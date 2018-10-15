@@ -6,24 +6,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Wall extends GameObject {
 
-    private float healthPoints;
-    private float maxHealthPoints;
-    private int percentHealthPoints;
     public HealthBar healthBar;
     private boolean broken;
 
     public Wall(TextureRegion texture, TextureAtlas HPtextureAtlas, float x, float y, float width, float height, float maxHealthPoints, float hpWidth) {
         super(texture, x, y, width, height);
-        this.maxHealthPoints = maxHealthPoints;
-        this.healthPoints = maxHealthPoints;
-        this.percentHealthPoints = 100;
-        this.healthBar = new HealthBar(HPtextureAtlas.findRegion("100"), x, y - hpWidth * 0.04f, hpWidth, hpWidth * 0.03f);
+
+        this.healthBar = new HealthBar(HPtextureAtlas.findRegion("100"), x, y - hpWidth * 0.04f, hpWidth, hpWidth * 0.03f, maxHealthPoints);
         healthBar.show();
         broken = false;
     }
 
-    public void damage(float value) {
-        this.healthPoints -= value;
+    public void damaged(float value) {
+        this.healthBar.damage(value);
     }
 
     public void brake(TextureRegion textureRegion) {
@@ -32,7 +27,7 @@ public class Wall extends GameObject {
     }
 
     public void repair(TextureRegion textureRegion) {
-        healthPoints = maxHealthPoints;
+        healthBar.setHealthPoints(healthBar.getMaxHealthPoints());
         broken = false;
         this.setSprite(textureRegion);
     }
@@ -48,23 +43,14 @@ public class Wall extends GameObject {
     public void handle() {
         super.handle();
         healthBar.handle();
-        if (healthPoints < 0) {
-            percentHealthPoints = 0;
-        }
-        else if (percentHealthPoints != (int) (100f * healthPoints / maxHealthPoints)) {
-            percentHealthPoints = (int) (100f * healthPoints / maxHealthPoints);
-
-        }
-        healthBar.setHealth(percentHealthPoints);
-        healthBar.setNeedUpdate(true);
     }
 
-    public float getPerHealthPoints() {
-        return percentHealthPoints;
+    public float getPercentHealthPoints() {
+        return healthBar.getPercentHealthPoints();
     }
 
     public float getHealthPoints() {
-        return healthPoints;
+        return healthBar.getHealthPoints();
     }
 
     public boolean isBroken() {
@@ -76,7 +62,5 @@ public class Wall extends GameObject {
         super.draw(batch);
         healthBar.draw(batch);
     }
-
-
 
 }

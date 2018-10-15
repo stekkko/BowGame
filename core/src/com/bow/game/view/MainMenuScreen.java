@@ -27,12 +27,13 @@ public class MainMenuScreen implements Screen {
         this.game = game;
         mainMenuController = new MainMenuController(game, textureAtlas);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        paused = true;
+        paused = false;
     }
 
     @Override
     public void show() {
         batch = new SpriteBatch();
+        mainMenuController.sync();
         paused = false;
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
@@ -66,6 +67,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resume() {
+        mainMenuController.sync();
         paused = false;
     }
 

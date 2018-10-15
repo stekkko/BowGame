@@ -17,10 +17,10 @@ public class BowGame extends Game {
 	public Screen levelSelector;
 	private Assets assets;
 
-	//TODO
-    //Settings
+	//TODO settings
 	private boolean musicAllowed;
 	private boolean soundsAllowed;
+	private int gamemode;
 
 	@Override
 	public void create () {
@@ -34,10 +34,10 @@ public class BowGame extends Game {
                 assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
 		levelSelector = new LevelSelector(this,
                 assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
-        //TODO
-        //Settings
+        //TODO settings
 		musicAllowed = true;
 		soundsAllowed = true;
+		gamemode = 1;
 
 		this.setScreen(menuScreen);
 	}
@@ -50,7 +50,15 @@ public class BowGame extends Game {
 		return soundsAllowed;
 	}
 
-	public void setMusicAllowed(boolean musicAllowed) {
+	public int getGamemode() {
+	    return gamemode;
+    }
+
+    public void setGamemode(int gamemode) {
+        this.gamemode = gamemode;
+    }
+
+    public void setMusicAllowed(boolean musicAllowed) {
 		this.musicAllowed = musicAllowed;
 	}
 

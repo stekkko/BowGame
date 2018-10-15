@@ -2,21 +2,23 @@ package com.bow.game.model;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Polygon;
 
-public class Ammo extends GameObject {
+public abstract class Ammo extends GameObject {
 
-    boolean readyToDelete;
-    boolean loadedVisible;
-    float damage;
-    float flyingSpeed;
-    float repelDist;
-    float critChance;
-    float critDamage;
+    private boolean readyToDelete;
+    private float damage;
+    private float flyingSpeed;
+    private float repelDist;
+    private float criticalChance;
+    private float criticalDamage;
 
-    public Ammo(TextureRegion texture, float x, float y, float width, float height) {
+    Ammo(TextureRegion texture, float x, float y, float width, float height) {
         super(texture, x, y, width, height);
         readyToDelete = false;
+    }
+
+    public Ammo copy() {
+        return this;
     }
 
     public void shoot() {
@@ -43,24 +45,24 @@ public class Ammo extends GameObject {
         this.repelDist = repelDist;
     }
 
-    public void setCritChance(float critChance) {
-        this.critChance = critChance;
+    public void setCriticalChance(float criticalChance) {
+        this.criticalChance = criticalChance;
     }
 
-    public void setCritDamage(float critDamage) {
-        this.critDamage = critDamage;
+    public void setCriticalDamage(float criticalDamage) {
+        this.criticalDamage = criticalDamage;
     }
 
     public float getFlyingSpeed() {
         return flyingSpeed;
     }
 
-    public float getCritChance() {
-        return critChance;
+    public float getCriticalChance() {
+        return criticalChance;
     }
 
-    public float getCritDamage() {
-        return critDamage;
+    public float getCriticalDamage() {
+        return criticalDamage;
     }
 
     public float getDamage() {
@@ -71,17 +73,8 @@ public class Ammo extends GameObject {
         return repelDist;
     }
 
-    public boolean isLoadedVisible() {
-        return loadedVisible;
-    }
-
-    public void setLoadedVisible(boolean loadedVisible) {
-        this.loadedVisible = loadedVisible;
-    }
-
     @Override
     public void draw(SpriteBatch batch) {
-        if (loadedVisible) super.draw(batch);
+        super.draw(batch);
     }
-
 }
