@@ -14,8 +14,8 @@ public class Arrow extends Ammo {
     }
 
     @Override
-    public Ammo copy() {
-        return new Arrow(this.getSprite(), this.getX(), this.getY(), this.getWidth(), this.getHeight(),
-                this.getDamage(), this.getCriticalChance(), this.getCriticalDamage(), this.getRepelDist(), this.getFlyingSpeed());
+    public Arrow copy() {
+        return new Arrow(getSprite(), getX(), getY(), getWidth(), getHeight(),
+                getDamage(), getCriticalChance(), getCriticalDamage(), getRepelDist(), getFlyingSpeed());
     }
 }

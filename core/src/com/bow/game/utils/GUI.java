@@ -10,8 +10,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.Locale;
 
 public class GUI {
-
-
     private Stage stage;
     private Label labelScore;
     private Label labelCD;
@@ -43,9 +41,13 @@ public class GUI {
         return cooldown;
     }
 
+    public void hideCooldown() {
+        labelCD.setText("");
+    }
+
     public void setCooldown(float cooldown) {
         this.cooldown = cooldown;
-        labelCD.setText(String.format(Locale.US,"%.2f", cooldown));
+        labelCD.setText(String.format(Locale.US,"%.1f", cooldown));
     }
 
     public float getScore() {

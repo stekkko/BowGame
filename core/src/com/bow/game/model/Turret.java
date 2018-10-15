@@ -15,7 +15,6 @@ public class Turret extends Weapon {
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        for (Ammo ammo : ammos) ammo.setPosition(x + this.getWidth() / 2 - ammo.getWidth() / 2, y + this.getHeight());
         amExample.setPosition(x + this.getWidth() / 2 - amExample.getWidth() / 2, y + this.getHeight());
     }
 }

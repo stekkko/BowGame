@@ -102,6 +102,7 @@ public class LevelController {
         }
         gui.addFloat(GameScreen.deltaCff);
         gui.setCooldown(spell.isOnCD() ? spell.getCooldownTime() - spell.getTime() : 0f);
+        if (gui.getCooldown() == 0) gui.hideCooldown();
         weapon.handle();
         wall.handle();
         wall.update(HPtextureAtlas);
@@ -147,6 +148,7 @@ public class LevelController {
                 weapon.setPosition(xp - weapon.getWidth() / 2, weapon.getY());
                 if (weapon.isLoaded() && weapon.isReadyToShoot()) {
                     weapon.shoot();
+                    //TODO bow
                     ammunition.add(weapon.getAmmo().copy());
                     ammunition.get(ammunition.size() - 1).shoot();
                     if (game.isSoundsAllowed()) shootSound.play(0.09f);
