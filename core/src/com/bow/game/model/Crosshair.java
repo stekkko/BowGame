@@ -22,6 +22,6 @@ public class Crosshair extends GameObject {
 
     @Override
     public void draw(SpriteBatch batch) {
-        if (drawn) super.draw(batch);
+        if (isDrawn()) super.draw(batch);
     }
 }
