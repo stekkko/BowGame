@@ -21,6 +21,8 @@ public class Spell extends Button {
         super.handle();
 
         if (isOnCD()) {
+            setToggled(false);
+            setDoEvent(false);
             time += GameScreen.deltaCff;
             if (time >= cooldownTime) {
                 setOnCD(false);

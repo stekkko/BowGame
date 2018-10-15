@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.Locale;
+
 public class GUI {
 
     private Stage stage;
@@ -20,15 +22,15 @@ public class GUI {
 
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         skin = new Skin(Gdx.files.internal("skin.json"));
-        score = 0;
+        time = 0;
 
-        labelScore = new Label("Score: " + score, skin.get("default", Label.LabelStyle.class));
+        labelScore = new Label("Time: " + time, skin.get("default", Label.LabelStyle.class));
         labelScore.setAlignment(Align.left);
         labelScore.setPosition(0, Gdx.graphics.getHeight(), Align.topLeft);
         labelScore.setFontScale(0.7f);
         stage.addActor(labelScore);
 
-        cooldown = 10f;
+
         labelCD = new Label(Float.toString(10f - cooldown), skin.get("default", Label.LabelStyle.class));
         labelCD.setAlignment(Align.left);
         labelCD.setPosition(0, Gdx.graphics.getHeight() / 2, Align.topLeft);
@@ -42,26 +44,26 @@ public class GUI {
 
     public void setCooldown(float cooldown) {
         this.cooldown = cooldown;
-        labelCD.setText(String.valueOf(cooldown));
+        labelCD.setText(String.format(Locale.US,"%.1f",cooldown));
     }
 
-    public float getScore() {
-        return score;
+    public float getTime() {
+        return time;
     }
 
-    public void setScore(int n) {
-        score = n;
-        labelScore.setText("Score: " + score);
+    public void setTime(int n) {
+        time = n;
+        labelScore.setText("Time: " + String.format(Locale.US,"%.2f",time));
     }
 
     public void addFloat(float f) {
-        score += f;
-        labelScore.setText("Score: " + score);
+        time += f;
+        labelScore.setText("Time: " + String.format(Locale.US,"%.2f",time));
     }
 
     public void addScore(int n) {
-        score += n;
-        labelScore.setText("Score: " + score);
+        time += n;
+        labelScore.setText("Time: " + String.format(Locale.US,"%.2f",time));
     }
 
     public void draw() {
