@@ -22,6 +22,7 @@ import com.bow.game.model.Bow;
 import com.bow.game.model.Button;
 import com.bow.game.model.mobs.Dog;
 import com.bow.game.model.Wall;
+import com.bow.game.model.mobs.Knight;
 import com.bow.game.model.mobs.Zombie;
 import com.bow.game.utils.GUI;
 import com.bow.game.view.GameScreen;
@@ -37,6 +38,7 @@ public class LevelController {
     private Background background;
     private ArrayList<Zombie> zombies;
     private ArrayList<Dog> dogs;
+    private ArrayList<Knight> knights;
     private Boss666 boss666;
     private Weapon weapon;
     private ArrayList<Ammo> ammunition;
@@ -102,6 +104,7 @@ public class LevelController {
         }
         gui.addFloat(GameScreen.deltaCff);
         gui.setCooldown(spell.isOnCD() ? spell.getCooldownTime() - spell.getTime() : 0f);
+        if (gui.getCooldown()==0){gui.hideCooldown();}
         weapon.handle();
         wall.handle();
         wall.update(HPtextureAtlas);
@@ -207,11 +210,22 @@ public class LevelController {
             zombie.handle();
             zombie.update(HPtextureAtlas);
         }
+        for (Knight knight : knights) {
+            knight.handle();
+            knight.update(HPtextureAtlas);
+        }
 
         for (Zombie zombie : zombies) {
             for (Explosion explosion : explosions) {
                 if (Intersector.overlapConvexPolygons(zombie.getBounds(), explosion.getBounds())) {
                     zombie.damaged(explosion.getDamage());
+                }
+            }
+            for (Knight knight : knights) {
+                if (Intersector.overlapConvexPolygons(zombie.getBounds(), knight.getBounds())) {
+                    zombie.damaged(knight.getDamage());
+                    zombie.repel(2f);
+                    knight.damaged(zombie.getDamage());
                 }
             }
             if (Intersector.overlapConvexPolygons(zombie.getBounds(), wall.getBounds())) {
@@ -240,6 +254,12 @@ public class LevelController {
                     dog.damaged(explosion.getDamage());
                 }
             }
+            for (Knight knight : knights) {
+                if (Intersector.overlapConvexPolygons(dog.getBounds(), knight.getBounds())) {
+                    dog.damaged(knight.getDamage());
+                    knight.damaged(dog.getDamage());
+                }
+            }
             if (Intersector.overlapConvexPolygons(dog.getBounds(), wall.getBounds())) {
                 dogs.remove(dog);
                 if (game.isSoundsAllowed()) bricksSound.play(0.6f);
@@ -247,8 +267,7 @@ public class LevelController {
                 wall.handle();
                 if (wall.getPercentHealthPoints() <= 0) {
                     restartGame();
-                }
-                else if (wall.getPercentHealthPoints() <= 50){
+                } else if (wall.getPercentHealthPoints() <= 50) {
                     wall.brake(textureAtlas.findRegion("wall2"));
                 }
                 break;
@@ -256,6 +275,12 @@ public class LevelController {
             if (dog.getPercentHealthPoints() <= 0) {
                 dogs.remove(dog);
                 gui.addScore(0);
+                break;
+            }
+        }
+        for (Knight knight : knights){
+            if (knight.getPercentHealthPoints() <=0) {
+                knights.remove(0);
                 break;
             }
         }
@@ -334,6 +359,9 @@ public class LevelController {
     private void gameDraw(SpriteBatch batch) {
         for (Dog dog : dogs) dog.draw(batch);
         for (Zombie zombie : zombies) zombie.draw(batch);
+        for (Knight knight : knights) {
+            knight.draw(batch);
+        }
     }
 
     public void draw(SpriteBatch batch) {
@@ -369,6 +397,7 @@ public class LevelController {
         this.bloodMap = new ArrayList<Blood>();
         this.ammunition = new ArrayList<Ammo>();
         this.explosions = new ArrayList<Explosion>();
+        this.knights = new ArrayList<Knight>();
 
 
         boss666 = new Boss666(textureAtlas.findRegion("boss1"), HPtextureAtlas,
@@ -387,6 +416,10 @@ public class LevelController {
         }
         wall = new Wall(textureAtlas.findRegion("wall1"), HPtextureAtlas,
                 -width / 2, 4f -height / 2, 2f * 28.96f, 2f, 1500f, width);
+
+
+        knights.add(new Knight(textureAtlas.findRegion("zombie"),HPtextureAtlas,
+                0 ,7f -height /2, 4f,2f,250,50f));
         wallFloor = new Background(textureAtlas.findRegion("wallFloor"),
                 -width / 2, - height / 2, 5f * 5.875f, 5f);
         pauseButton = new Button(textureAtlas.findRegion("pauseButton"),
@@ -429,3 +462,4 @@ public class LevelController {
         music.dispose();
     }
 }
+

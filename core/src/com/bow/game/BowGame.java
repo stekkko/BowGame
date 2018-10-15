@@ -18,7 +18,7 @@ public class BowGame extends Game {
 	private Assets assets;
 
 	//TODO settings
-	private boolean musicAllowed;
+    private boolean musicAllowed;
 	private boolean soundsAllowed;
 	private int gamemode;
 
@@ -34,7 +34,7 @@ public class BowGame extends Game {
                 assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
 		levelSelector = new LevelSelector(this,
                 assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
-        //TODO settings
+
 		musicAllowed = true;
 		soundsAllowed = true;
 		gamemode = 1;
