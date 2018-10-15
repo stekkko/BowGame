@@ -15,9 +15,11 @@ public class GUI {
     private Stage stage;
     private Label labelScore;
     private Label labelCD;
+    private Label labelCD1;
     private Skin skin;
     private float score;
     private float cooldown;
+    private float cooldown1;
 
     public GUI() {
 
@@ -34,21 +36,40 @@ public class GUI {
         cooldown = 10f;
         labelCD = new Label(String.valueOf((int)(10f - cooldown)), skin.get("default", Label.LabelStyle.class));
         labelCD.setAlignment(Align.left);
-        labelCD.setPosition(0, Gdx.graphics.getHeight() / 2, Align.topLeft);
+        labelCD.setPosition(50, Gdx.graphics.getHeight() / 2, Align.topLeft);
         labelCD.setFontScale(0.5f);
         stage.addActor(labelCD);
+
+        cooldown1 = 0.5f;
+        labelCD1 = new Label(String.valueOf((int)(5f - cooldown)), skin.get("default", Label.LabelStyle.class));
+        labelCD1.setAlignment(Align.left);
+        labelCD1.setPosition(50, Gdx.graphics.getHeight() / 2 +150, Align.topLeft);
+        labelCD1.setFontScale(0.5f);
+        stage.addActor(labelCD1);
     }
 
     public float getCooldown() {
         return cooldown;
     }
+
+    public float getCooldown1() {
+        return cooldown1;
+    }
+
     public void hideCooldown() {
         labelCD.setText("");
+    }
+    public void hideCooldown1() {
+        labelCD1.setText("");
     }
 
     public void setCooldown(float cooldown) {
         this.cooldown = cooldown;
         labelCD.setText(String.format(Locale.US,"%.1f", cooldown));
+    }
+    public void setCooldown1(float cooldown) {
+        this.cooldown1 = cooldown;
+        labelCD1.setText(String.format(Locale.US,"%.1f", cooldown));
     }
 
     public float getScore() {

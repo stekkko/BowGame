@@ -45,7 +45,8 @@ public class LevelController {
     private Wall wall;
     private ArrayList<Blood> bloodMap;
     private Button pauseButton;
-    private Spell spell;
+    private Spell spellExplosion;
+    private Spell spellKnight;
     private Background wallFloor;
     private ArrayList<Explosion> explosions;
 
@@ -103,8 +104,10 @@ public class LevelController {
             ex.handle();
         }
         gui.addFloat(GameScreen.deltaCff);
-        gui.setCooldown(spell.isOnCD() ? spell.getCooldownTime() - spell.getTime() : 0f);
+        gui.setCooldown(spellExplosion.isOnCD() ? spellExplosion.getCooldownTime() - spellExplosion.getTime() : 0f);
+        gui.setCooldown1(spellKnight.isOnCD() ? spellKnight.getCooldownTime() - spellKnight.getTime() : 0f);
         if (gui.getCooldown()==0){gui.hideCooldown();}
+        if (gui.getCooldown1()==0){gui.hideCooldown1();}
         weapon.handle();
         wall.handle();
         wall.update(HPtextureAtlas);
@@ -112,7 +115,8 @@ public class LevelController {
         boss666.update(HPtextureAtlas);
         wallFloor.handle();
         pauseButton.handle();
-        spell.handle();
+        spellExplosion.handle();
+        spellKnight.handle();
 
         for (Ammo ammo : ammunition) {
             if (ammo.isReadyToDelete() || ammo.getY() > height / 2) {
@@ -131,7 +135,8 @@ public class LevelController {
             jtx = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             jty = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
             pauseButton.setToggled(pauseButton.getBounds().contains(jtx, jty));
-            spell.setToggled(spell.getBounds().contains(jtx, jty));
+            spellExplosion.setToggled(spellExplosion.getBounds().contains(jtx, jty));
+            spellKnight.setToggled(spellKnight.getBounds().contains(jtx, jty));
         }
 
 
@@ -140,13 +145,28 @@ public class LevelController {
             yp = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
 
             pauseButton.setToggled(pauseButton.getBounds().contains(xp, yp));
-            if (spell.getBounds().contains(xp, yp)) spell.setToggled(true);
-            if (spell.isToggled() && spell.getBounds().contains(jtx, jty) && !spell.isOnCD()) {
-                spell.getCrosshair().setPosition(xp - spell.getCrosshair().getWidth() / 2, yp - spell.getCrosshair().getHeight() / 2);
-                spell.getCrosshair().setDrawn(true);
+            if (spellExplosion.getBounds().contains(xp, yp)) spellExplosion.setToggled(true);
+            if (spellExplosion.isToggled() && spellExplosion.getBounds().contains(jtx, jty) && !spellExplosion.isOnCD()) {
+                spellExplosion.getCrosshair().setPosition(xp - spellExplosion.getCrosshair().getWidth() / 2, yp - spellExplosion.getCrosshair().getHeight() / 2);
+                spellExplosion.getCrosshair().setDrawn(true);
             }
 
-            if (!spell.getCrosshair().isDrawn()) {
+
+            if (!spellExplosion.getCrosshair().isDrawn()) {
+                weapon.setPosition(xp - weapon.getWidth() / 2, weapon.getY());
+                if (weapon.isLoaded() && weapon.isReadyToShoot()) {
+                    weapon.shoot();
+                    ammunition.add(weapon.getAmmo().copy());
+                    ammunition.get(ammunition.size() - 1).shoot();
+                    if (game.isSoundsAllowed()) shootSound.play(0.09f);
+                }
+            }
+            if (spellKnight.getBounds().contains(xp, yp)) spellKnight.setToggled(true);
+            if (spellKnight.isToggled() && spellKnight.getBounds().contains(jtx, jty) && !spellKnight.isOnCD()) {
+                spellKnight.getCrosshair().setPosition(xp - spellKnight.getCrosshair().getWidth() / 2, yp - spellKnight.getCrosshair().getHeight() / 2);
+                spellKnight.getCrosshair().setDrawn(true);
+            }
+            if (!spellKnight.getCrosshair().isDrawn()) {
                 weapon.setPosition(xp - weapon.getWidth() / 2, weapon.getY());
                 if (weapon.isLoaded() && weapon.isReadyToShoot()) {
                     weapon.shoot();
@@ -163,13 +183,20 @@ public class LevelController {
                 game.gameScreen.pause();
                 game.setScreen(game.pauseScreen);
             }
-            if (spell.isToggled() && spell.getBounds().contains(jtx, jty)) {
+            if (spellExplosion.isToggled() && spellExplosion.getBounds().contains(jtx, jty)) {
                 if (game.isSoundsAllowed()) explosionSound.play();
-                spell.setToggled(false);
-                spell.setOnCD(true);
+                spellExplosion.setToggled(false);
+                spellExplosion.setOnCD(true);
                 explosions.add(new Explosion(textureAtlas.findRegion("explosion"), xp -4.5f, yp -4.5f, 9f, 9f, 100f));
             }
-            spell.getCrosshair().setDrawn(false);
+
+            if (spellKnight.isToggled() && spellKnight.getBounds().contains(jtx, jty)) {
+                spellKnight.setToggled(false);
+                spellKnight.setOnCD(true);
+                knights.add(new Knight(textureAtlas.findRegion("dog"),HPtextureAtlas, xp - 5f, yp - 1.5f, 10f,3f,100500,100));
+            }
+            spellExplosion.getCrosshair().setDrawn(false);
+            spellKnight.getCrosshair().setDrawn(false);
         }
     }
 
@@ -223,7 +250,7 @@ public class LevelController {
             }
             for (Knight knight : knights) {
                 if (Intersector.overlapConvexPolygons(zombie.getBounds(), knight.getBounds())) {
-                    zombie.damaged(knight.getDamage());
+                    zombie.damaged(0);
                     zombie.repel(2f);
                     knight.damaged(zombie.getDamage());
                 }
@@ -377,7 +404,8 @@ public class LevelController {
         for (Ammo ammo : ammunition) ammo.draw(batch);
         for (Explosion ex : explosions) ex.draw(batch);
         pauseButton.draw(batch);
-        spell.draw(batch);
+        spellExplosion.draw(batch);
+        spellKnight.draw(batch);
     }
 
     private void initParams() {
@@ -418,16 +446,18 @@ public class LevelController {
                 -width / 2, 4f -height / 2, 2f * 28.96f, 2f, 1500f, width);
 
 
-        knights.add(new Knight(textureAtlas.findRegion("zombie"),HPtextureAtlas,
-                0 ,7f -height /2, 4f,2f,250,50f));
+        knights.add(new Knight(textureAtlas.findRegion("dog"),HPtextureAtlas,
+                0 ,7f -height /2, 3f,3f,500,50f));
         wallFloor = new Background(textureAtlas.findRegion("wallFloor"),
                 -width / 2, - height / 2, 5f * 5.875f, 5f);
         pauseButton = new Button(textureAtlas.findRegion("pauseButton"),
                 width / 2 - 2f * 1.275f - 0.5f, height / 2 - 2.5f, 2f * 1.275f, 2f);
         Crosshair crosshair = new Crosshair(textureAtlas.findRegion("crosshair"),
                 0, 0, 9f, 9f);
-        spell = new Spell(textureAtlas.findRegion("exSpellButton"),
+        spellExplosion = new Spell(textureAtlas.findRegion("exSpellButton"),
                 -width / 2, -2f, 4f, 4f, crosshair);
+        spellKnight = new Spell(textureAtlas.findRegion("exSpellButton"),
+                -width / 2, 3f, 4f, 4f, crosshair);
         background = new Background(textureAtlas.findRegion("grass"),
                 -width / 2, -height / 2, height * 1f, height);
 
