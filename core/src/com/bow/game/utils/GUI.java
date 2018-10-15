@@ -42,10 +42,13 @@ public class GUI {
     public float getCooldown() {
         return cooldown;
     }
+    public void hideCooldown() {
+        labelCD.setText("");
+    }
 
     public void setCooldown(float cooldown) {
         this.cooldown = cooldown;
-        labelCD.setText(String.format(Locale.US,"%.2f", cooldown));
+        labelCD.setText(String.format(Locale.US,"%.1f", cooldown));
     }
 
     public float getScore() {

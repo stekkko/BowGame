@@ -90,8 +90,8 @@ public class MainMenuController {
             if (exitButton.isToggled()) {
                 exitButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
-//                TODO exit button
-                game.getScreen().dispose();
+                System.gc();
+                System.exit(0);
 
             }
         }
