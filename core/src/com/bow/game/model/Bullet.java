@@ -10,12 +10,11 @@ public class Bullet extends Ammo {
         setDamage(damage);
         setFlyingSpeed(flyingSPD);
         setRepelDist(repelDist);
-
     }
 
     @Override
-    public Ammo copy() {
-        return new Bullet(this.getSprite(), this.getX(), this.getY(), this.getWidth(), this.getHeight(),
-                this.getDamage(), this.getCriticalChance(), this.getCriticalDamage(), this.getRepelDist(), this.getFlyingSpeed());
+    public Bullet copy() {
+        return new Bullet(getSprite(), getX(), getY(), getWidth(), getHeight(),
+                getDamage(), getCriticalChance(), getCriticalDamage(), getRepelDist(), getFlyingSpeed());
     }
 }

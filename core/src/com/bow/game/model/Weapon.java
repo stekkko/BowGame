@@ -16,13 +16,13 @@ public abstract class Weapon extends GameObject {
     private int maxAmmo;
     private float time;
     Ammo amExample;
-    ArrayList<Ammo> ammos;
+    private int ammo;
     private boolean loaded;
     private boolean readyToShoot;
 
     Weapon(TextureRegion texture, float x, float y, float width, float height, int maxAmmo) {
         super(texture, x, y, width, height);
-        ammos = new ArrayList<Ammo>();
+        ammo = 0;
         time = 0f;
         loaded = false;
         readyToShoot = false;
@@ -30,16 +30,15 @@ public abstract class Weapon extends GameObject {
     }
 
     public void instReload() {
-        for (int i = 0; i < maxAmmo - ammos.size(); i++)
-            ammos.add(amExample.copy());
+        ammo = maxAmmo;
         readyToShoot = true;
         loaded = true;
     }
 
     public void shoot() {
-        if (ammos.isEmpty()) loaded = false;
+        if (ammo == 0) loaded = false;
         else {
-            ammos.remove(0);
+            ammo--;
             readyToShoot = false;
         }
     }
@@ -47,15 +46,12 @@ public abstract class Weapon extends GameObject {
     @Override
     public void handle() {
         super.handle();
-        for (Ammo ammo : ammos) ammo.handle();
         amExample.handle();
 
 
         if (!isLoaded()) {
             time += GameScreen.deltaCff;
             if (time > ammoReloadInterval) {
-                loaded = true;
-                readyToShoot = true;
                 instReload();
                 time = 0;
             }
@@ -82,7 +78,7 @@ public abstract class Weapon extends GameObject {
     public void draw(SpriteBatch batch) {
         super.draw(batch);
         if (isLoaded() && isLoadedVisible()) {
-            for(Ammo ammo : ammos) ammo.draw(batch);
+            amExample.draw(batch);
         }
     }
 

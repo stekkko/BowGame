@@ -6,9 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class HealthBar extends GameObject {
 
+    private static TextureRegion[] textureRegions;
     private boolean shown;
-    private boolean needUpdate;
-    private boolean dead;
 
     private float healthPoints;
     private float maxHealthPoints;
@@ -17,32 +16,32 @@ public class HealthBar extends GameObject {
     @Override
     public void handle() {
         super.handle();
-    }
-
-    public HealthBar(TextureRegion texture, float x, float y, float width, float height, float maxHealthPoints) {
-        super(texture, x, y, width, height);
-        shown = false;
-        needUpdate = false;
-        this.maxHealthPoints = maxHealthPoints;
-        this.healthPoints = maxHealthPoints;
-        this.percentHealthPoints = 100;
-    }
-
-    public void update(TextureAtlas textureAtlas) {
         if (healthPoints < maxHealthPoints) show();
         if (percentHealthPoints != (int) (100f * healthPoints / maxHealthPoints)) {
             setPercentHealthPoints((int) (100f * healthPoints / maxHealthPoints));
-            setNeedUpdate(true);
-            setSprite(textureAtlas.findRegion(Integer.toString(percentHealthPoints)));
+            setSprite(textureRegions[percentHealthPoints]);
         }
+    }
 
+    HealthBar(float x, float y, float width, float height, float maxHealthPoints) {
+        super(textureRegions[100], x, y, width, height);
+        hide();
+        this.maxHealthPoints = maxHealthPoints;
+        setHealthPoints(maxHealthPoints);
+        setPercentHealthPoints(100);
     }
 
     public void damage(float damage) {
         this.healthPoints -= damage;
-        this.setNeedUpdate(true);
         if (healthPoints < 0) {
             healthPoints = 0;
+        }
+    }
+
+    public static void setTextureRegions(TextureAtlas textureAtlas) {
+        textureRegions = new TextureRegion[101];
+        for (int i = 0; i < 101; i++) {
+            textureRegions[i] = textureAtlas.findRegion(String.valueOf(i));
         }
     }
 
@@ -81,12 +80,4 @@ public class HealthBar extends GameObject {
     }
 
     public void hide() { shown = false; }
-
-    public boolean isNeedUpdate() {
-        return needUpdate;
-    }
-
-    public void setNeedUpdate(boolean needUpdate) {
-        this.needUpdate = needUpdate;
-    }
 }

@@ -3,6 +3,8 @@ package com.bow.game.model;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.Random;
+
 public abstract class Ammo extends GameObject {
 
     private boolean readyToDelete;
@@ -69,6 +71,10 @@ public abstract class Ammo extends GameObject {
 
     public float getDamage() {
         return damage;
+    }
+
+    public float getDamage(Random random) {
+        return random.nextFloat() < getCriticalChance() ? getCriticalDamage() : getDamage();
     }
 
     public float getRepelDist() {

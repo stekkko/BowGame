@@ -2,7 +2,6 @@ package com.bow.game.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
@@ -12,9 +11,9 @@ public abstract class Enemy extends GameObject {
     private HealthBar healthBar;
     private float damage;
 
-    public Enemy(TextureRegion texture, TextureAtlas HPtextureAtlas, float x, float y, float width, float height, float maxHealthPoints, float damage) {
+    public Enemy(TextureRegion texture, float x, float y, float width, float height, float maxHealthPoints, float damage) {
         super(texture, x, y, width, height);
-        this.healthBar = new HealthBar(HPtextureAtlas.findRegion("100"), x, y + height, width, width * 0.07843f, maxHealthPoints);
+        this.healthBar = new HealthBar(x, y + height, width, width * 0.07843f, maxHealthPoints);
         this.damage = damage;
     }
 
@@ -57,6 +56,15 @@ public abstract class Enemy extends GameObject {
         healthBar.damage(value);
     }
 
+    /**
+     * Enemy has been moved backwards
+     * @param dist distance
+     */
+    public void repel(float dist) {
+        this.setPosition(this.getX(), this.getY() + dist);
+    }
+
+
     @Override
     public void handle() {
         super.handle();
@@ -64,13 +72,6 @@ public abstract class Enemy extends GameObject {
 
         healthBar.setSpeedX(this.speedX);
         healthBar.setSpeedY(this.speedY);
-    }
-
-    public void update(TextureAtlas HPtextureAtlas) {
-        if (healthBar.isNeedUpdate()) {
-            healthBar.update(HPtextureAtlas);
-            healthBar.setNeedUpdate(false);
-        }
     }
 
     @Override

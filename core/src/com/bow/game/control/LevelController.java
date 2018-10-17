@@ -31,10 +31,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class LevelController {
-
     private static Random random;
     private BowGame game;
+    private GUI gui;
+    private TextureAtlas textureAtlas;
 
+    //Game Objects
     private Background background;
     private ArrayList<Zombie> zombies;
     private ArrayList<Dog> dogs;
@@ -45,25 +47,26 @@ public class LevelController {
     private Wall wall;
     private ArrayList<Blood> bloodMap;
     private Button pauseButton;
-    private Spell spell;
+    private Spell spellExplosion;
+    private Spell spellKnight;
     private Background wallFloor;
     private ArrayList<Explosion> explosions;
 
+    //Music and Sounds
+    private Sound swordHitSound;
+    private Sound swordSound;
     private Sound scream;
-
     private Sound explosionSound;
     private Sound hitSound;
     private Sound bricksSound;
-    private Sound shootSound;
+    private Sound shootBowSound;
+    private Sound shootTurretSound;
+    private Sound reloadedSound;
     private Sound buttonSound;
     public Music music;
 
-    private TextureAtlas textureAtlas;
-    private TextureAtlas HPtextureAtlas;
-    private GUI gui;
-
+    //Params
     private boolean bossFIGHT;
-
     private float spawnInterval;
     private float time;
     private float xp = 0;
@@ -74,14 +77,11 @@ public class LevelController {
     private float width = GameScreen.cameraWidth;
     private float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-    public LevelController(BowGame game, TextureAtlas textureAtlas, TextureAtlas HPtextueAtlas, GUI gui) {
+    public LevelController(BowGame game, TextureAtlas textureAtlas, GUI gui) {
         this.game = game;
-
-        random = new Random();
         this.gui = gui;
-        this.HPtextureAtlas = HPtextueAtlas;
+        random = new Random();
         this.textureAtlas = textureAtlas;
-
         init();
     }
 
@@ -92,46 +92,52 @@ public class LevelController {
     }
 
     public void handle() {
-        if (bossFIGHT)
-            handleBossFight();
-        else
-            handleGame();
+        if (bossFIGHT) handleBossFight();
+        else handleGame();
 
         for (Ammo ammo : ammunition) ammo.handle();
         for (Explosion ex : explosions) {
             ex.setDamage(0);
             ex.handle();
         }
-        gui.addFloat(GameScreen.deltaCff);
-        gui.setCooldown(spell.isOnCD() ? spell.getCooldownTime() - spell.getTime() : 0f);
-        if (gui.getCooldown()==0){gui.hideCooldown();}
-        weapon.handle();
+
+        if (wall.getPercentHealthPoints() <= 0)
+            restartGame();
+        else if (wall.getPercentHealthPoints() <= 50)
+            wall.brake(textureAtlas.findRegion("wall2"));
         wall.handle();
-        wall.update(HPtextureAtlas);
+
+        gui.addFloat(GameScreen.deltaCff);
+        gui.setCooldown(spellExplosion.isOnCD() ? spellExplosion.getCooldownTime() - spellExplosion.getTime() : 0f);
+        gui.setCooldown1(spellKnight.isOnCD() ? spellKnight.getCooldownTime() - spellKnight.getTime() : 0f);
+        if (gui.getCooldown() == 0) { gui.hideCooldown(); }
+        if (gui.getCooldown1() == 0) { gui.hideCooldown1(); }
+
+        weapon.handle();
         boss666.handle();
-        boss666.update(HPtextureAtlas);
         wallFloor.handle();
         pauseButton.handle();
-        spell.handle();
+        spellExplosion.handle();
+        spellKnight.handle();
 
-        for (Ammo ammo : ammunition) {
-            if (ammo.isReadyToDelete() || ammo.getY() > height / 2) {
+        for (int i = ammunition.size() - 1; i >= 0; i--) {
+            Ammo ammo = ammunition.get(i);
+            if (ammo.isReadyToDelete() || ammo.getY() > height / 2)
                 ammunition.remove(ammo);
-                break;
-            }
         }
-        for (Explosion ex : explosions) {
-            if (ex.isReadyToDelete()) {
+        for (int i = explosions.size() - 1; i >= 0; i--) {
+            Explosion ex = explosions.get(i);
+            if (ex.isReadyToDelete())
                 explosions.remove(ex);
-                break;
-            }
         }
 
         if (Gdx.input.justTouched()) {
             jtx = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             jty = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
+
             pauseButton.setToggled(pauseButton.getBounds().contains(jtx, jty));
-            spell.setToggled(spell.getBounds().contains(jtx, jty));
+            spellExplosion.setToggled(spellExplosion.getBounds().contains(jtx, jty));
+            spellKnight.setToggled(spellKnight.getBounds().contains(jtx, jty));
         }
 
 
@@ -139,43 +145,60 @@ public class LevelController {
             xp = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             yp = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
 
-            pauseButton.setToggled(pauseButton.getBounds().contains(xp, yp));
-            if (spell.getBounds().contains(xp, yp)) spell.setToggled(true);
-            if (spell.isToggled() && spell.getBounds().contains(jtx, jty) && !spell.isOnCD()) {
-                spell.getCrosshair().setPosition(xp - spell.getCrosshair().getWidth() / 2, yp - spell.getCrosshair().getHeight() / 2);
-                spell.getCrosshair().setDrawn(true);
+            if (spellExplosion.isToggled() && !spellExplosion.isOnCD()) {
+                spellExplosion.getCrosshair().setPosition(xp - spellExplosion.getCrosshair().getWidth() / 2, yp - spellExplosion.getCrosshair().getHeight() / 2);
+                spellExplosion.getCrosshair().setDrawn(true);
             }
 
-            if (!spell.getCrosshair().isDrawn()) {
+            if (spellKnight.isToggled() && !spellKnight.isOnCD()) {
+                spellKnight.getCrosshair().setPosition(xp - spellKnight.getCrosshair().getWidth() / 2, yp - spellKnight.getCrosshair().getHeight() / 2);
+                spellKnight.getCrosshair().setDrawn(true);
+            }
+
+            if (!spellExplosion.getCrosshair().isDrawn() && !spellKnight.getCrosshair().isDrawn()) {
                 weapon.setPosition(xp - weapon.getWidth() / 2, weapon.getY());
                 if (weapon.isLoaded() && weapon.isReadyToShoot()) {
                     weapon.shoot();
                     ammunition.add(Ammo.copy(weapon.getAmmo()));
                     ammunition.get(ammunition.size() - 1).shoot();
-                    if (game.isSoundsAllowed()) shootSound.play(0.09f);
+                    if (game.isSoundsAllowed()) {
+                        if (game.getGamemode() == 1) shootBowSound.play(0.1f);
+                        if (game.getGamemode() == 2) shootTurretSound.play(0.1f);
+                    }
                 }
             }
+
         }
         else {
-            if (pauseButton.isToggled() && pauseButton.getBounds().contains(jtx, jty)) {
+            if (pauseButton.isToggled()) {
                 if (game.isSoundsAllowed()) buttonSound.play();
                 pauseButton.setToggled(false);
                 game.gameScreen.pause();
                 game.setScreen(game.pauseScreen);
             }
-            if (spell.isToggled() && spell.getBounds().contains(jtx, jty)) {
+            if (spellExplosion.isToggled()) {
                 if (game.isSoundsAllowed()) explosionSound.play();
-                spell.setToggled(false);
-                spell.setOnCD(true);
-                explosions.add(new Explosion(textureAtlas.findRegion("explosion"), xp -4.5f, yp -4.5f, 9f, 9f, 100f));
+                spellExplosion.setToggled(false);
+                spellExplosion.setOnCD(true);
+                spellExplosion.getCrosshair().setDrawn(false);
+                explosions.add(new Explosion(textureAtlas.findRegion("explosion"), xp -4.5f, yp -4.5f, 9f, 9f, 50f));
             }
-            spell.getCrosshair().setDrawn(false);
+            if (spellKnight.isToggled()) {
+                if (game.isSoundsAllowed()) swordSound.play();
+                spellKnight.setToggled(false);
+                spellKnight.setOnCD(true);
+                spellKnight.getCrosshair().setDrawn(false);
+                Knight knight = new Knight(textureAtlas.findRegion("knight"),
+                        xp -1.5f ,yp - 1.5f * 0.906f, 3f,3f * 0.906f,1000,25f);
+                knight.targetSpawn(xp -1.5f, yp -1.5f * 0.906f, 0f, 1f);
+                knight.setPosition(knight.getX(), Math.max(knight.getY(), wall.getY() + wall.getHeight()));
+                knights.add(knight);
+            }
         }
     }
 
     private void handleBossFight() {
         boss666.handle();
-        boss666.update(HPtextureAtlas);
         for (Explosion ex : explosions) {
             if (Intersector.overlapConvexPolygons(boss666.getBounds(), ex.getBounds())) {
                 boss666.damaged(ex.getDamage());
@@ -202,20 +225,12 @@ public class LevelController {
     }
 
     private void handleGame() {
-        for (Dog dog : dogs) {
-            dog.handle();
-            dog.update(HPtextureAtlas);
-        }
-        for (Zombie zombie : zombies) {
-            zombie.handle();
-            zombie.update(HPtextureAtlas);
-        }
-        for (Knight knight : knights) {
-            knight.handle();
-            knight.update(HPtextureAtlas);
-        }
+        for (Dog dog : dogs) dog.handle();
+        for (Zombie zombie : zombies) zombie.handle();
+        for (Knight knight : knights) knight.handle();
 
-        for (Zombie zombie : zombies) {
+        for (int i = zombies.size() - 1; i >= 0; i--) {
+            Zombie zombie = zombies.get(i);
             for (Explosion explosion : explosions) {
                 if (Intersector.overlapConvexPolygons(zombie.getBounds(), explosion.getBounds())) {
                     zombie.damaged(explosion.getDamage());
@@ -223,32 +238,30 @@ public class LevelController {
             }
             for (Knight knight : knights) {
                 if (Intersector.overlapConvexPolygons(zombie.getBounds(), knight.getBounds())) {
+                    if (game.isSoundsAllowed()) swordHitSound.play(0.2f);
                     zombie.damaged(knight.getDamage());
                     zombie.repel(2f);
                     knight.damaged(zombie.getDamage());
+                    knight.repel(-1f);
                 }
             }
             if (Intersector.overlapConvexPolygons(zombie.getBounds(), wall.getBounds())) {
                 zombies.remove(zombie);
-                if (game.isSoundsAllowed()) bricksSound.play(0.6f);
+                if (game.isSoundsAllowed()) bricksSound.play(0.7f);
                 wall.damaged(zombie.getDamage());
-                wall.handle();
-                wall.update(HPtextureAtlas);
-                if (wall.getPercentHealthPoints() <= 0) {
-                    restartGame();
-                }
-                else if (wall.getPercentHealthPoints() <= 50){
-                    wall.brake(textureAtlas.findRegion("wall2"));
-                }
-                break;
             }
-            if (zombie.getPercentHealthPoints() <= 0) {
-                zombies.remove(zombie);
-                gui.addScore(0);
-                break;
-            }
+            if (zombie.getPercentHealthPoints() <= 0) zombies.remove(zombie);
+
         }
-        for (Dog dog : dogs) {
+
+        for (int i = knights.size() - 1; i >= 0; i--) {
+            Knight knight = knights.get(i);
+            if (knight.getPercentHealthPoints() <= 0 || knight.getY() > height / 2) knights.remove(knight);
+        }
+
+
+        for (int i = dogs.size() - 1; i >= 0; i--) {
+            Dog dog = dogs.get(i);
             for (Explosion explosion : explosions) {
                 if (Intersector.overlapConvexPolygons(dog.getBounds(), explosion.getBounds())) {
                     dog.damaged(explosion.getDamage());
@@ -256,48 +269,32 @@ public class LevelController {
             }
             for (Knight knight : knights) {
                 if (Intersector.overlapConvexPolygons(dog.getBounds(), knight.getBounds())) {
+                    if (game.isSoundsAllowed()) swordHitSound.play(0.5f);
                     dog.damaged(knight.getDamage());
+                    dog.repel(3f);
                     knight.damaged(dog.getDamage());
+                    knight.repel(-1f);
                 }
             }
             if (Intersector.overlapConvexPolygons(dog.getBounds(), wall.getBounds())) {
                 dogs.remove(dog);
                 if (game.isSoundsAllowed()) bricksSound.play(0.6f);
                 wall.damaged(dog.getDamage());
-                wall.handle();
-                if (wall.getPercentHealthPoints() <= 0) {
-                    restartGame();
-                } else if (wall.getPercentHealthPoints() <= 50) {
-                    wall.brake(textureAtlas.findRegion("wall2"));
-                }
-                break;
             }
-            if (dog.getPercentHealthPoints() <= 0) {
-                dogs.remove(dog);
-                gui.addScore(0);
-                break;
-            }
-        }
-        for (Knight knight : knights){
-            if (knight.getPercentHealthPoints() <=0) {
-                knights.remove(0);
-                break;
-            }
+            if (dog.getPercentHealthPoints() <= 0) dogs.remove(dog);
         }
         time += GameScreen.deltaCff;
-        spawnInterval -= 0.001 * GameScreen.deltaCff;
+        spawnInterval -= 0.005 * GameScreen.deltaCff;
         if (time > spawnInterval) {
             int param = random.nextInt(6);
             int adjustZombies = 1;
             for (int i = 0; i < param + adjustZombies; i++) {
-                zombies.add(new Zombie(textureAtlas.findRegion("zombie"), HPtextureAtlas,
-                        -width, height / 2, 3f, 3f * 1.12f, 100f, 200f));
+                zombies.add(new Zombie(-width, height / 2, 3f, 3f * 1.12f, 100f, 200f));
                 zombies.get(zombies.size() - 1).randomSpawn(random, width, 0f, -1.5f);
             }
             for (int i = 0; i < 5 - param; i++) {
-                dogs.add(new Dog(textureAtlas.findRegion("dog"), HPtextureAtlas,
-                        -width, height / 2, 2f, 2f * 2.8125f, 50f, 50f));
-                dogs.get(dogs.size() - 1).randomSpawn(random, width, 0f, -3f);
+                dogs.add(new Dog(-width, height / 2, 2f, 2f * 2.8125f, 50f, 50f));
+                dogs.get(dogs.size() - 1).randomSpawn(random, width, 0f, -4f);
             }
             time = 0;
         }
@@ -305,43 +302,32 @@ public class LevelController {
         for (Ammo ammo : ammunition) {
             for (Zombie zombie : zombies) {
                 if (Intersector.overlapConvexPolygons(zombie.getBounds(), ammo.getBounds())) {
-                    float damage = random.nextFloat() < ammo.getCriticalChance() ? ammo.getCriticalDamage() : ammo.getDamage();
-                    if (zombie.getPercentHealthPoints() > 66 && zombie.getPercentHealthPoints() <= 66 + damage) {
-                        zombie.setSprite(textureAtlas.findRegion("zombie66"));
-                    }
-                    else if (zombie.getPercentHealthPoints() > 33 && zombie.getPercentHealthPoints() <= 33 + damage) {
-                        zombie.setSprite(textureAtlas.findRegion("zombie33"));
-                    }
+                    zombie.damaged(ammo.getDamage(random));
                     zombie.repel(ammo.getRepelDist());
-                    zombie.damaged(damage);
-
-                    bloodMap.add(new Blood(textureAtlas.findRegion("blood"),
-                            zombie.getX() - 0.5f + random.nextFloat(), zombie.getY(), zombie.getWidth(), zombie.getWidth()));
-
+                    bloodMap.add(new Blood(zombie.getX() - 0.5f + random.nextFloat(), zombie.getY(), zombie.getWidth(), zombie.getWidth()));
                     if (game.isSoundsAllowed()) hitSound.play(0.8f);
                     ammo.delete();
                 }
             }
             for (Dog dog : dogs) {
                 if (Intersector.overlapConvexPolygons(dog.getBounds(), ammo.getBounds())) {
-                    float damage = random.nextFloat() < ammo.getCriticalChance() ? ammo.getCriticalDamage() : ammo.getDamage();
-                    dog.damaged(damage);
-                    bloodMap.add(new Blood(textureAtlas.findRegion("blood"),
-                            dog.getX() - 0.5f + random.nextFloat(), dog.getY(), dog.getWidth(), dog.getWidth()));
+                    dog.damaged(ammo.getDamage(random));
+                    bloodMap.add(new Blood(dog.getX() - 0.5f + random.nextFloat(), dog.getY(), dog.getWidth(), dog.getWidth()));
                     if (game.isSoundsAllowed()) hitSound.play(0.8f);
                     ammo.delete();
                 }
             }
 
         }
+
         if (bloodMap.size() > 200) {
             bloodMap.remove(0);
         }
+
         bossFIGHT = gui.getScore() > 60 && gui.getScore() < 61;
         if (bossFIGHT) {
             boss666.targetSpawn(-boss666.getWidth() / 2, height / 2, 0f, -1f);
             time = 0;
-
         }
     }
 
@@ -359,9 +345,7 @@ public class LevelController {
     private void gameDraw(SpriteBatch batch) {
         for (Dog dog : dogs) dog.draw(batch);
         for (Zombie zombie : zombies) zombie.draw(batch);
-        for (Knight knight : knights) {
-            knight.draw(batch);
-        }
+        for (Knight knight : knights) knight.draw(batch);
     }
 
     public void draw(SpriteBatch batch) {
@@ -377,7 +361,8 @@ public class LevelController {
         for (Ammo ammo : ammunition) ammo.draw(batch);
         for (Explosion ex : explosions) ex.draw(batch);
         pauseButton.draw(batch);
-        spell.draw(batch);
+        spellExplosion.draw(batch);
+        spellKnight.draw(batch);
     }
 
     private void initParams() {
@@ -400,7 +385,7 @@ public class LevelController {
         this.knights = new ArrayList<Knight>();
 
 
-        boss666 = new Boss666(textureAtlas.findRegion("boss1"), HPtextureAtlas,
+        boss666 = new Boss666(textureAtlas.findRegion("boss1"),
                 - 4f, height / 2, 8f, 8f, 800f, (float) Integer.MAX_VALUE);
         if (game.getGamemode() == 1) {
             Ammo ammoInWeapon = new Arrow(textureAtlas.findRegion("arrow"),
@@ -410,41 +395,48 @@ public class LevelController {
         }
         else if (game.getGamemode() == 2) {
             Ammo ammoInWeapon = new Bullet(textureAtlas.findRegion("bullet"),
-                    0f, -height / 2, 0.2f, 0.2f * 3.555f, 20f, 0.01f, 100f, 0.1f, 40f);
+                    0f, -height / 2, 0.5f, 0.5f * 3.555f,
+                    20f, 0.01f, 100f, 0.1f, 40f);
             weapon = new Turret(textureAtlas.findRegion("turret"),
                     0f, -height / 2, 3f, 3f * 1.435f, ammoInWeapon, 30, 2.0f, 0.1f);
         }
-        wall = new Wall(textureAtlas.findRegion("wall1"), HPtextureAtlas,
+        wall = new Wall(textureAtlas.findRegion("wall1"),
                 -width / 2, 4f -height / 2, 2f * 28.96f, 2f, 1500f, width);
-
-
-        knights.add(new Knight(textureAtlas.findRegion("knight"),HPtextureAtlas,
-                0 ,7f -height /2, 4f,4f * 0.906f,250,50f));
         wallFloor = new Background(textureAtlas.findRegion("wallFloor"),
                 -width / 2, - height / 2, 5f * 5.875f, 5f);
         pauseButton = new Button(textureAtlas.findRegion("pauseButton"),
                 width / 2 - 2f * 1.275f - 0.5f, height / 2 - 2.5f, 2f * 1.275f, 2f);
         Crosshair crosshair = new Crosshair(textureAtlas.findRegion("crosshair"),
                 0, 0, 9f, 9f);
-        spell = new Spell(textureAtlas.findRegion("exSpellButton"),
+        Crosshair crosshair1 = new Crosshair(textureAtlas.findRegion("crosshair"),
+                0, 0, 4f, 4f);
+        spellExplosion = new Spell(textureAtlas.findRegion("exSpellButton"),
                 -width / 2, -2f, 4f, 4f, crosshair);
+        spellKnight = new Spell(textureAtlas.findRegion("knightSpellButton"),
+                -width / 2, 2.5f, 4f, 4f, crosshair1);
+
         background = new Background(textureAtlas.findRegion("grass"),
                 -width / 2, -height / 2, height * 1f, height);
 
     }
 
     private void initSounds() {
+
         hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.ogg"));
-        shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot.ogg"));
+        shootBowSound = Gdx.audio.newSound(Gdx.files.internal("shootBow.ogg"));
         bricksSound = Gdx.audio.newSound(Gdx.files.internal("bricks.ogg"));
         buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
         scream = Gdx.audio.newSound(Gdx.files.internal("scream.ogg"));
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
+        swordSound = Gdx.audio.newSound(Gdx.files.internal("knight.ogg"));
+        swordHitSound = Gdx.audio.newSound(Gdx.files.internal("swordHit.ogg"));
+        shootTurretSound = Gdx.audio.newSound(Gdx.files.internal("shootTurret.ogg"));
+        reloadedSound = Gdx.audio.newSound(Gdx.files.internal("reloaded.ogg"));
 
 
         music = Gdx.audio.newMusic(Gdx.files.internal("bensound-instinct.mp3"));
         music.setLooping(true);
-        music.setVolume(0.18f);
+        music.setVolume(0.15f);
         if (game.isMusicAllowed()) {
             music.play();
         }
@@ -453,12 +445,18 @@ public class LevelController {
     public void dispose() {
         game.dispose();
         gui.dispose();
-        HPtextureAtlas.dispose();
         textureAtlas.dispose();
 
         hitSound.dispose();
-        shootSound.dispose();
+        shootBowSound.dispose();
         bricksSound.dispose();
+        buttonSound.dispose();
+        scream.dispose();
+        explosionSound.dispose();
+        swordHitSound.dispose();
+        swordSound.dispose();
+        shootTurretSound.dispose();
+        reloadedSound.dispose();
         music.dispose();
     }
 }

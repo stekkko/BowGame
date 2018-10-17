@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 1494, 597
+  xy: 1960, 631
   size: 26, 146
   orig: 26, 146
   offset: 0, 0
@@ -20,14 +20,14 @@ blood
   index: -1
 boss1
   rotate: false
-  xy: 1018, 548
+  xy: 2, 34
   size: 347, 347
   orig: 347, 347
   offset: 0, 0
   index: -1
 boss2
   rotate: false
-  xy: 2, 34
+  xy: 1018, 548
   size: 347, 347
   orig: 347, 347
   offset: 0, 0
@@ -48,7 +48,7 @@ bullet
   index: -1
 crosshair
   rotate: false
-  xy: 673, 39
+  xy: 1367, 745
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
@@ -62,14 +62,14 @@ dog
   index: -1
 exSpellButton
   rotate: false
-  xy: 1367, 745
+  xy: 673, 39
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 exitButton
   rotate: false
-  xy: 1519, 839
+  xy: 1519, 757
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
@@ -83,7 +83,7 @@ explosion
   index: -1
 goButton
   rotate: false
-  xy: 1519, 757
+  xy: 673, 313
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
@@ -102,9 +102,16 @@ knight
   orig: 36, 30
   offset: 0, 0
   index: -1
+knightSpellButton
+  rotate: false
+  xy: 1367, 593
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
 mainMenuButton
   rotate: false
-  xy: 673, 313
+  xy: 1519, 839
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
@@ -118,35 +125,35 @@ menuBack
   index: -1
 musicButtonOff
   rotate: false
-  xy: 1522, 675
+  xy: 1623, 593
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 musicButtonOn
   rotate: false
-  xy: 1626, 675
+  xy: 1519, 593
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 pauseButton
   rotate: false
-  xy: 1278, 466
+  xy: 867, 231
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 playButton
   rotate: false
-  xy: 1018, 380
+  xy: 1519, 675
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 resumeButton
   rotate: false
-  xy: 1753, 839
+  xy: 1018, 380
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
@@ -160,14 +167,14 @@ soundButtonOff
   index: -1
 soundButtonOn
   rotate: false
-  xy: 1522, 593
+  xy: 1278, 466
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 turret
   rotate: false
-  xy: 867, 199
+  xy: 1880, 665
   size: 78, 112
   orig: 78, 112
   offset: 0, 0
@@ -195,21 +202,21 @@ wallFloor
   index: -1
 zombie
   rotate: false
-  xy: 1753, 697
+  xy: 1753, 779
   size: 125, 140
   orig: 125, 140
   offset: 0, 0
   index: -1
 zombie33
   rotate: false
-  xy: 1880, 697
+  xy: 1880, 779
   size: 125, 140
   orig: 125, 140
   offset: 0, 0
   index: -1
 zombie66
   rotate: false
-  xy: 1367, 603
+  xy: 1753, 637
   size: 125, 140
   orig: 125, 140
   offset: 0, 0

@@ -3,7 +3,6 @@ package com.bow.game.model;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Arrow extends Ammo {
-
     public Arrow(TextureRegion texture, float x, float y, float width, float height, float damage, float critChance, float critDamage, float repelDist, float flyingSPD) {
         super(texture, x, y, width, height);
         setCriticalChance(critChance);
@@ -14,8 +13,8 @@ public class Arrow extends Ammo {
     }
 
     @Override
-    public Ammo copy() {
-        return new Arrow(this.getSprite(), this.getX(), this.getY(), this.getWidth(), this.getHeight(),
-                this.getDamage(), this.getCriticalChance(), this.getCriticalDamage(), this.getRepelDist(), this.getFlyingSpeed());
+    public Arrow copy() {
+        return new Arrow(getSprite(), getX(), getY(), getWidth(), getHeight(),
+                getDamage(), getCriticalChance(), getCriticalDamage(), getRepelDist(), getFlyingSpeed());
     }
 }
