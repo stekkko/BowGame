@@ -22,8 +22,8 @@ public abstract class Weapon extends GameObject {
 
     Weapon(TextureRegion texture, float x, float y, float width, float height, int maxAmmo) {
         super(texture, x, y, width, height);
-        time = 0f;
         ammo = 0;
+        time = 0f;
         loaded = false;
         readyToShoot = false;
         setMaxAmmo(maxAmmo);
@@ -36,9 +36,11 @@ public abstract class Weapon extends GameObject {
     }
 
     public void shoot() {
-        if (ammo <= 0) loaded = false;
-        readyToShoot = false;
-        ammo--;
+        if (ammo == 0) loaded = false;
+        else {
+            ammo--;
+            readyToShoot = false;
+        }
     }
 
     @Override
@@ -69,7 +71,7 @@ public abstract class Weapon extends GameObject {
     }
 
     public Ammo getAmmo() {
-        return amExample.copy();
+        return amExample;
     }
 
     @Override

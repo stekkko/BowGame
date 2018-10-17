@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Wall extends GameObject {
 
-    public HealthBar healthBar;
+    private HealthBar healthBar;
     private boolean broken;
 
-    public Wall(TextureRegion texture, TextureAtlas HPtextureAtlas, float x, float y, float width, float height, float maxHealthPoints, float hpWidth) {
+    public Wall(TextureRegion texture, float x, float y, float width, float height, float maxHealthPoints, float hpWidth) {
         super(texture, x, y, width, height);
 
-        this.healthBar = new HealthBar(HPtextureAtlas.findRegion("100"), x, y - hpWidth * 0.04f, hpWidth, hpWidth * 0.03f, maxHealthPoints);
+        this.healthBar = new HealthBar(x, y - hpWidth * 0.04f, hpWidth, hpWidth * 0.03f, maxHealthPoints);
         healthBar.show();
         broken = false;
     }
@@ -30,13 +30,6 @@ public class Wall extends GameObject {
         healthBar.setHealthPoints(healthBar.getMaxHealthPoints());
         broken = false;
         this.setSprite(textureRegion);
-    }
-
-    public void update(TextureAtlas HPtextureAtlas) {
-        if (healthBar.isNeedUpdate()) {
-            healthBar.update(HPtextureAtlas);
-            healthBar.setNeedUpdate(false);
-        }
     }
 
     @Override

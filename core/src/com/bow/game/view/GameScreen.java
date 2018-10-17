@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bow.game.BowGame;
 import com.bow.game.control.LevelController;
 import com.bow.game.utils.GUI;
@@ -24,10 +26,10 @@ public class GameScreen implements Screen {
     public static final float cameraWidth = 20f;
     public static float deltaCff;
 
-    public GameScreen(BowGame game, TextureAtlas textureAtlas, TextureAtlas HPtextureAtlas) {
+    public GameScreen(BowGame game, TextureAtlas textureAtlas) {
         this.game = game;
         gui = new GUI();
-        levelController = new LevelController(game, textureAtlas, HPtextureAtlas, gui);
+        levelController = new LevelController(game, textureAtlas, gui);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = true;
     }

@@ -4,13 +4,11 @@ package com.bow.game.model;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Bow extends Weapon {
-
     public Bow(TextureRegion texture, float x, float y, float width, float height, Ammo ammo, float arrowLoadInterval) {
         super(texture, x, y, width, height, 1);
         setAmmo(ammo);
-        instReload();
         setAmmoReloadInterval(arrowLoadInterval);
-        setMaxAmmo(1);
+        setAmmoFireInterval(arrowLoadInterval);
         setLoadedVisible(true);
     }
 

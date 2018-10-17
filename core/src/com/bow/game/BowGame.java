@@ -4,6 +4,11 @@ package com.bow.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.bow.game.model.Blood;
+import com.bow.game.model.HealthBar;
+import com.bow.game.model.mobs.Dog;
+import com.bow.game.model.mobs.Zombie;
 import com.bow.game.utils.Assets;
 import com.bow.game.view.GameScreen;
 import com.bow.game.view.LevelSelector;
@@ -25,9 +30,9 @@ public class BowGame extends Game {
 	@Override
 	public void create () {
 		assets = new Assets();
+        initializeStatics(assets);
 		gameScreen = new GameScreen(this,
-				assets.getManager().get("atlasBow.atlas", TextureAtlas.class),
-				assets.getManager().get("atlasHP.atlas", TextureAtlas.class));
+				assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
 		menuScreen = new MainMenuScreen(this,
 				assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
 		pauseScreen = new PauseMenuScreen(this,
@@ -41,6 +46,19 @@ public class BowGame extends Game {
 
 		this.setScreen(menuScreen);
 	}
+
+	public void initializeStatics(Assets assets) {
+	    TextureAtlas textureAtlas = assets.getManager().get("atlasBow.atlas");
+	    TextureAtlas HPtextureAtlas = assets.getManager().get("atlasHP.atlas");
+
+        HealthBar.setTextureRegions(HPtextureAtlas);
+        Zombie.setTextures(new TextureRegion[][]{
+                {textureAtlas.findRegion("zombie")},
+                {textureAtlas.findRegion("zombie33")},
+                {textureAtlas.findRegion("zombie66")}});
+        Blood.setTextureRegion(textureAtlas.findRegion("blood"));
+        Dog.setTextureRegion(textureAtlas.findRegion("dog"));
+    }
 
 	public boolean isMusicAllowed() {
 		return musicAllowed;
