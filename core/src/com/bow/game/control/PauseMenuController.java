@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
 import com.bow.game.model.Background;
 import com.bow.game.model.Button;
+import com.bow.game.utils.Assets;
 import com.bow.game.view.PauseMenuScreen;
 
 public class PauseMenuController {
     private BowGame game;
-    private TextureAtlas textureAtlas;
+    private Assets assets;
 
     private Sound buttonSound;
 
@@ -24,19 +25,19 @@ public class PauseMenuController {
     private float width = PauseMenuScreen.cameraWidth;
     private float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-    public PauseMenuController(BowGame game, TextureAtlas textureAtlas) {
+    public PauseMenuController(BowGame game, Assets assets) {
         this.game = game;
-        this.textureAtlas = textureAtlas;
+        this.assets = assets;
 
-        background = new Background(textureAtlas.findRegion("menuBack"),
+        background = new Background(assets.getTexture("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
-        resumeButton = new Button(textureAtlas.findRegion("resumeButton"),
+        resumeButton = new Button(assets.getTexture("resumeButton"),
                 -2f * 2.9f, 0, 4f * 2.9f, 4f);
-        musicButton = new Button(textureAtlas.findRegion(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"),
+        musicButton = new Button(assets.getTexture(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"),
                 -2f * 2.9f, -5f, 4f * 1.275f, 4f);
-        soundButton = new Button(textureAtlas.findRegion(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"),
+        soundButton = new Button(assets.getTexture(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"),
                 2f * 2.9f - 4f * 1.275f, -5f, 4f * 1.275f, 4f);
-        exitMainMenuButton = new Button(textureAtlas.findRegion("mainMenuButton"),
+        exitMainMenuButton = new Button(assets.getTexture("mainMenuButton"),
                 -2f * 2.9f, -10f, 4f * 2.9f, 4f);
         buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
     }
@@ -66,11 +67,11 @@ public class PauseMenuController {
             if (musicButton.isToggled()) {
                 if (game.isMusicAllowed()) {
                     game.setMusicAllowed(false);
-                    musicButton.setSprite(textureAtlas.findRegion("musicButtonOff"));
+                    musicButton.setSprite(assets.getTexture("musicButtonOff"));
                 }
                 else {
                     game.setMusicAllowed(true);
-                    musicButton.setSprite(textureAtlas.findRegion("musicButtonOn"));
+                    musicButton.setSprite(assets.getTexture("musicButtonOn"));
                 }
                 musicButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
@@ -78,11 +79,11 @@ public class PauseMenuController {
             if (soundButton.isToggled()) {
                 if (game.isSoundsAllowed()) {
                     game.setSoundsAllowed(false);
-                    soundButton.setSprite(textureAtlas.findRegion("soundButtonOff"));
+                    soundButton.setSprite(assets.getTexture("soundButtonOff"));
                 }
                 else {
                     game.setSoundsAllowed(true);
-                    soundButton.setSprite(textureAtlas.findRegion("soundButtonOn"));
+                    soundButton.setSprite(assets.getTexture("soundButtonOn"));
                 }
                 soundButton.setToggled(false);
                 if (game.isSoundsAllowed()) buttonSound.play();
@@ -98,8 +99,8 @@ public class PauseMenuController {
     }
 
     public void sync() {
-        musicButton.setSprite(textureAtlas.findRegion(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"));
-        soundButton.setSprite(textureAtlas.findRegion(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"));
+        musicButton.setSprite(assets.getTexture(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"));
+        soundButton.setSprite(assets.getTexture(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"));
     }
 
     public void draw(SpriteBatch batch) {
@@ -113,6 +114,6 @@ public class PauseMenuController {
     public void dispose() {
         buttonSound.dispose();
         game.dispose();
-        textureAtlas.dispose();
+        assets.dispose();
     }
 }

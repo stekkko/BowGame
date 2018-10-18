@@ -7,13 +7,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
 import com.bow.game.model.Background;
 import com.bow.game.model.Button;
+import com.bow.game.utils.Assets;
 import com.bow.game.view.LevelSelector;
 import com.bow.game.view.MainMenuScreen;
 import com.bow.game.view.PauseMenuScreen;
 
 public class LevelSelectorController {
     private BowGame game;
-    private TextureAtlas textureAtlas;
+    private Assets assets;
 
     private Sound buttonSound;
 
@@ -25,15 +26,15 @@ public class LevelSelectorController {
     private float width = LevelSelector.cameraWidth;
     private float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-    public LevelSelectorController(BowGame game, TextureAtlas textureAtlas) {
+    public LevelSelectorController(BowGame game, Assets assets) {
         this.game = game;
-        this.textureAtlas = textureAtlas;
+        this.assets = assets;
 
-        background = new Background(textureAtlas.findRegion("menuBack"),
+        background = new Background(assets.getTexture("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
-        playCampaignButton = new Button(textureAtlas.findRegion("goButton"),
+        playCampaignButton = new Button(assets.getTexture("goButton"),
                 -2f * 2.9f, 0, 4f * 2.9f, 4f);
-        playEndlessButton = new Button(textureAtlas.findRegion("goButton"),
+        playEndlessButton = new Button(assets.getTexture("goButton"),
                 -2f * 2.9f, -5f, 4f * 2.9f, 4f);
         buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
     }
@@ -80,6 +81,6 @@ public class LevelSelectorController {
     public void dispose() {
         buttonSound.dispose();
         game.dispose();
-        textureAtlas.dispose();
+        assets.dispose();
     }
 }

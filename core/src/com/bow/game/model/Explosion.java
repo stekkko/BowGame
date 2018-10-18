@@ -1,50 +1,44 @@
 package com.bow.game.model;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.bow.game.model.mobs.Ally;
 import com.bow.game.view.GameScreen;
 
-public class Explosion extends GameObject {
+public class Explosion extends Ally {
 
-    private float lifeTime;
     private float time;
+    private float lifeTime;
     private float damage;
     private boolean readyToDelete;
 
-    public Explosion(TextureRegion texture, float x, float y, float width, float height, float damage) {
-        super(texture, x, y, width, height);
+    public Explosion(TextureRegion texture, float x, float y, float width, float height, float damage, float lifeTime) {
+        super(texture, x, y, width, height, 1f, damage, 0f, false);
+        this.healthBar = null;
+        this.lifeTime = lifeTime;
         readyToDelete = false;
         time = 0;
-        lifeTime = 200f;
-        setDamage(damage);
     }
 
     @Override
     public void handle() {
         super.handle();
-
         if (!readyToDelete) {
-            time += GameScreen.deltaCff * 320f;
+            time += GameScreen.deltaCff;
             if (time > lifeTime) {
-                readyToDelete = true;
+                setReadyToDelete(true);
                 time = 0;
             }
         }
     }
 
-    public float getDamage() {
-        return damage;
-    }
-
-    public void setDamage(float damage) {
-        this.damage = damage;
-    }
-
-    public float getLifeTime() {
+    @Override
+    public float getHealthPoints() {
         return lifeTime;
     }
 
-    public void setLifeTime(float lifeTime) {
-        this.lifeTime = lifeTime;
+    @Override
+    public float getPercentHealthPoints() {
+        return time;
     }
 
     public boolean isReadyToDelete() {

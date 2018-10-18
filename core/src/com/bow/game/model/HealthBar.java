@@ -18,7 +18,7 @@ public class HealthBar extends GameObject {
         super.handle();
         if (healthPoints < maxHealthPoints) show();
         if (percentHealthPoints != (int) (100f * healthPoints / maxHealthPoints)) {
-            setPercentHealthPoints((int) (100f * healthPoints / maxHealthPoints));
+            setPercentHealthPoints(Math.min(100, Math.max(0, (int) (100f * healthPoints / maxHealthPoints))));
             setSprite(textureRegions[percentHealthPoints]);
         }
     }

@@ -6,15 +6,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
-public abstract class Enemy extends GameObject {
+public abstract class Mob extends GameObject {
 
-    private HealthBar healthBar;
+    protected HealthBar healthBar;
     private float damage;
+    private float repelPower;
+    private boolean repelable;
 
-    public Enemy(TextureRegion texture, float x, float y, float width, float height, float maxHealthPoints, float damage) {
+    public Mob(TextureRegion texture, float x, float y, float width, float height, float maxHealthPoints, float damage, float repelPower, boolean repelable) {
         super(texture, x, y, width, height);
         this.healthBar = new HealthBar(x, y + height, width, width * 0.07843f, maxHealthPoints);
         this.damage = damage;
+        this.repelPower = repelPower;
+        setRepelable(repelable);
     }
 
     /**
@@ -32,9 +36,8 @@ public abstract class Enemy extends GameObject {
         float delta = max - min;
         this.setPosition(random.nextFloat() * (delta) + min, height / 2 + (random.nextFloat() * 5f));
 
-        this.healthBar.setPosition(this.getX(), this.getY() - this.healthBar.getHeight());
+        if (healthBar != null) this.healthBar.setPosition(this.getX(), this.getY() - this.healthBar.getHeight());
         setSpeed(speedX, speedY);
-        healthBar.setSpeed(speedX, speedY);
     }
 
     /**
@@ -45,7 +48,7 @@ public abstract class Enemy extends GameObject {
     public void targetSpawn(float x, float y, float speedX, float speedY) {
         this.setPosition(x, y);
         this.setSpeed(speedX, speedY);
-        this.healthBar.setSpeed(speedX, speedY);
+        if (healthBar != null) this.healthBar.setSpeed(speedX, speedY);
     }
 
     /**
@@ -53,7 +56,7 @@ public abstract class Enemy extends GameObject {
      * @param value dealt damaged
      */
     public void damaged(float value) {
-        healthBar.damage(value);
+        if (healthBar != null) healthBar.damage(value);
     }
 
     /**
@@ -61,29 +64,30 @@ public abstract class Enemy extends GameObject {
      * @param dist distance
      */
     public void repel(float dist) {
-        this.setPosition(this.getX(), this.getY() + dist);
+        if (isRepelable()) setPosition(getX(), getY() + dist);
     }
 
 
     @Override
     public void handle() {
         super.handle();
-        healthBar.handle();
-
-        healthBar.setSpeedX(this.speedX);
-        healthBar.setSpeedY(this.speedY);
+        if (healthBar != null) {
+            healthBar.handle();
+            healthBar.setSpeedX(this.speedX);
+            healthBar.setSpeedY(this.speedY);
+        }
     }
 
     @Override
     public void draw(SpriteBatch batch) {
         super.draw(batch);
-        healthBar.draw(batch);
+        if (healthBar != null) healthBar.draw(batch);
     }
 
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        healthBar.setPosition(x, y - this.healthBar.getHeight());
+        if (healthBar != null) healthBar.setPosition(x, y - this.healthBar.getHeight());
     }
 
     public void setDamage(float damage) {
@@ -94,15 +98,23 @@ public abstract class Enemy extends GameObject {
         return damage;
     }
 
+    public float getRepelPower() {
+        return repelPower;
+    }
+
     public float getHealthPoints() {
-        return healthBar.getHealthPoints();
+        return healthBar == null ? 0 : healthBar.getHealthPoints();
     }
 
     public float getPercentHealthPoints() {
-        return healthBar.getPercentHealthPoints();
+        return healthBar == null ? 0 : healthBar.getPercentHealthPoints();
     }
 
-    public float getMaxHealthPoints() {
-        return healthBar.getMaxHealthPoints();
+    public void setRepelable(boolean repelable) {
+        this.repelable = repelable;
+    }
+
+    public boolean isRepelable() {
+        return repelable;
     }
 }

@@ -10,6 +10,7 @@ import com.bow.game.BowGame;
 import com.bow.game.control.LevelSelectorController;
 import com.bow.game.control.MainMenuController;
 import com.bow.game.control.PauseMenuController;
+import com.bow.game.utils.Assets;
 
 public class LevelSelector implements Screen {
 
@@ -23,9 +24,9 @@ public class LevelSelector implements Screen {
     public static final float cameraWidth = 20f;
     public static float deltaCff;
 
-    public LevelSelector(BowGame game, TextureAtlas textureAtlas) {
+    public LevelSelector(BowGame game, Assets assets) {
         this.game = game;
-        levelSelectorController = new LevelSelectorController(game, textureAtlas);
+        levelSelectorController = new LevelSelectorController(game, assets);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = false;
     }

@@ -4,7 +4,6 @@ package com.bow.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.bow.game.model.Blood;
 import com.bow.game.model.HealthBar;
 import com.bow.game.model.mobs.Dog;
@@ -29,16 +28,12 @@ public class BowGame extends Game {
 
 	@Override
 	public void create () {
-		assets = new Assets();
+		assets = new Assets(this);
         initializeStatics(assets);
-		gameScreen = new GameScreen(this,
-				assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
-		menuScreen = new MainMenuScreen(this,
-				assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
-		pauseScreen = new PauseMenuScreen(this,
-                assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
-		levelSelector = new LevelSelector(this,
-                assets.getManager().get("atlasBow.atlas", TextureAtlas.class));
+		gameScreen = new GameScreen(this, assets);
+		menuScreen = new MainMenuScreen(this, assets);
+		pauseScreen = new PauseMenuScreen(this, assets);
+		levelSelector = new LevelSelector(this, assets);
 
 		musicAllowed = true;
 		soundsAllowed = true;
@@ -47,17 +42,11 @@ public class BowGame extends Game {
 		this.setScreen(menuScreen);
 	}
 
-	public void initializeStatics(Assets assets) {
-	    TextureAtlas textureAtlas = assets.getManager().get("atlasBow.atlas");
-	    TextureAtlas HPtextureAtlas = assets.getManager().get("atlasHP.atlas");
-
-        HealthBar.setTextureRegions(HPtextureAtlas);
-        Zombie.setTextures(new TextureRegion[][]{
-                {textureAtlas.findRegion("zombie")},
-                {textureAtlas.findRegion("zombie33")},
-                {textureAtlas.findRegion("zombie66")}});
-        Blood.setTextureRegion(textureAtlas.findRegion("blood"));
-        Dog.setTextureRegion(textureAtlas.findRegion("dog"));
+	private void initializeStatics(Assets assets) {
+        HealthBar.setTextureRegions(assets.getAtlas("atlasHP.atlas"));
+        Zombie.setTextures(assets.getTexture("zombie"));
+        Blood.setTextureRegion(assets.getTexture("blood"));
+        Dog.setTextureRegion(assets.getTexture("dog"));
     }
 
 	public boolean isMusicAllowed() {

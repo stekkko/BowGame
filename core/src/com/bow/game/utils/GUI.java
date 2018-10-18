@@ -23,7 +23,7 @@ public class GUI {
 
     public GUI() {
 
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 25));
         skin = new Skin(Gdx.files.internal("skin.json"));
         score = 0;
 

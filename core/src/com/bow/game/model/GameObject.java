@@ -46,7 +46,7 @@ public abstract class GameObject {
         sprite.setOrigin(width / 2f, height / 2f);
     }
 
-    public TextureRegion getSprite() {
+    public Sprite getSprite() {
         return this.sprite;
     }
 

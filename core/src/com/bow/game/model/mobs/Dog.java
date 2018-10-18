@@ -2,7 +2,6 @@ package com.bow.game.model.mobs;
 
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.bow.game.model.Enemy;
 
 public class Dog extends Enemy {
 
@@ -11,8 +10,8 @@ public class Dog extends Enemy {
         texture = textureRegion;
     }
 
-    public Dog(float x, float y, float width, float height, float maxHealthPoints, float damage) {
-        super(texture, x, y, width, height, maxHealthPoints, damage);
+    public Dog(float x, float y, float width, float height, float maxHealthPoints, float damage, float repelPower) {
+        super(texture, x, y, width, height, maxHealthPoints, damage, repelPower, true);
     }
 
 

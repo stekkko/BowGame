@@ -17,6 +17,7 @@ public class Spell extends Button {
         this.crosshair = crosshair;
         onCD = true;
         cooldownTime = 10f;
+        this.getSprite().setAlpha(0.5f);
     }
 
     @Override

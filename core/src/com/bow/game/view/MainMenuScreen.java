@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
 import com.bow.game.control.MainMenuController;
 import com.bow.game.control.PauseMenuController;
+import com.bow.game.utils.Assets;
 
 public class MainMenuScreen implements Screen {
 
@@ -23,9 +24,9 @@ public class MainMenuScreen implements Screen {
     public static final float cameraWidth = 20f;
     public static float deltaCff;
 
-    public MainMenuScreen(BowGame game, TextureAtlas textureAtlas) {
+    public MainMenuScreen(BowGame game, Assets assets) {
         this.game = game;
-        mainMenuController = new MainMenuController(game, textureAtlas);
+        mainMenuController = new MainMenuController(game, assets);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = false;
     }

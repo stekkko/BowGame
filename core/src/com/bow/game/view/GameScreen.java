@@ -7,16 +7,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bow.game.BowGame;
 import com.bow.game.control.LevelController;
+import com.bow.game.utils.Assets;
 import com.bow.game.utils.GUI;
 
 public class GameScreen implements Screen {
     private BowGame game;
-    private SpriteBatch batch;
     private GUI gui;
+    private SpriteBatch batch;
     private LevelController levelController;
 
     private boolean paused;
@@ -26,10 +25,10 @@ public class GameScreen implements Screen {
     public static final float cameraWidth = 20f;
     public static float deltaCff;
 
-    public GameScreen(BowGame game, TextureAtlas textureAtlas) {
+    public GameScreen(BowGame game, Assets assets) {
         this.game = game;
         gui = new GUI();
-        levelController = new LevelController(game, textureAtlas, gui);
+        levelController = new LevelController(game, assets, gui);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = true;
     }
@@ -90,7 +89,6 @@ public class GameScreen implements Screen {
     public void dispose() {
         levelController.dispose();
         batch.dispose();
-        gui.dispose();
         game.dispose();
     }
 }
