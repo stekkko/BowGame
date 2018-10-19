@@ -14,7 +14,7 @@ public class Zombie extends Enemy {
 
     public Zombie(float x, float y, float width, float height, float maxHealthPoints, float damage, float repelPower) {
         super(textures[0][0], x, y, width, height, maxHealthPoints, damage, repelPower, true);
-        animation = new Animation(0.2f, 3, 9);
+        animation = new Animation(0.2f, 3, 9, Animation.LOOP);
     }
 
     @Override
@@ -51,11 +51,11 @@ public class Zombie extends Enemy {
     public void handle() {
         super.handle();
         animation.handle();
-        setSprite(textures[animation.getState()][animation.getFrame()]);
     }
 
     @Override
     public void draw(SpriteBatch batch) {
+        setSprite(textures[animation.getState()][animation.getFrame()]);
         super.draw(batch);
     }
 }

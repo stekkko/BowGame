@@ -17,7 +17,7 @@ public class Spell extends Button {
         this.crosshair = crosshair;
         onCD = true;
         cooldownTime = 10f;
-        this.getSprite().setAlpha(0.5f);
+        this.getSprite().setAlpha(0.7f);
     }
 
     @Override
@@ -39,6 +39,7 @@ public class Spell extends Button {
 
     @Override
     public void draw(SpriteBatch batch) {
+        getSprite().setAlpha(0.7f);
         super.draw(batch);
         if (crosshair.isDrawn()) crosshair.draw(batch);
     }

@@ -11,7 +11,6 @@ import java.util.Locale;
 
 public class GUI {
 
-
     private Stage stage;
     private Label labelScore;
     private Label labelCD;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.model.Blood;
+import com.bow.game.model.Explosion;
 import com.bow.game.model.HealthBar;
 import com.bow.game.model.mobs.Dog;
 import com.bow.game.model.mobs.Zombie;
@@ -44,6 +45,7 @@ public class BowGame extends Game {
 
 	private void initializeStatics(Assets assets) {
         HealthBar.setTextureRegions(assets.getAtlas("atlasHP.atlas"));
+		Explosion.setTextureRegions(assets.getTexture("explosion"));
         Zombie.setTextures(assets.getTexture("zombie"));
         Blood.setTextureRegion(assets.getTexture("blood"));
         Dog.setTextureRegion(assets.getTexture("dog"));

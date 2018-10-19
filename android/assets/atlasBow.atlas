@@ -1,208 +1,222 @@
 
 atlasBow.png
-size: 2048,2048
+size: 4096,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 476, 340
+  xy: 503, 197
   size: 26, 146
   orig: 26, 146
   offset: 0, 0
   index: -1
 blood
   rotate: false
-  xy: 2, 488
+  xy: 1768, 281
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
   index: -1
 boss1
   rotate: false
-  xy: 1254, 1683
+  xy: 2270, 434
   size: 347, 347
   orig: 347, 347
   offset: 0, 0
   index: -1
 boss2
   rotate: false
-  xy: 516, 1155
+  xy: 2, 118
   size: 347, 347
   orig: 347, 347
   offset: 0, 0
   index: -1
 bow
   rotate: false
-  xy: 1603, 1946
+  xy: 2733, 803
   size: 258, 84
   orig: 258, 84
   offset: 0, 0
   index: -1
 bullet
   rotate: false
-  xy: 504, 956
+  xy: 2, 2
   size: 9, 32
   orig: 9, 32
   offset: 0, 0
   index: -1
 crosshair
   rotate: false
-  xy: 865, 1188
+  xy: 351, 193
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 dog
   rotate: false
-  xy: 236, 29
+  xy: 2923, 666
   size: 48, 135
   orig: 48, 135
   offset: 0, 0
   index: -1
-exSpellButton
-  rotate: false
-  xy: 324, 336
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
 exitButton
   rotate: false
-  xy: 516, 1073
+  xy: 3548, 937
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 2, 166
-  size: 320, 320
-  orig: 320, 320
+  xy: 2, 889
+  size: 3072, 128
+  orig: 3072, 128
+  offset: 0, 0
+  index: -1
+explosionSpellButtonOff
+  rotate: false
+  xy: 2771, 651
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+explosionSpellButtonOn
+  rotate: false
+  xy: 2619, 479
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
 goButton
   rotate: false
-  xy: 2, 84
+  xy: 545, 385
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 grass
   rotate: false
-  xy: 2, 990
+  xy: 1254, 269
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 knight
   rotate: false
-  xy: 1254, 1651
+  xy: 2993, 857
   size: 36, 30
   orig: 36, 30
   offset: 0, 0
   index: -1
-knightSpellButton
+knightSpellButtonOff
   rotate: false
-  xy: 324, 184
+  xy: 2771, 499
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+knightSpellButtonOn
+  rotate: false
+  xy: 2619, 631
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 mainMenuButton
   rotate: false
-  xy: 865, 1340
+  xy: 2, 36
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 menuBack
   rotate: false
-  xy: 1603, 1824
+  xy: 351, 345
   size: 192, 120
   orig: 192, 120
   offset: 0, 0
   index: -1
 musicButtonOff
   rotate: false
-  xy: 1863, 1950
+  xy: 779, 385
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 musicButtonOn
   rotate: false
-  xy: 1099, 1340
+  xy: 883, 385
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 pauseButton
   rotate: false
-  xy: 1337, 1422
+  xy: 2504, 352
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 playButton
   rotate: false
-  xy: 2, 2
+  xy: 2270, 352
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 resumeButton
   rotate: false
-  xy: 516, 991
+  xy: 3782, 937
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 soundButtonOff
   rotate: false
-  xy: 1603, 1742
+  xy: 236, 36
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 soundButtonOn
   rotate: false
-  xy: 1017, 1258
+  xy: 987, 385
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 turret
   rotate: false
-  xy: 750, 1041
+  xy: 4016, 905
   size: 78, 112
   orig: 78, 112
   offset: 0, 0
   index: -1
 wall1
   rotate: false
-  xy: 2, 1504
+  xy: 1254, 836
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 wall2
   rotate: false
-  xy: 2, 1557
+  xy: 1254, 783
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 wallFloor
   rotate: false
-  xy: 865, 1422
+  xy: 3076, 937
   size: 470, 80
   orig: 470, 80
   offset: 0, 0
   index: -1
 zombie
   rotate: false
-  xy: 2, 1610
+  xy: 2, 467
   size: 1250, 420
   orig: 1250, 420
   offset: 0, 0

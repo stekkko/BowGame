@@ -6,6 +6,8 @@ import com.bow.game.view.GameScreen;
 import java.util.Random;
 
 public class Animation {
+    public final static int LOOP = 1;
+    public final static int  NORMAL = 2;
 
     private final float frameDuration;
     private final int states;
@@ -13,12 +15,14 @@ public class Animation {
     private float time;
     private int frame;
     private int state;
+    private int mode;
 
 
-    public Animation(float frameDuration, int states, int frames) {
+    public Animation(float frameDuration, int states, int frames, int mode) {
         this.frameDuration = frameDuration;
         this.states = states;
         this.frames = frames;
+        this.mode = mode;
         time = 0f;
         frame = 0;
         state = 0;
@@ -27,7 +31,8 @@ public class Animation {
     public void handle() {
         time += GameScreen.deltaCff;
         if (time > frameDuration) {
-            frame = (frame + 1) % frames;
+            if (mode == NORMAL) frame = Math.min(frames, frame + 1);
+            else if (mode == LOOP) frame = (frame + 1) % frames;
             time = 0;
         }
 

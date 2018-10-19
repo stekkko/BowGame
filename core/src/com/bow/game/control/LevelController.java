@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.bow.game.BowGame;
 import com.bow.game.model.Ammo;
+import com.bow.game.model.Animation;
 import com.bow.game.model.Arrow;
 import com.bow.game.model.Background;
 import com.bow.game.model.Blood;
@@ -30,6 +31,8 @@ import com.bow.game.utils.GUI;
 import com.bow.game.view.GameScreen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class LevelController {
@@ -53,6 +56,7 @@ public class LevelController {
     private Background wallFloor;
 
     //Music and Sounds
+    private Map<String, Sound> sounds;
     private Sound swordHitSound;
     private Sound swordSound;
     private Sound scream;
@@ -110,8 +114,12 @@ public class LevelController {
         weapon.handle();
         wallFloor.handle();
         pauseButton.handle();
+
         spellExplosion.handle();
+        if (!spellExplosion.isOnCD()) spellExplosion.setSprite(assets.getTexture("explosionSpellButtonOn"));
         spellKnight.handle();
+        if (!spellKnight.isOnCD()) spellKnight.setSprite(assets.getTexture("knightSpellButtonOn"));
+
 
         for (int i = ammunition.size() - 1; i >= 0; i--) {
             Ammo ammo = ammunition.get(i);
@@ -169,14 +177,15 @@ public class LevelController {
                 spellExplosion.setToggled(false);
                 spellExplosion.setOnCD(true);
                 spellExplosion.getCrosshair().setDrawn(false);
-                allies.add(new Explosion(assets.getTexture("explosion"),
-                        xp -4.5f, yp -4.5f, 9f, 9f, 50f, 1f));
+                spellExplosion.setSprite(assets.getTexture("explosionSpellButtonOff"));
+                allies.add(new Explosion(xp -6f, yp -6f, 12f, 12f,50f));
             }
             if (spellKnight.isToggled()) {
                 assets.playSound(swordSound, 1f);
                 spellKnight.setToggled(false);
                 spellKnight.setOnCD(true);
                 spellKnight.getCrosshair().setDrawn(false);
+                spellKnight.setSprite(assets.getTexture("knightSpellButtonOff"));
                 Knight knight = new Knight(assets.getTexture("knight"),
                         xp -1.5f ,yp - 1.5f * 0.906f, 3f,3f * 0.906f,800, 25f, 2f);
                 knight.targetSpawn(xp -1.5f, yp -1.5f * 0.906f, 0f, 1f);
@@ -216,7 +225,6 @@ public class LevelController {
                 allies.remove(ally);
             }
         }
-
 
         time += GameScreen.deltaCff;
         spawnInterval -= 0.005 * GameScreen.deltaCff;
@@ -325,9 +333,9 @@ public class LevelController {
                 0, 0, 9f, 9f);
         Crosshair crosshair1 = new Crosshair(assets.getTexture("crosshair"),
                 0, 0, 4f, 4f);
-        spellExplosion = new Spell(assets.getTexture("exSpellButton"),
+        spellExplosion = new Spell(assets.getTexture("explosionSpellButtonOff"),
                 -width / 2, -2f, 4f, 4f, crosshair);
-        spellKnight = new Spell(assets.getTexture("knightSpellButton"),
+        spellKnight = new Spell(assets.getTexture("knightSpellButtonOff"),
                 -width / 2, 2.5f, 4f, 4f, crosshair1);
 
         background = new Background(assets.getTexture("grass"),

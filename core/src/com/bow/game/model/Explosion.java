@@ -1,44 +1,54 @@
 package com.bow.game.model;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.bow.game.model.mobs.Ally;
-import com.bow.game.view.GameScreen;
 
 public class Explosion extends Ally {
 
-    private float time;
-    private float lifeTime;
-    private float damage;
+    private static TextureRegion[][] textures;
+    private Animation animation;
     private boolean readyToDelete;
 
-    public Explosion(TextureRegion texture, float x, float y, float width, float height, float damage, float lifeTime) {
-        super(texture, x, y, width, height, 1f, damage, 0f, false);
+    public Explosion(float x, float y, float width, float height, float damage) {
+        super(textures[0][0], x, y, width, height, 1f, damage, 0f, false);
+        animation = new Animation(0.04f, 1, 12, Animation.NORMAL);
         this.healthBar = null;
-        this.lifeTime = lifeTime;
-        readyToDelete = false;
-        time = 0;
+        setReadyToDelete(false);
     }
 
     @Override
     public void handle() {
         super.handle();
-        if (!readyToDelete) {
-            time += GameScreen.deltaCff;
-            if (time > lifeTime) {
-                setReadyToDelete(true);
-                time = 0;
+        animation.handle();
+        if (animation.getFrame() == 12) setReadyToDelete(true);
+    }
+
+    public static void setTextureRegions(TextureRegion textureRegions) {
+        textures = new TextureRegion[1][12];
+        int eWidth = 256;
+        int eHeight = 128;
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 12; j++) {
+                textures[i][j] = new TextureRegion(textureRegions, j * eWidth, i * eHeight, eWidth, eHeight);
             }
         }
     }
 
     @Override
+    public void draw(SpriteBatch batch) {
+        setSprite(textures[animation.getState()][animation.getFrame()]);
+        super.draw(batch);
+    }
+
+    @Override
     public float getHealthPoints() {
-        return lifeTime;
+        return isReadyToDelete() ? 0 : 1;
     }
 
     @Override
     public float getPercentHealthPoints() {
-        return time;
+        return isReadyToDelete() ? 0 : 100;
     }
 
     public boolean isReadyToDelete() {
