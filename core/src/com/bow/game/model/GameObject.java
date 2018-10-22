@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
 import com.bow.game.view.GameScreen;
+import com.bow.game.view.MainMenuScreen;
 
 
 public abstract class GameObject {
@@ -35,7 +36,7 @@ public abstract class GameObject {
     }
 
     public void handle() {
-        this.setPosition(this.getX() + this.getSpeedX() * GameScreen.deltaCff, this.getY() + this.getSpeedY() * GameScreen.deltaCff);
+        this.setPosition(this.getX() + this.getSpeedX() * MainMenuScreen.deltaCff, this.getY() + this.getSpeedY() * MainMenuScreen.deltaCff);
     }
 
     public void setSprite(TextureRegion textureRegion) {

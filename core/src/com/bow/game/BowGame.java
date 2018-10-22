@@ -2,6 +2,8 @@ package com.bow.game;
 
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.model.Blood;
@@ -16,6 +18,7 @@ import com.bow.game.view.MainMenuScreen;
 import com.bow.game.view.PauseMenuScreen;
 
 public class BowGame extends Game {
+	public Preferences prefs;
 	public Screen gameScreen;
 	public Screen menuScreen;
 	public Screen pauseScreen;
@@ -23,12 +26,13 @@ public class BowGame extends Game {
 	private Assets assets;
 
 	//TODO settings
-    private boolean musicAllowed;
-	private boolean soundsAllowed;
+	public final int SURVIVAL = 1;
+	public final int ENDLESS = 2;
 	private int gamemode;
 
 	@Override
 	public void create () {
+	    prefs = Gdx.app.getPreferences("My Preferences");
 		assets = new Assets(this);
         initializeStatics(assets);
 		gameScreen = new GameScreen(this, assets);
@@ -36,10 +40,7 @@ public class BowGame extends Game {
 		pauseScreen = new PauseMenuScreen(this, assets);
 		levelSelector = new LevelSelector(this, assets);
 
-		musicAllowed = true;
-		soundsAllowed = true;
-		gamemode = 1;
-
+		gamemode = SURVIVAL;
 		this.setScreen(menuScreen);
 	}
 
@@ -51,14 +52,6 @@ public class BowGame extends Game {
         Dog.setTextureRegion(assets.getTexture("dog"));
     }
 
-	public boolean isMusicAllowed() {
-		return musicAllowed;
-	}
-
-	public boolean isSoundsAllowed() {
-		return soundsAllowed;
-	}
-
 	public int getGamemode() {
 	    return gamemode;
     }
@@ -66,14 +59,6 @@ public class BowGame extends Game {
     public void setGamemode(int gamemode) {
         this.gamemode = gamemode;
     }
-
-    public void setMusicAllowed(boolean musicAllowed) {
-		this.musicAllowed = musicAllowed;
-	}
-
-	public void setSoundsAllowed(boolean soundsAllowed) {
-		this.soundsAllowed = soundsAllowed;
-	}
 
 	@Override
 	public void render () {
@@ -83,6 +68,7 @@ public class BowGame extends Game {
 	@Override
 	public void dispose () {
 		super.dispose();
+		prefs.flush();
 		gameScreen.dispose();
 		menuScreen.dispose();
 		assets.dispose();

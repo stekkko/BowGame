@@ -36,11 +36,11 @@ public abstract class Weapon extends GameObject {
     }
 
     public void shoot() {
-        if (ammo == 0) loaded = false;
-        else {
+        if (ammo > 0) {
             ammo--;
             readyToShoot = false;
         }
+        if (ammo == 0) loaded = false;
     }
 
     @Override

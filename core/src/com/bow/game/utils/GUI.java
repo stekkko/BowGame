@@ -36,14 +36,14 @@ public class GUI {
         labelCD = new Label(String.valueOf((int)(10f - cooldown)), skin.get("default", Label.LabelStyle.class));
         labelCD.setAlignment(Align.left);
         labelCD.setPosition(50, Gdx.graphics.getHeight() / 2, Align.topLeft);
-        labelCD.setFontScale(0.5f);
+        labelCD.setFontScale(0.3f);
         stage.addActor(labelCD);
 
         cooldown1 = 0.5f;
         labelCD1 = new Label(String.valueOf((int)(0.5f - cooldown)), skin.get("default", Label.LabelStyle.class));
         labelCD1.setAlignment(Align.left);
-        labelCD1.setPosition(50, Gdx.graphics.getHeight() / 2 + 200, Align.topLeft);
-        labelCD1.setFontScale(0.5f);
+        labelCD1.setPosition(50, Gdx.graphics.getHeight() / 2 + 175, Align.topLeft);
+        labelCD1.setFontScale(0.3f);
         stage.addActor(labelCD1);
     }
 

@@ -3,14 +3,12 @@ package com.bow.game.control;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
 import com.bow.game.model.Background;
 import com.bow.game.model.Button;
 import com.bow.game.utils.Assets;
 import com.bow.game.view.LevelSelector;
-import com.bow.game.view.MainMenuScreen;
-import com.bow.game.view.PauseMenuScreen;
+
 
 public class LevelSelectorController {
     private BowGame game;
@@ -32,9 +30,9 @@ public class LevelSelectorController {
 
         background = new Background(assets.getTexture("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
-        playCampaignButton = new Button(assets.getTexture("goButton"),
+        playCampaignButton = new Button(assets.getTexture("survivalButton"),
                 -2f * 2.9f, 0, 4f * 2.9f, 4f);
-        playEndlessButton = new Button(assets.getTexture("goButton"),
+        playEndlessButton = new Button(assets.getTexture("endlessButton"),
                 -2f * 2.9f, -5f, 4f * 2.9f, 4f);
         buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
     }
@@ -44,27 +42,28 @@ public class LevelSelectorController {
         playCampaignButton.handle();
         playEndlessButton.handle();
 
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.justTouched()) {
             float x = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             float y = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
 
             playCampaignButton.setToggled(playCampaignButton.getBounds().contains(x, y));
             playEndlessButton.setToggled(playEndlessButton.getBounds().contains(x, y));
         }
-        else {
+
+        if (!Gdx.input.isTouched()) {
             if (playCampaignButton.isToggled()) {
                 playCampaignButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
                 game.levelSelector.pause();
-                game.setGamemode(1);
+                game.setGamemode(game.SURVIVAL);
                 game.setScreen(game.gameScreen);
                 game.gameScreen.resume();
             }
             if (playEndlessButton.isToggled()) {
                 playEndlessButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
                 game.levelSelector.pause();
-                game.setGamemode(2);
+                game.setGamemode(game.ENDLESS);
                 game.setScreen(game.gameScreen);
                 game.gameScreen.resume();
             }

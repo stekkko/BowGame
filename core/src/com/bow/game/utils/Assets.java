@@ -21,13 +21,13 @@ public class Assets {
     }
 
     public void playSound(Sound sound, float volume) {
-        if (game.isSoundsAllowed()) sound.play(volume);
+        if (game.prefs.getBoolean("soundAllowed", true)) sound.play(volume);
     }
 
-    public void playMusic(Music music) {
+    public void playMusic(Music music, float volume) {
         music.setLooping(true);
-        music.setVolume(0.15f);
-        if (game.isMusicAllowed()) music.play();
+        music.setVolume(volume);
+        if (game.prefs.getBoolean("musicAllowed", true)) music.play();
     }
 
     public TextureRegion getTexture(String name) {

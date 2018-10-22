@@ -1,6 +1,7 @@
 package com.bow.game.control;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,11 +17,15 @@ public class MainMenuController {
 
     private Sound buttonSound;
 
-    private Background background;
+    private Background background1;
+    private Background background2;
+    private Background logo;
     private Button playButton;
     private Button musicButton;
     private Button soundButton;
     private Button exitButton;
+
+    public Music theme;
 
     private float width = MainMenuScreen.cameraWidth;
     private float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
@@ -29,26 +34,41 @@ public class MainMenuController {
         this.game = game;
         this.assets = assets;
 
-        background = new Background(assets.getTexture("menuBack"),
+        logo = new Background(assets.getTexture("logo"),
+                -3f * 3.4f, 5f, 6f * 3.4f, 6f);
+        background1 = new Background(assets.getTexture("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
+        background2 = new Background(assets.getTexture("menuBack"),
+                -width / 2 + 1.59f * height,  -height / 2, 1.6f * height, height);
+        background1.setSpeedX(-1f);
+        background2.setSpeedX(-1f);
         playButton = new Button(assets.getTexture("playButton"),
-                -2f * 2.9f, 0, 4f * 2.9f, 4f);
-        musicButton = new Button(assets.getTexture(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"),
-                -2f * 2.9f, -5f, 4f * 1.275f, 4f);
-        soundButton = new Button(assets.getTexture(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"),
-                2f * 2.9f - 4f * 1.275f, -5f, 4f * 1.275f, 4f);
+                -1.5f * 2.9f, 0f, 3f * 2.9f, 3f);
+        musicButton = new Button(assets.getTexture(game.prefs.getBoolean("musicAllowed", true) ? "musicButtonOn" : "musicButtonOff"),
+                -1.5f * 2.9f, -4f, 3f * 1.275f, 3f);
+        soundButton = new Button(assets.getTexture(game.prefs.getBoolean("soundAllowed", true) ? "soundButtonOn" : "soundButtonOff"),
+                1.5f * 2.9f - 3f * 1.275f, -4f, 3f * 1.275f, 3f);
         exitButton = new Button(assets.getTexture("exitButton"),
-                -2f * 2.9f, -10f, 4f * 2.9f, 4f);
+                -1.5f * 2.9f, -8f, 3f * 2.9f, 3f);
         buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
+
+        theme = Gdx.audio.newMusic(Gdx.files.internal("menuTheme.wav"));
+        assets.playMusic(theme, 0.5f);
     }
 
     public void handle() {
-        background.handle();
+        background1.handle();
+        background2.handle();
+        if (background1.getX() + background1.getWidth() < -width / 2 - 3f) background1.setPosition(background2.getX() + background2.getWidth() - 0.1f, background1.getY());
+        if (background1.getX() > width / 2 + 3f) background1.setPosition(background2.getX() - background2.getWidth() + 0.1f, background1.getY());
+        if (background2.getX() + background2.getWidth() < -width / 2 - 3f) background2.setPosition(background1.getX() + background1.getWidth() - 0.1f, background2.getY());
+        if (background2.getX() > width / 2 + 3f) background2.setPosition(background1.getX() - background1.getWidth() + 0.1f, background2.getY());
+
         playButton.handle();
         musicButton.handle();
         soundButton.handle();
 
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.justTouched()) {
             float x = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             float y = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
 
@@ -56,41 +76,49 @@ public class MainMenuController {
             musicButton.setToggled(musicButton.getBounds().contains(x, y));
             soundButton.setToggled(soundButton.getBounds().contains(x, y));
             exitButton.setToggled(exitButton.getBounds().contains(x, y));
+            if (!playButton.isToggled() && !musicButton.isToggled() && !soundButton.isToggled() && !exitButton.isToggled()) {
+                background1.setSpeedX(-background1.getSpeedX());
+                background2.setSpeedX(-background2.getSpeedX());
+            }
         }
-        else {
+
+        if (!Gdx.input.isTouched()) {
             if (playButton.isToggled()) {
                 playButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
                 game.menuScreen.pause();
                 game.setScreen(game.levelSelector);
             }
             if (musicButton.isToggled()) {
-                if (game.isMusicAllowed()) {
-                    game.setMusicAllowed(false);
+                if (game.prefs.getBoolean("musicAllowed", true)) {
+                    game.prefs.putBoolean("musicAllowed", false).flush();
                     musicButton.setSprite(assets.getTexture("musicButtonOff"));
+                    theme.stop();
                 }
                 else {
-                    game.setMusicAllowed(true);
+                    game.prefs.putBoolean("musicAllowed", true).flush();
                     musicButton.setSprite(assets.getTexture("musicButtonOn"));
+                    theme.play();
                 }
                 musicButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
             }
             if (soundButton.isToggled()) {
-                if (game.isSoundsAllowed()) {
-                    game.setSoundsAllowed(false);
+                if (game.prefs.getBoolean("soundAllowed", true)) {
+                    game.prefs.putBoolean("soundAllowed", false).flush();
                     soundButton.setSprite(assets.getTexture("soundButtonOff"));
                 }
                 else {
-                    game.setSoundsAllowed(true);
+                    game.prefs.putBoolean("soundAllowed", true).flush();
                     soundButton.setSprite(assets.getTexture("soundButtonOn"));
                 }
                 soundButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
             }
             if (exitButton.isToggled()) {
                 exitButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
+                game.prefs.flush();
                 System.gc();
                 System.exit(0);
 
@@ -99,12 +127,14 @@ public class MainMenuController {
     }
 
     public void sync() {
-        musicButton.setSprite(assets.getTexture(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"));
-        soundButton.setSprite(assets.getTexture(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"));
+        musicButton.setSprite(assets.getTexture(game.prefs.getBoolean("musicAllowed", true) ? "musicButtonOn" : "musicButtonOff"));
+        soundButton.setSprite(assets.getTexture(game.prefs.getBoolean("soundAllowed", true) ? "soundButtonOn" : "soundButtonOff"));
     }
 
     public void draw(SpriteBatch batch) {
-        background.draw(batch);
+        background1.draw(batch);
+        background2.draw(batch);
+        logo.draw(batch);
         playButton.draw(batch);
         musicButton.draw(batch);
         soundButton.draw(batch);

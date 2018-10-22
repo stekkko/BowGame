@@ -6,15 +6,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
+import com.bow.game.control.EndlessLevelController;
 import com.bow.game.control.LevelController;
+import com.bow.game.control.SurvivalLevelController;
 import com.bow.game.utils.Assets;
 import com.bow.game.utils.GUI;
 
 public class GameScreen implements Screen {
     private BowGame game;
     private GUI gui;
+    Assets assets;
     private SpriteBatch batch;
     private LevelController levelController;
 
@@ -27,8 +29,8 @@ public class GameScreen implements Screen {
 
     public GameScreen(BowGame game, Assets assets) {
         this.game = game;
+        this.assets = assets;
         gui = new GUI();
-        levelController = new LevelController(game, assets, gui);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = true;
     }
@@ -36,8 +38,8 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        if (game.isMusicAllowed()) levelController.music.play();
-
+        levelController = (game.getGamemode() == game.ENDLESS ? new EndlessLevelController(game, assets, gui) : new SurvivalLevelController(game, assets, gui));
+        if (game.prefs.getBoolean("musicAllowed", true)) levelController.music.play();
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = false;
     }
@@ -77,7 +79,7 @@ public class GameScreen implements Screen {
     public void resume() {
         levelController.restartGame();
         paused = false;
-        if (game.isMusicAllowed()) levelController.music.play();
+        assets.playMusic(levelController.music, 0.15f);
     }
 
     @Override

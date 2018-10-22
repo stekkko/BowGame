@@ -32,13 +32,13 @@ public class PauseMenuController {
         background = new Background(assets.getTexture("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
         resumeButton = new Button(assets.getTexture("resumeButton"),
-                -2f * 2.9f, 0, 4f * 2.9f, 4f);
-        musicButton = new Button(assets.getTexture(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"),
-                -2f * 2.9f, -5f, 4f * 1.275f, 4f);
-        soundButton = new Button(assets.getTexture(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"),
-                2f * 2.9f - 4f * 1.275f, -5f, 4f * 1.275f, 4f);
+                -1.5f * 2.9f, 0, 3f * 2.9f, 3f);
+        musicButton = new Button(assets.getTexture(game.prefs.getBoolean("musicAllowed", true) ? "musicButtonOn" : "musicButtonOff"),
+                -1.5f * 2.9f, -4f, 3f * 1.275f, 3f);
+        soundButton = new Button(assets.getTexture(game.prefs.getBoolean("soundAllowed", true) ? "soundButtonOn" : "soundButtonOff"),
+                1.5f * 2.9f - 3f * 1.275f, -4f, 3f * 1.275f, 3f);
         exitMainMenuButton = new Button(assets.getTexture("mainMenuButton"),
-                -2f * 2.9f, -10f, 4f * 2.9f, 4f);
+                -1.5f * 2.9f, -8f, 3f * 2.9f, 3f);
         buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
     }
 
@@ -48,7 +48,7 @@ public class PauseMenuController {
         musicButton.handle();
         soundButton.handle();
 
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.justTouched()) {
             float x = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             float y = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
 
@@ -57,40 +57,41 @@ public class PauseMenuController {
             soundButton.setToggled(soundButton.getBounds().contains(x, y));
             exitMainMenuButton.setToggled(exitMainMenuButton.getBounds().contains(x, y));
         }
-        else {
+
+        if (!Gdx.input.isTouched()) {
             if (resumeButton.isToggled()) {
                 resumeButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
                 game.pauseScreen.pause();
                 game.setScreen(game.gameScreen);
             }
             if (musicButton.isToggled()) {
-                if (game.isMusicAllowed()) {
-                    game.setMusicAllowed(false);
+                if (game.prefs.getBoolean("musicAllowed", true)) {
+                    game.prefs.putBoolean("musicAllowed", false).flush();
                     musicButton.setSprite(assets.getTexture("musicButtonOff"));
                 }
                 else {
-                    game.setMusicAllowed(true);
+                    game.prefs.putBoolean("musicAllowed", true).flush();
                     musicButton.setSprite(assets.getTexture("musicButtonOn"));
                 }
                 musicButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
             }
             if (soundButton.isToggled()) {
-                if (game.isSoundsAllowed()) {
-                    game.setSoundsAllowed(false);
+                if (game.prefs.getBoolean("soundAllowed", true)) {
+                    game.prefs.putBoolean("soundAllowed", false).flush();
                     soundButton.setSprite(assets.getTexture("soundButtonOff"));
                 }
                 else {
-                    game.setSoundsAllowed(true);
+                    game.prefs.putBoolean("soundAllowed", true).flush();
                     soundButton.setSprite(assets.getTexture("soundButtonOn"));
                 }
                 soundButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
             }
             if (exitMainMenuButton.isToggled()) {
                 exitMainMenuButton.setToggled(false);
-                if (game.isSoundsAllowed()) buttonSound.play();
+                assets.playSound(buttonSound, 1f);
                 game.pauseScreen.pause();
                 game.setScreen(game.menuScreen);
             }
@@ -99,8 +100,8 @@ public class PauseMenuController {
     }
 
     public void sync() {
-        musicButton.setSprite(assets.getTexture(game.isMusicAllowed() ? "musicButtonOn" : "musicButtonOff"));
-        soundButton.setSprite(assets.getTexture(game.isSoundsAllowed() ? "soundButtonOn" : "soundButtonOff"));
+        musicButton.setSprite(assets.getTexture(game.prefs.getBoolean("musicAllowed", true) ? "musicButtonOn" : "musicButtonOff"));
+        soundButton.setSprite(assets.getTexture(game.prefs.getBoolean("soundAllowed", true) ? "soundButtonOn" : "soundButtonOff"));
     }
 
     public void draw(SpriteBatch batch) {

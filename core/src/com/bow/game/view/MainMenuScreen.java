@@ -2,18 +2,18 @@ package com.bow.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.BowGame;
 import com.bow.game.control.MainMenuController;
-import com.bow.game.control.PauseMenuController;
 import com.bow.game.utils.Assets;
 
 public class MainMenuScreen implements Screen {
 
     private BowGame game;
+    private Assets assets;
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private MainMenuController mainMenuController;
@@ -26,7 +26,9 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(BowGame game, Assets assets) {
         this.game = game;
+        this.assets = assets;
         mainMenuController = new MainMenuController(game, assets);
+        assets.playMusic(mainMenuController.theme, 0.5f);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = false;
     }
@@ -63,11 +65,13 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void pause() {
+        mainMenuController.theme.stop();
         paused = true;
     }
 
     @Override
     public void resume() {
+        assets.playMusic(mainMenuController.theme, 0.5f);
         mainMenuController.sync();
         paused = false;
     }
