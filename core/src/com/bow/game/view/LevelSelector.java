@@ -16,7 +16,6 @@ public class LevelSelector implements Screen {
 
     private BowGame game;
     private OrthographicCamera camera;
-    private SpriteBatch batch;
     private LevelSelectorController levelSelectorController;
 
     private boolean paused;
@@ -24,16 +23,15 @@ public class LevelSelector implements Screen {
     public static final float cameraWidth = 20f;
     public static float deltaCff;
 
-    public LevelSelector(BowGame game, Assets assets) {
+    public LevelSelector(BowGame game) {
         this.game = game;
-        levelSelectorController = new LevelSelectorController(game, assets);
+        levelSelectorController = new LevelSelectorController(game);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = false;
     }
 
     @Override
     public void show() {
-        batch = new SpriteBatch();
         paused = false;
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
@@ -46,11 +44,11 @@ public class LevelSelector implements Screen {
 
         deltaCff = delta;
 
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
         if (!paused) levelSelectorController.handle();
-        levelSelectorController.draw(batch);
-        batch.end();
+        levelSelectorController.draw(game.batch);
+        game.batch.end();
     }
 
     @Override
@@ -77,7 +75,6 @@ public class LevelSelector implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
         game.dispose();
         levelSelectorController.dispose();
     }

@@ -13,9 +13,7 @@ import com.bow.game.utils.Assets;
 public class MainMenuScreen implements Screen {
 
     private BowGame game;
-    private Assets assets;
     private OrthographicCamera camera;
-    private SpriteBatch batch;
     private MainMenuController mainMenuController;
 
     //TODO
@@ -24,21 +22,12 @@ public class MainMenuScreen implements Screen {
     public static final float cameraWidth = 20f;
     public static float deltaCff;
 
-    public MainMenuScreen(BowGame game, Assets assets) {
+    public MainMenuScreen(BowGame game) {
         this.game = game;
-        this.assets = assets;
-        mainMenuController = new MainMenuController(game, assets);
-        assets.playMusic(mainMenuController.theme, 0.5f);
+        mainMenuController = new MainMenuController(game);
+        game.assets.playMusic("theme", 0.5f);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = false;
-    }
-
-    @Override
-    public void show() {
-        batch = new SpriteBatch();
-        mainMenuController.sync();
-        paused = false;
-        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -49,11 +38,19 @@ public class MainMenuScreen implements Screen {
 
         deltaCff = delta;
 
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
         if (!paused) mainMenuController.handle();
-        mainMenuController.draw(batch);
-        batch.end();
+        mainMenuController.draw(game.batch);
+        game.batch.end();
+    }
+
+    @Override
+    public void show() {
+        mainMenuController.sync();
+        game.assets.playMusic("theme", 0.5f);
+        paused = false;
+        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -65,13 +62,12 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void pause() {
-        mainMenuController.theme.stop();
         paused = true;
     }
 
     @Override
     public void resume() {
-        assets.playMusic(mainMenuController.theme, 0.5f);
+        game.assets.playMusic("theme", 0.5f);
         mainMenuController.sync();
         paused = false;
     }
@@ -83,7 +79,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
         game.dispose();
         mainMenuController.dispose();
     }

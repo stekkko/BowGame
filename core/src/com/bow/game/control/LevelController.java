@@ -1,8 +1,9 @@
 package com.bow.game.control;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.bow.game.BowGame;
@@ -13,7 +14,6 @@ import com.bow.game.model.Blood;
 import com.bow.game.model.Bow;
 import com.bow.game.model.Bullet;
 import com.bow.game.model.Button;
-import com.bow.game.model.Crosshair;
 import com.bow.game.model.Explosion;
 import com.bow.game.model.Spell;
 import com.bow.game.model.Turret;
@@ -25,19 +25,16 @@ import com.bow.game.model.mobs.Dog;
 import com.bow.game.model.mobs.Enemy;
 import com.bow.game.model.mobs.Knight;
 import com.bow.game.model.mobs.Zombie;
-import com.bow.game.utils.Assets;
-import com.bow.game.utils.GUI;
 import com.bow.game.view.GameScreen;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
 
 public abstract class LevelController {
     static Random random;
-    BowGame game;
-    GUI gui;
-    Assets assets;
+    protected BowGame game;
+
+    public BitmapFont font;
 
     //Game Objects
     Background background;
@@ -53,8 +50,7 @@ public abstract class LevelController {
     Spell spellKnight;
     Background wallFloor;
 
-    //Music and Sounds
-    Map<String, Sound> sounds;
+    //Sounds
     Sound swordHitSound;
     Sound swordSound;
     Sound scream;
@@ -65,7 +61,6 @@ public abstract class LevelController {
     Sound shootTurretSound;
     Sound reloadedSound;
     Sound buttonSound;
-    public Music music;
 
     //Params
     boolean bossFIGHT;
@@ -79,11 +74,12 @@ public abstract class LevelController {
     float width = GameScreen.cameraWidth;
     float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-    LevelController(BowGame game, Assets assets, GUI gui) {
+    LevelController(BowGame game) {
         this.game = game;
-        this.gui = gui;
         random = new Random();
-        this.assets = assets;
+        font = new BitmapFont(Gdx.files.internal("font123.fnt"), Gdx.files.internal("font123.png"), false);
+        font.getData().setScale(0.05f);
+        font.setColor(Color.GOLD);
         init();
     }
 
@@ -97,20 +93,14 @@ public abstract class LevelController {
         handleGame();
         for (Ammo ammo : ammunition) ammo.handle();
 
-        gui.addFloat(GameScreen.deltaCff);
-        gui.setCooldown(spellExplosion.isOnCD() ? spellExplosion.getCooldownTime() - spellExplosion.getTime() : 0f);
-        gui.setCooldown1(spellKnight.isOnCD() ? spellKnight.getCooldownTime() - spellKnight.getTime() : 0f);
-        if (gui.getCooldown() == 0) { gui.hideCooldown(); }
-        if (gui.getCooldown1() == 0) { gui.hideCooldown1(); }
-
         weapon.handle();
         wallFloor.handle();
         pauseButton.handle();
 
         spellExplosion.handle();
-        if (!spellExplosion.isOnCD()) spellExplosion.setSprite(assets.getTexture("explosionSpellButtonOn"));
+        if (!spellExplosion.isOnCD()) spellExplosion.setSprite(game.assets.getTexture("explosionSpellButtonOn"));
         spellKnight.handle();
-        if (!spellKnight.isOnCD()) spellKnight.setSprite(assets.getTexture("knightSpellButtonOn"));
+        if (!spellKnight.isOnCD()) spellKnight.setSprite(game.assets.getTexture("knightSpellButtonOn"));
 
 
         for (int i = ammunition.size() - 1; i >= 0; i--) {
@@ -133,52 +123,54 @@ public abstract class LevelController {
             xp = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             yp = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
 
-            if (spellExplosion.isToggled() && !spellExplosion.isOnCD()) {
+            if (spellExplosion.isToggled() && !spellExplosion.isOnCD() && !spellExplosion.getBounds().contains(xp, yp)) {
                 spellExplosion.getCrosshair().setPosition(xp - spellExplosion.getCrosshair().getWidth() / 2, yp - spellExplosion.getCrosshair().getHeight() / 2);
                 spellExplosion.getCrosshair().setDrawn(true);
             }
+            else spellExplosion.getCrosshair().setDrawn(false);
 
-            if (spellKnight.isToggled() && !spellKnight.isOnCD()) {
+            if (spellKnight.isToggled() && !spellKnight.isOnCD() && !spellKnight.getBounds().contains(xp, yp)) {
                 spellKnight.getCrosshair().setPosition(xp - spellKnight.getCrosshair().getWidth() / 2, yp - spellKnight.getCrosshair().getHeight() / 2);
                 spellKnight.getCrosshair().setDrawn(true);
             }
+            else spellKnight.getCrosshair().setDrawn(false);
 
-            if (!spellExplosion.getCrosshair().isDrawn() && !spellKnight.getCrosshair().isDrawn()) {
+            if (!spellExplosion.isToggled() && !spellKnight.isToggled()) {
                 weapon.setPosition(xp - weapon.getWidth() / 2, weapon.getY());
                 if (weapon.isLoaded() && weapon.isReadyToShoot()) {
                     weapon.shoot();
                     ammunition.add(Ammo.copy(weapon.getAmmo()));
                     ammunition.get(ammunition.size() - 1).shoot();
 
-                    if (weapon instanceof Turret) assets.playSound(shootTurretSound, 0.2f);
-                    if (weapon instanceof Bow) assets.playSound(shootBowSound, 0.1f);
+                    if (weapon instanceof Turret) game.assets.playSound(shootTurretSound, 0.2f);
+                    if (weapon instanceof Bow) game.assets.playSound(shootBowSound, 0.1f);
 
                 }
             }
 
         }
         else {
-            if (pauseButton.isToggled()) {
-                assets.playSound(buttonSound, 1f);
+            if (pauseButton.isToggled() && pauseButton.getBounds().contains(xp, yp)) {
+                game.assets.playSound(buttonSound, 1f);
                 pauseButton.setToggled(false);
                 game.gameScreen.pause();
                 game.setScreen(game.pauseScreen);
             }
-            if (spellExplosion.isToggled()) {
-                assets.playSound(explosionSound, 1f);
+            else if (spellExplosion.isToggled() && !spellExplosion.getBounds().contains(xp, yp)) {
+                game.assets.playSound(explosionSound, 1f);
                 spellExplosion.setToggled(false);
                 spellExplosion.setOnCD(true);
                 spellExplosion.getCrosshair().setDrawn(false);
-                spellExplosion.setSprite(assets.getTexture("explosionSpellButtonOff"));
+                spellExplosion.setSprite(game.assets.getTexture("explosionSpellButtonOff"));
                 allies.add(new Explosion(xp -6f, yp -6f, 12f, 12f,50f));
             }
-            if (spellKnight.isToggled()) {
-                assets.playSound(swordSound, 1f);
+            else if (spellKnight.isToggled() && !spellKnight.getBounds().contains(xp, yp))  {
+                game.assets.playSound(swordSound, 1f);
                 spellKnight.setToggled(false);
                 spellKnight.setOnCD(true);
                 spellKnight.getCrosshair().setDrawn(false);
-                spellKnight.setSprite(assets.getTexture("knightSpellButtonOff"));
-                Knight knight = new Knight(assets.getTexture("knight"),
+                spellKnight.setSprite(game.assets.getTexture("knightSpellButtonOff"));
+                Knight knight = new Knight(game.assets.getTexture("knight"),
                         xp -1.5f ,yp - 1.5f * 0.906f, 3f,3f * 0.906f,800, 25f, 2f);
                 knight.targetSpawn(xp -1.5f, yp -1.5f * 0.906f, 0f, 1f);
                 knight.setPosition(knight.getX(), Math.max(knight.getY(), wall.getY() + wall.getHeight()));
@@ -195,8 +187,8 @@ public abstract class LevelController {
             Enemy enemy = enemies.get(i);
             for (Ally ally : allies) {
                 if (Intersector.overlapConvexPolygons(enemy.getBounds(), ally.getBounds())) {
-                    if (ally instanceof Knight) assets.playSound(swordHitSound, 0.2f);
-                    else if (ally instanceof Wall) assets.playSound(bricksSound, 0.7f);
+                    if (ally instanceof Knight) game.assets.playSound(swordHitSound, 0.2f);
+                    else if (ally instanceof Wall) game.assets.playSound(bricksSound, 0.7f);
 
                     enemy.damaged(ally.getDamage());
                     if (enemy.isRepelable()) enemy.repel(ally.getRepelPower());
@@ -205,8 +197,10 @@ public abstract class LevelController {
                 }
             }
             if (enemy.getPercentHealthPoints() <= 0) {
-                if (enemy instanceof Boss666) assets.playSound(scream, 0.5f);
+                if (enemy instanceof Boss666) game.assets.playSound(scream, 0.5f);
                 enemies.remove(enemy);
+                game.prefs.putInteger("cash", 0);
+                game.prefs.putInteger("cash", game.prefs.getInteger("cash", 0) + enemy.getValue()).flush();
                 bloodMap.add(new Blood(enemy, random));
             }
         }
@@ -240,7 +234,7 @@ public abstract class LevelController {
                 if (Intersector.overlapConvexPolygons(enemy.getBounds(), ammo.getBounds())) {
                     enemy.damaged(ammo.getDamage(random));
                     enemy.repel(ammo.getRepelDist());
-                    assets.playSound(hitSound,0.8f);
+                    game.assets.playSound(hitSound,0.8f);
                     ammo.delete();
                 }
             }
@@ -252,10 +246,9 @@ public abstract class LevelController {
     }
 
     public void restartGame() {
-        music.stop();
+        game.assets.stopMusic("music");
         init();
-        gui.setScore(0);
-        assets.playMusic(music, 0.15f);
+        game.assets.playMusic("music", 0.15f);
     }
 
     public void draw(SpriteBatch batch) {
@@ -271,6 +264,7 @@ public abstract class LevelController {
         pauseButton.draw(batch);
         spellExplosion.draw(batch);
         spellKnight.draw(batch);
+        font.draw(game.batch, game.prefs.getInteger("cash", 0) + "$", - width / 2 + 1f, height / 2 - 1f);
     }
 
     protected abstract void initParams();
@@ -283,30 +277,30 @@ public abstract class LevelController {
 
         weapon = initWeapon(initAmmo(game.prefs.getString("ammoEquip", "Arrow")), game.prefs.getString("weaponEquip", "Bow"));
 
-        wall = new Wall(assets.getTexture("wall1"),
+        wall = new Wall(game.assets.getTexture("wall1"),
                 -width / 2, 4f -height / 2, 2f * 28.96f, 2f, game.prefs.getFloat("WallHP", 300f), width, 3f);
         allies.add(wall);
-        wallFloor = new Background(assets.getTexture("wallFloor"),
+        wallFloor = new Background(game.assets.getTexture("wallFloor"),
                 -width / 2, - height / 2, 5f * 5.875f, 5f);
-        background = new Background(assets.getTexture("grass"),
+        background = new Background(game.assets.getTexture("grass"),
                 -width / 2, -height / 2, height * 1f, height);
-        pauseButton = new Button(assets.getTexture("pauseButton"),
+        pauseButton = new Button(game.assets.getTexture("pauseButton"),
                 width / 2 - 2f * 1.275f - 0.5f, height / 2 - 2f - 0.5f, 2f * 1.275f, 2f);
     }
 
     private Ammo initAmmo(String ammoEquip) {
         switch (ammoEquip) {
             case ("Arrow"): {
-                return new Arrow(assets.getTexture("poisonArrow"),
+                return new Arrow(game.assets.getTexture("poisonArrow"),
                         2.25f, -height / 2, 0.5f, 0.5f * 5.6153f, 25f, 0.05f, 100f, 0.3f, 25f);
             }
             case ("Bullet"): {
-                return new Bullet(assets.getTexture("bullet"),
+                return new Bullet(game.assets.getTexture("bullet"),
                         0f, -height / 2, 0.5f, 0.5f * 3.555f,
                         20f, 0.01f, 100f, 0.1f, 40f);
             }
             default: {
-                return new Arrow(assets.getTexture("poisonArrow"),
+                return new Arrow(game.assets.getTexture("poisonArrow"),
                         2.25f, -height / 2, 0.5f, 0.5f * 5.6153f, 25f, 0.05f, 100f, 0.3f, 25f);
             }
         }
@@ -315,15 +309,15 @@ public abstract class LevelController {
     private Weapon initWeapon(Ammo ammoInWeapon, String weaponEquip) {
         switch (weaponEquip) {
             case ("Bow"): {
-                return new Bow(assets.getTexture("bowLVL2"),
+                return new Bow(game.assets.getTexture("bowLVL2"),
                         0f, -height / 2, 5f, 5f * 0.3255f, ammoInWeapon, 0.5f);
             }
             case ("Turret"): {
-                return new Turret(assets.getTexture("turret"),
+                return new Turret(game.assets.getTexture("turret"),
                         0f, -height / 2, 3f, 3f * 1.435f, ammoInWeapon, 30, 2.0f, 0.1f);
             }
             default: {
-                return new Bow(assets.getTexture("bowLVL2"),
+                return new Bow(game.assets.getTexture("bowLVL2"),
                         0f, -height / 2, 5f, 5f * 0.3255f, ammoInWeapon, 0.0f);
             }
         }
@@ -341,15 +335,10 @@ public abstract class LevelController {
         swordHitSound = Gdx.audio.newSound(Gdx.files.internal("swordHit.ogg"));
         shootTurretSound = Gdx.audio.newSound(Gdx.files.internal("shootTurret.ogg"));
         reloadedSound = Gdx.audio.newSound(Gdx.files.internal("reloaded.ogg"));
-
-        music = Gdx.audio.newMusic(Gdx.files.internal("bensound-instinct.mp3"));
-        assets.playMusic(music, 0.15f);
     }
 
     public void dispose() {
         game.dispose();
-        gui.dispose();
-        assets.dispose();
     }
 }
 

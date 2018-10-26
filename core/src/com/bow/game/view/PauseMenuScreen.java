@@ -15,7 +15,6 @@ public class PauseMenuScreen implements Screen {
 
     private BowGame game;
     private OrthographicCamera camera;
-    private SpriteBatch batch;
     private PauseMenuController pauseMenuController;
 
     //TODO
@@ -24,16 +23,15 @@ public class PauseMenuScreen implements Screen {
     public static final float cameraWidth = 20f;
     public static float deltaCff;
 
-    public PauseMenuScreen(BowGame game, Assets assets) {
+    public PauseMenuScreen(BowGame game) {
         this.game = game;
-        pauseMenuController = new PauseMenuController(game, assets);
+        pauseMenuController = new PauseMenuController(game);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         paused = false;
     }
 
     @Override
     public void show() {
-        batch = new SpriteBatch();
         pauseMenuController.sync();
         paused = false;
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -47,11 +45,11 @@ public class PauseMenuScreen implements Screen {
 
         deltaCff = delta;
 
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
         if (!paused) pauseMenuController.handle();
-        pauseMenuController.draw(batch);
-        batch.end();
+        pauseMenuController.draw(game.batch);
+        game.batch.end();
     }
 
     @Override
@@ -79,7 +77,6 @@ public class PauseMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
         game.dispose();
         pauseMenuController.dispose();
     }

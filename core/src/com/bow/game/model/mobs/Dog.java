@@ -11,7 +11,7 @@ public class Dog extends Enemy {
     }
 
     public Dog(float x, float y, float width, float height, float maxHealthPoints, float damage, float repelPower) {
-        super(texture, x, y, width, height, maxHealthPoints, damage, repelPower, true);
+        super(texture, x, y, width, height, maxHealthPoints, damage, repelPower, 6, true);
     }
 
 

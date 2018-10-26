@@ -13,7 +13,7 @@ public class Zombie extends Enemy {
     private Animation animation;
 
     public Zombie(float x, float y, float width, float height, float maxHealthPoints, float damage, float repelPower) {
-        super(textures[0][0], x, y, width, height, maxHealthPoints, damage, repelPower, true);
+        super(textures[0][0], x, y, width, height, maxHealthPoints, damage, repelPower, 10, true);
         animation = new Animation(0.2f, 3, 9, Animation.LOOP);
     }
 

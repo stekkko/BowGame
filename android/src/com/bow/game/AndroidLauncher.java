@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.bow.game.BowGame;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -14,6 +13,7 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useCompass = false;
 		config.useAccelerometer = false;
 		config.useWakelock = true;
+		config.useImmersiveMode = true;
 		initialize(new BowGame(), config);
 	}
 }

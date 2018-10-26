@@ -5,6 +5,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bow.game.model.Blood;
 import com.bow.game.model.Explosion;
@@ -23,7 +25,8 @@ public class BowGame extends Game {
 	public Screen menuScreen;
 	public Screen pauseScreen;
 	public Screen levelSelector;
-	private Assets assets;
+	public SpriteBatch batch;
+	public Assets assets;
 
 	//TODO settings
 	public final int SURVIVAL = 1;
@@ -34,30 +37,23 @@ public class BowGame extends Game {
 	public void create () {
 	    prefs = Gdx.app.getPreferences("My Preferences");
 		assets = new Assets(this);
-        initializeStatics(assets);
-		gameScreen = new GameScreen(this, assets);
-		menuScreen = new MainMenuScreen(this, assets);
-		pauseScreen = new PauseMenuScreen(this, assets);
-		levelSelector = new LevelSelector(this, assets);
+		batch = new SpriteBatch();
+        initializeStatics();
+		gameScreen = new GameScreen(this);
+		menuScreen = new MainMenuScreen(this);
+		pauseScreen = new PauseMenuScreen(this);
+		levelSelector = new LevelSelector(this);
 
 		gamemode = SURVIVAL;
 		this.setScreen(menuScreen);
 	}
 
-	private void initializeStatics(Assets assets) {
+	private void initializeStatics() {
         HealthBar.setTextureRegions(assets.getAtlas("atlasHP.atlas"));
 		Explosion.setTextureRegions(assets.getTexture("explosion"));
         Zombie.setTextures(assets.getTexture("zombie"));
         Blood.setTextureRegion(assets.getTexture("blood"));
         Dog.setTextureRegion(assets.getTexture("dog"));
-    }
-
-	public int getGamemode() {
-	    return gamemode;
-    }
-
-    public void setGamemode(int gamemode) {
-        this.gamemode = gamemode;
     }
 
 	@Override
@@ -69,8 +65,17 @@ public class BowGame extends Game {
 	public void dispose () {
 		super.dispose();
 		prefs.flush();
+		batch.dispose();
 		gameScreen.dispose();
 		menuScreen.dispose();
 		assets.dispose();
+	}
+
+	public int getGamemode() {
+		return gamemode;
+	}
+
+	public void setGamemode(int gamemode) {
+		this.gamemode = gamemode;
 	}
 }

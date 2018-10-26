@@ -27,7 +27,6 @@ public class Spell extends Button {
 
         if (isOnCD()) {
             setToggled(false);
-            setDoEvent(false);
             crosshair.setDrawn(false);
             time += GameScreen.deltaCff;
             if (time >= cooldownTime) {
