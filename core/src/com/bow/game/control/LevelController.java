@@ -9,12 +9,12 @@ import com.badlogic.gdx.math.Intersector;
 import com.bow.game.BowGame;
 import com.bow.game.model.Ammo;
 import com.bow.game.model.Arrow;
-import com.bow.game.model.Background;
 import com.bow.game.model.Blood;
 import com.bow.game.model.Bow;
 import com.bow.game.model.Bullet;
 import com.bow.game.model.Button;
 import com.bow.game.model.Explosion;
+import com.bow.game.model.GameObject;
 import com.bow.game.model.Spell;
 import com.bow.game.model.Turret;
 import com.bow.game.model.Wall;
@@ -37,7 +37,8 @@ public abstract class LevelController {
     public BitmapFont font;
 
     //Game Objects
-    Background background;
+    GameObject background;
+    GameObject wallFloor;
     ArrayList<Enemy> enemies;
     ArrayList<Ally> allies;
     Weapon weapon;
@@ -48,7 +49,7 @@ public abstract class LevelController {
     Button pauseButton;
     Spell spellExplosion;
     Spell spellKnight;
-    Background wallFloor;
+
 
     //Sounds
     Sound swordHitSound;
@@ -89,22 +90,19 @@ public abstract class LevelController {
         initSounds();
     }
 
-    public void handle() {
-        handleGame();
-        for (Ammo ammo : ammunition) ammo.handle();
+    public void handle(float dt) {
+        weapon.handle(dt);
+        handleGame(dt);
 
-        weapon.handle();
-        wallFloor.handle();
-        pauseButton.handle();
-
-        spellExplosion.handle();
+        spellExplosion.handle(dt);
         if (!spellExplosion.isOnCD()) spellExplosion.setSprite(game.assets.getTexture("explosionSpellButtonOn"));
-        spellKnight.handle();
+        spellKnight.handle(dt);
         if (!spellKnight.isOnCD()) spellKnight.setSprite(game.assets.getTexture("knightSpellButtonOn"));
 
 
         for (int i = ammunition.size() - 1; i >= 0; i--) {
             Ammo ammo = ammunition.get(i);
+            ammo.handle(dt);
             if (ammo.isReadyToDelete() || ammo.getY() > height / 2)
                 ammunition.remove(ammo);
         }
@@ -179,12 +177,10 @@ public abstract class LevelController {
         }
     }
 
-    private void handleGame() {
-        for (Enemy enemy : enemies) enemy.handle();
-        for (Ally ally : allies) ally.handle();
-
+    private void handleGame(float dt) {
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy enemy = enemies.get(i);
+            enemy.handle(dt);
             for (Ally ally : allies) {
                 if (Intersector.overlapConvexPolygons(enemy.getBounds(), ally.getBounds())) {
                     if (ally instanceof Knight) game.assets.playSound(swordHitSound, 0.2f);
@@ -207,14 +203,15 @@ public abstract class LevelController {
 
         for (int i = allies.size() - 1; i >= 0; i--) {
             Ally ally = allies.get(i);
+            ally.handle(dt);
             if (ally instanceof Explosion) ally.setDamage(0f);
             if (ally.getPercentHealthPoints() <= 0 || ally.getY() > height / 2) {
                 allies.remove(ally);
             }
         }
 
-        time += GameScreen.deltaCff;
-        spawnInterval -= 0.005 * GameScreen.deltaCff;
+        time += dt;
+        spawnInterval -= 0.005 * dt;
         if (time > spawnInterval) {
             int param = random.nextInt(6);
             int adjustZombies = 1;
@@ -233,7 +230,7 @@ public abstract class LevelController {
             for (Enemy enemy : enemies) {
                 if (Intersector.overlapConvexPolygons(enemy.getBounds(), ammo.getBounds())) {
                     enemy.damaged(ammo.getDamage(random));
-                    enemy.repel(ammo.getRepelDist());
+                    if (enemy.isRepelable()) enemy.repel(ammo.getRepelDist());
                     game.assets.playSound(hitSound,0.8f);
                     ammo.delete();
                 }
@@ -280,9 +277,9 @@ public abstract class LevelController {
         wall = new Wall(game.assets.getTexture("wall1"),
                 -width / 2, 4f -height / 2, 2f * 28.96f, 2f, game.prefs.getFloat("WallHP", 300f), width, 3f);
         allies.add(wall);
-        wallFloor = new Background(game.assets.getTexture("wallFloor"),
+        wallFloor = new GameObject(game.assets.getTexture("wallFloor"),
                 -width / 2, - height / 2, 5f * 5.875f, 5f);
-        background = new Background(game.assets.getTexture("grass"),
+        background = new GameObject(game.assets.getTexture("grass"),
                 -width / 2, -height / 2, height * 1f, height);
         pauseButton = new Button(game.assets.getTexture("pauseButton"),
                 width / 2 - 2f * 1.275f - 0.5f, height / 2 - 2f - 0.5f, 2f * 1.275f, 2f);

@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bow.game.BowGame;
-import com.bow.game.model.Background;
 import com.bow.game.model.Button;
+import com.bow.game.model.GameObject;
 import com.bow.game.view.LevelSelector;
 
 
@@ -14,7 +14,7 @@ public class LevelSelectorController {
 
     private Sound buttonSound;
 
-    private Background background;
+    private GameObject background;
     private Button playCampaignButton;
     private Button playEndlessButton;
 
@@ -27,7 +27,7 @@ public class LevelSelectorController {
     public LevelSelectorController(BowGame game) {
         this.game = game;
 
-        background = new Background(game.assets.getTexture("menuBack"),
+        background = new GameObject(game.assets.getTexture("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
         playCampaignButton = new Button(game.assets.getTexture("survivalButton"),
                 -2f * 2.9f, 0, 4f * 2.9f, 4f);
@@ -37,10 +37,6 @@ public class LevelSelectorController {
     }
 
     public void handle() {
-        background.handle();
-        playCampaignButton.handle();
-        playEndlessButton.handle();
-
         if (Gdx.input.justTouched()) {
             float x = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             float y = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;

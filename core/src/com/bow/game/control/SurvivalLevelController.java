@@ -12,8 +12,8 @@ public class SurvivalLevelController extends LevelController {
     }
 
     @Override
-    public void handle() {
-        super.handle();
+    public void handle(float dt) {
+        super.handle(dt);
         if (wall.getPercentHealthPoints() <= 0) {
             restartGame();
             game.setScreen(game.menuScreen);

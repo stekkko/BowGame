@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bow.game.BowGame;
-import com.bow.game.model.Background;
 import com.bow.game.model.Button;
+import com.bow.game.model.GameObject;
 import com.bow.game.view.PauseMenuScreen;
 
 public class PauseMenuController {
@@ -13,7 +13,7 @@ public class PauseMenuController {
 
     private Sound buttonSound;
 
-    private Background background;
+    private GameObject background;
     private Button resumeButton;
     private Button musicButton;
     private Button soundButton;
@@ -28,7 +28,7 @@ public class PauseMenuController {
     public PauseMenuController(BowGame game) {
         this.game = game;
 
-        background = new Background(game.assets.getTexture("menuBack"),
+        background = new GameObject(game.assets.getTexture("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
         resumeButton = new Button(game.assets.getTexture("resumeButton"),
                 -1.5f * 2.9f, 0, 3f * 2.9f, 3f);
@@ -42,11 +42,6 @@ public class PauseMenuController {
     }
 
     public void handle() {
-        background.handle();
-        resumeButton.handle();
-        musicButton.handle();
-        soundButton.handle();
-
         if (Gdx.input.justTouched()) {
             float x = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             float y = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;

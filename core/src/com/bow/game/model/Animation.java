@@ -1,8 +1,6 @@
 package com.bow.game.model;
 
 
-import com.bow.game.view.GameScreen;
-
 import java.util.Random;
 
 public class Animation {
@@ -28,8 +26,8 @@ public class Animation {
         state = 0;
     }
 
-    public void handle() {
-        time += GameScreen.deltaCff;
+    public void handle(float dt) {
+        time += dt;
         if (time > frameDuration) {
             if (mode == NORMAL) frame = Math.min(frames, frame + 1);
             else if (mode == LOOP) frame = (frame + 1) % frames;

@@ -19,7 +19,6 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
 
     public static final float cameraWidth = 20f;
-    public static float deltaCff;
 
     public GameScreen(BowGame game) {
         this.game = game;
@@ -44,11 +43,9 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        deltaCff = delta;
-
         game.batch.setProjectionMatrix(camera.combined);
 
-        if (!paused) levelController.handle();
+        if (!paused) levelController.handle(delta);
         game.batch.begin();
         levelController.draw(game.batch);
         game.batch.end();

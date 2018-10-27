@@ -46,9 +46,9 @@ public class Zombie extends Enemy {
     }
 
     @Override
-    public void handle() {
-        super.handle();
-        animation.handle();
+    public void handle(float dt) {
+        super.handle(dt);
+        animation.handle(dt);
         if (getPercentHealthPoints() <= 66 && animation.getState() == 0) animation.update();
         if (getPercentHealthPoints() <= 33 && animation.getState() == 1) animation.update();
     }

@@ -21,7 +21,6 @@ public class LevelSelector implements Screen {
     private boolean paused;
 
     public static final float cameraWidth = 20f;
-    public static float deltaCff;
 
     public LevelSelector(BowGame game) {
         this.game = game;
@@ -41,8 +40,6 @@ public class LevelSelector implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        deltaCff = delta;
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();

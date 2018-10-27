@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
-public abstract class Ammo extends GameObject {
+public abstract class Ammo extends DynamicGameObject {
 
     private boolean readyToDelete;
     private float damage;
@@ -26,7 +26,7 @@ public abstract class Ammo extends GameObject {
     }
 
     public void shoot() {
-        speedY = flyingSpeed;
+        setSpeedY(flyingSpeed);
     }
 
     public void delete() {

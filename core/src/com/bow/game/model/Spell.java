@@ -20,15 +20,11 @@ public class Spell extends Button {
         this.getSprite().setAlpha(0.7f);
     }
 
-    @Override
-    public void handle() {
-        super.handle();
-        crosshair.handle();
-
+    public void handle(float dt) {
         if (isOnCD()) {
             setToggled(false);
             crosshair.setDrawn(false);
-            time += GameScreen.deltaCff;
+            time += dt;
             if (time >= cooldownTime) {
                 setOnCD(false);
                 time = 0;
@@ -49,10 +45,6 @@ public class Spell extends Button {
 
     public void setCrosshair(Crosshair crosshair) {
         this.crosshair = crosshair;
-    }
-
-    public float getTime() {
-        return time;
     }
 
     public float getCooldownTime() {

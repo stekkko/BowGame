@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class HealthBar extends GameObject {
+public class HealthBar extends DynamicGameObject {
 
     private static TextureRegion[] textureRegions;
     private boolean shown;
@@ -14,8 +14,8 @@ public class HealthBar extends GameObject {
     private int percentHealthPoints;
 
     @Override
-    public void handle() {
-        super.handle();
+    public void handle(float dt) {
+        super.handle(dt);
         if (healthPoints < maxHealthPoints) show();
         if (percentHealthPoints != (int) (100f * healthPoints / maxHealthPoints)) {
             setPercentHealthPoints(Math.min(100, Math.max(0, (int) (100f * healthPoints / maxHealthPoints))));

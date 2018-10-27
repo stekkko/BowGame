@@ -43,21 +43,16 @@ public abstract class Weapon extends GameObject {
         if (ammo == 0) loaded = false;
     }
 
-    @Override
-    public void handle() {
-        super.handle();
-        amExample.handle();
-
-
+    public void handle(float dt) {
         if (!isLoaded()) {
-            time += GameScreen.deltaCff;
+            time += dt;
             if (time > ammoReloadInterval) {
                 instReload();
                 time = 0;
             }
         }
         else if (!isReadyToShoot()) {
-            time += GameScreen.deltaCff;
+            time += dt;
             if (time > ammoFireInterval) {
                 readyToShoot = true;
                 time = 0;

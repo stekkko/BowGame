@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
-public abstract class Mob extends GameObject {
+public abstract class Mob extends DynamicGameObject {
 
     protected HealthBar healthBar;
     private float damage;
@@ -34,7 +34,7 @@ public abstract class Mob extends GameObject {
         float min = -width / 2;
         float max = width / 2 - getWidth();
         float delta = max - min;
-        this.setPosition(random.nextFloat() * (delta) + min, height / 2 + (random.nextFloat() * 5f));
+        setPosition(random.nextFloat() * (delta) + min, height / 2 + (random.nextFloat() * 5f));
 
         if (healthBar != null) this.healthBar.setPosition(this.getX(), this.getY() - this.healthBar.getHeight());
         setSpeed(speedX, speedY);
@@ -48,7 +48,7 @@ public abstract class Mob extends GameObject {
     public void targetSpawn(float x, float y, float speedX, float speedY) {
         this.setPosition(x, y);
         this.setSpeed(speedX, speedY);
-        if (healthBar != null) this.healthBar.setSpeed(speedX, speedY);
+        if (healthBar != null) healthBar.setSpeed(speedX, speedY);
     }
 
     /**
@@ -69,12 +69,12 @@ public abstract class Mob extends GameObject {
 
 
     @Override
-    public void handle() {
-        super.handle();
+    public void handle(float dt) {
+        super.handle(dt);
         if (healthBar != null) {
-            healthBar.handle();
-            healthBar.setSpeedX(this.speedX);
-            healthBar.setSpeedY(this.speedY);
+            healthBar.handle(dt);
+            healthBar.setSpeedX(getSpeedX());
+            healthBar.setSpeedY(getSpeedY());
         }
     }
 
@@ -87,7 +87,7 @@ public abstract class Mob extends GameObject {
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        if (healthBar != null) healthBar.setPosition(x, y - this.healthBar.getHeight());
+        if (healthBar != null) healthBar.setPosition(x, y - healthBar.getHeight());
     }
 
     public void setDamage(float damage) {

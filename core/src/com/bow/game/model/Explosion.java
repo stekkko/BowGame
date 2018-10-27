@@ -17,10 +17,8 @@ public class Explosion extends Ally {
         setReadyToDelete(false);
     }
 
-    @Override
-    public void handle() {
-        super.handle();
-        animation.handle();
+    public void handle(float dt) {
+        animation.handle(dt);
         if (animation.getFrame() == 12) setReadyToDelete(true);
     }
 
