@@ -7,8 +7,8 @@ public class Crosshair extends GameObject {
 
     private boolean drawn;
 
-    public Crosshair(TextureRegion texture, float x, float y, float width, float height) {
-        super(texture, x, y, width, height);
+    public Crosshair(TextureRegion texture, float width, float height) {
+        super(texture,0 ,0,  width, height);
         setDrawn(false);
     }
 

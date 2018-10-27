@@ -17,6 +17,7 @@ public class LevelSelectorController {
     private GameObject background;
     private Button playCampaignButton;
     private Button playEndlessButton;
+    private Button backButton;
 
     private float xp = 0;
     private float yp = 0;
@@ -29,10 +30,13 @@ public class LevelSelectorController {
 
         background = new GameObject(game.assets.getTexture("menuBack"),
                 -width / 2,  -height / 2, 1.6f * height, height);
+
         playCampaignButton = new Button(game.assets.getTexture("survivalButton"),
-                -2f * 2.9f, 0, 4f * 2.9f, 4f);
+                -4 * 1.45f - 1f, -5f, 4f * 1.45f, 4f);
         playEndlessButton = new Button(game.assets.getTexture("endlessButton"),
-                -2f * 2.9f, -5f, 4f * 2.9f, 4f);
+                1f, -5f, 4f * 1.45f, 4f);
+        backButton = new Button(game.assets.getTexture("backButton"),
+                -9f , -height / 2 + 1f, 2f * 2.9f, 2f);
         buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
     }
 
@@ -43,6 +47,7 @@ public class LevelSelectorController {
 
             playCampaignButton.setToggled(playCampaignButton.getBounds().contains(x, y));
             playEndlessButton.setToggled(playEndlessButton.getBounds().contains(x, y));
+            backButton.setToggled(backButton.getBounds().contains(x,y));
         }
 
         if (Gdx.input.isTouched()) {
@@ -70,6 +75,13 @@ public class LevelSelectorController {
                 game.setScreen(game.gameScreen);
                 game.gameScreen.resume();
             }
+            if (backButton.isToggled() && backButton.getBounds().contains(xp, yp)) {
+                backButton.setToggled(false);
+                game.assets.playSound(buttonSound, 1f);
+                game.levelSelector.pause();
+                game.setScreen(game.menuScreen);
+                game.menuScreen.resume();
+            }
         }
 
     }
@@ -78,6 +90,7 @@ public class LevelSelectorController {
         background.draw(batch);
         playCampaignButton.draw(batch);
         playEndlessButton.draw(batch);
+        backButton.draw(batch);
     }
 
     public void dispose() {

@@ -7,23 +7,37 @@ import com.bow.game.view.GameScreen;
 
 public class Spell extends Button {
 
+    public final static int NULLSPELL = 0;
+    public final static int KNIGHT = 1;
+    public final static int EXPLOSION = 2;
+
     private Crosshair crosshair;
     private float cooldownTime;
     private float time;
     private boolean onCD;
+    private int id;
 
-    public Spell(TextureRegion texture, float x, float y, float width, float height, Crosshair crosshair) {
+    public Spell(TextureRegion texture, float x, float y, float width, float height, int id, float cooldownTime) {
         super(texture, x, y, width, height);
-        this.crosshair = crosshair;
-        onCD = true;
-        cooldownTime = 10f;
+        this.id = id;
         this.getSprite().setAlpha(0.7f);
+        this.crosshair = null;
+        onCD = true;
+        this.cooldownTime = cooldownTime;
+    }
+
+    public Spell(TextureRegion texture, float x, float y, float width, float height, int id, float cooldownTime, Crosshair crosshair) {
+        this(texture, x, y, width, height, id, cooldownTime);
+        this.crosshair = crosshair;
     }
 
     public void handle(float dt) {
-        if (isOnCD()) {
+        //special case for no spell
+        if (getId() == NULLSPELL) setOnCD(true);
+        //other cases
+        else if (isOnCD()) {
             setToggled(false);
-            crosshair.setDrawn(false);
+            if (crosshair != null) crosshair.setDrawn(false);
             time += dt;
             if (time >= cooldownTime) {
                 setOnCD(false);
@@ -32,11 +46,21 @@ public class Spell extends Button {
         }
     }
 
+    public void moveCrosshair(float x, float y) {
+        if (crosshair != null) crosshair.setPosition(x - crosshair.getWidth() / 2, y - crosshair.getHeight() / 2);
+    }
+
+    public void off() {
+        setToggled(false);
+        setOnCD(true);
+        setDrawnCrosshair(false);
+    }
+
     @Override
     public void draw(SpriteBatch batch) {
         getSprite().setAlpha(0.7f);
         super.draw(batch);
-        if (crosshair.isDrawn()) crosshair.draw(batch);
+        if (crosshair != null && crosshair.isDrawn()) crosshair.draw(batch);
     }
 
     public Crosshair getCrosshair() {
@@ -55,11 +79,19 @@ public class Spell extends Button {
         this.cooldownTime = cooldownTime;
     }
 
+    public void setDrawnCrosshair(boolean drawnCrosshair) {
+        if (crosshair != null) crosshair.setDrawn(drawnCrosshair);
+    }
+
     public boolean isOnCD() {
         return onCD;
     }
 
     public void setOnCD(boolean onCD) {
         this.onCD = onCD;
+    }
+
+    public int getId() {
+        return id;
     }
 }

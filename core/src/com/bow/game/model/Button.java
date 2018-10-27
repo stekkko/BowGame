@@ -18,4 +18,5 @@ public class Button extends GameObject {
     public boolean isToggled() {
         return toggled;
     }
+
 }

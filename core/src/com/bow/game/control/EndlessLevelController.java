@@ -57,14 +57,6 @@ public class EndlessLevelController extends LevelController {
     @Override
     protected void initObjects() {
         super.initObjects();
-        Crosshair crosshair = new Crosshair(game.assets.getTexture("crosshair"),
-                0, 0, 9f, 9f);
-        Crosshair crosshair1 = new Crosshair(game.assets.getTexture("crosshair"),
-                0, 0, 4f, 4f);
-        spellExplosion = new Spell(game.assets.getTexture("explosionSpellButtonOff"),
-                -width / 2, -2f, 3f, 3f, crosshair);
-        spellKnight = new Spell(game.assets.getTexture("knightSpellButtonOff"),
-                -width / 2, 1.5f, 3f, 3f, crosshair1);
     }
 }
 
