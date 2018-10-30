@@ -6,288 +6,337 @@ filter: Nearest,Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 3015, 1572
-  size: 26, 146
-  orig: 26, 146
+  xy: 1845, 1040
+  size: 104, 146
+  orig: 104, 146
   offset: 0, 0
   index: -1
 backButton
   rotate: false
-  xy: 2629, 1598
+  xy: 1611, 1106
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
+background2
+  rotate: false
+  xy: 2, 508
+  size: 666, 374
+  orig: 666, 374
+  offset: 0, 0
+  index: -1
 blood
   rotate: false
-  xy: 2, 314
+  xy: 2, 6
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
   index: -1
 boss1
   rotate: false
-  xy: 2280, 1493
+  xy: 1028, 1003
   size: 347, 347
   orig: 347, 347
   offset: 0, 0
   index: -1
 boss2
   rotate: false
-  xy: 1028, 965
+  xy: 670, 535
   size: 347, 347
   orig: 347, 347
   offset: 0, 0
   index: -1
 bow
   rotate: false
-  xy: 2, 84
+  xy: 1028, 917
   size: 258, 84
   orig: 258, 84
   offset: 0, 0
   index: -1
 bowLVL2
   rotate: false
-  xy: 1028, 879
+  xy: 2280, 1543
   size: 258, 84
   orig: 258, 84
   offset: 0, 0
   index: -1
 bullet
   rotate: false
-  xy: 486, 280
+  xy: 2752, 1677
   size: 9, 32
   orig: 9, 32
   offset: 0, 0
   index: -1
+buyButton
+  rotate: false
+  xy: 1377, 1188
+  size: 512, 80
+  orig: 512, 80
+  offset: 0, 0
+  index: -1
 coin
   rotate: false
-  xy: 504, 377
+  xy: 2125, 1193
   size: 160, 157
   orig: 160, 157
   offset: 0, 0
   index: -1
 crosshair
   rotate: false
-  xy: 2629, 1446
+  xy: 858, 79
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 dog
   rotate: false
-  xy: 666, 399
+  xy: 2031, 1053
   size: 48, 135
   orig: 48, 135
   offset: 0, 0
   index: -1
 endlessButton
   rotate: false
-  xy: 2629, 1680
+  xy: 1377, 1026
   size: 232, 160
   orig: 232, 160
   offset: 0, 0
   index: -1
 exitButton
   rotate: false
-  xy: 2, 2
+  xy: 2764, 1773
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 2, 1842
+  xy: 2, 1910
   size: 3072, 128
   orig: 3072, 128
   offset: 0, 0
   index: -1
 explosionSpellButtonOff
   rotate: false
-  xy: 2863, 1568
+  xy: 858, 231
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 explosionSpellButtonOn
   rotate: false
-  xy: 1611, 1080
+  xy: 706, 79
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 goButton
   rotate: false
-  xy: 736, 734
+  xy: 2280, 1461
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
+golem
+  rotate: false
+  xy: 3076, 1985
+  size: 960, 53
+  orig: 960, 53
+  offset: 0, 0
+  index: -1
+golemLegs
+  rotate: false
+  xy: 2280, 1855
+  size: 720, 53
+  orig: 720, 53
+  offset: 0, 0
+  index: -1
+golemStone
+  rotate: false
+  xy: 1028, 901
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
 grass
   rotate: false
-  xy: 2, 816
+  xy: 2, 884
   size: 1024, 1024
   orig: 1024, 1024
   offset: 0, 0
   index: -1
 knight
   rotate: false
-  xy: 3076, 1858
+  xy: 4038, 2008
   size: 36, 30
   orig: 36, 30
   offset: 0, 0
   index: -1
 knightSpellButtonOff
   rotate: false
-  xy: 1377, 918
+  xy: 858, 383
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 knightSpellButtonOn
   rotate: false
-  xy: 262, 18
+  xy: 706, 231
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 logo
   rotate: false
-  xy: 2, 170
+  xy: 2280, 1711
   size: 482, 142
   orig: 482, 142
   offset: 0, 0
   index: -1
 mainMenuButton
   rotate: false
-  xy: 1611, 1232
+  xy: 3310, 1903
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 menuBack
   rotate: false
-  xy: 2863, 1720
+  xy: 2287, 1230
   size: 192, 120
   orig: 192, 120
   offset: 0, 0
   index: -1
 musicButtonOff
   rotate: false
-  xy: 3886, 1890
+  xy: 2644, 1547
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 musicButtonOn
   rotate: false
-  xy: 1845, 1232
+  xy: 3648, 1903
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 nullSpellButton
   rotate: false
-  xy: 736, 582
+  xy: 706, 383
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
-panel
+panelOff
   rotate: false
-  xy: 504, 536
-  size: 230, 278
-  orig: 230, 278
+  xy: 504, 104
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+panelOn
+  rotate: false
+  xy: 504, 306
+  size: 200, 200
+  orig: 200, 200
   offset: 0, 0
   index: -1
 pauseButton
   rotate: false
-  xy: 3782, 1890
+  xy: 3544, 1903
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 playButton
   rotate: false
-  xy: 3548, 1890
+  xy: 1611, 1024
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 poisonArrow
   rotate: false
-  xy: 1529, 922
+  xy: 2081, 1042
   size: 26, 146
   orig: 26, 146
   offset: 0, 0
   index: -1
 rameForWeapon
   rotate: false
-  xy: 1763, 1130
+  xy: 504, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 resumeButton
   rotate: false
-  xy: 1377, 1070
+  xy: 3076, 1903
   size: 232, 80
   orig: 232, 80
   offset: 0, 0
   index: -1
 soundButtonOff
   rotate: false
-  xy: 1865, 1150
+  xy: 2540, 1547
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 soundButtonOn
   rotate: false
-  xy: 1949, 1232
+  xy: 3752, 1903
   size: 102, 80
   orig: 102, 80
   offset: 0, 0
   index: -1
 survivalButton
   rotate: false
-  xy: 1377, 1152
+  xy: 1891, 1190
   size: 232, 160
   orig: 232, 160
   offset: 0, 0
   index: -1
 turret
   rotate: false
-  xy: 888, 620
+  xy: 1951, 1076
   size: 78, 112
   orig: 78, 112
   offset: 0, 0
   index: -1
+upgradeButton
+  rotate: false
+  xy: 1377, 1270
+  size: 512, 80
+  orig: 512, 80
+  offset: 0, 0
+  index: -1
 wall1
   rotate: false
-  xy: 1028, 1367
+  xy: 1028, 1405
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 wall2
   rotate: false
-  xy: 1028, 1314
+  xy: 1028, 1352
   size: 1477, 51
   orig: 1477, 51
   offset: 0, 0
   index: -1
 wallFloor
   rotate: false
-  xy: 3076, 1890
+  xy: 2280, 1629
   size: 470, 80
   orig: 470, 80
   offset: 0, 0
   index: -1
 zombie
   rotate: false
-  xy: 1028, 1420
-  size: 1250, 420
-  orig: 1250, 420
+  xy: 1028, 1458
+  size: 1250, 450
+  orig: 1250, 450
   offset: 0, 0
   index: -1

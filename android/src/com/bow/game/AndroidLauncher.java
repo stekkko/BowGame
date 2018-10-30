@@ -14,6 +14,7 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useAccelerometer = false;
 		config.useWakelock = true;
 		config.useImmersiveMode = true;
+		config.hideStatusBar = true;
 		initialize(new BowGame(), config);
 	}
 }

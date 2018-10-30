@@ -5,12 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bow.game.BowGame;
-import com.bow.game.model.Button;
+import com.bow.game.model.ui.Button;
 import com.bow.game.model.DynamicGameObject;
 import com.bow.game.model.GameObject;
-import com.bow.game.view.MainMenuScreen;
+import com.bow.game.screens.MainMenuScreen;
 
-public class MainMenuController {
+public class MainMenuController implements Controller {
     private BowGame game;
 
     private Sound buttonSound;
@@ -26,18 +26,20 @@ public class MainMenuController {
     private float xp = 0;
     private float yp = 0;
 
-    private float width = MainMenuScreen.cameraWidth;
-    private float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
+    private float width;
+    private float height;
 
     public MainMenuController(BowGame game) {
         this.game = game;
+        width = MainMenuScreen.cameraWidth;
+        height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
         logo = new GameObject(game.assets.getTexture("logo"),
                 -3f * 3.4f, 5f, 6f * 3.4f, 6f);
-        background1 = new DynamicGameObject(game.assets.getTexture("menuBack"),
-                -width / 2,  -height / 2, 1.6f * height, height);
-        background2 = new DynamicGameObject(game.assets.getTexture("menuBack"),
-                -width / 2 + 1.59f * height,  -height / 2, 1.6f * height, height);
+        background1 = new DynamicGameObject(game.assets.getTexture("background2"),
+                -width / 2 - 3f,  -height / 2, 1.6f * height, height);
+        background2 = new DynamicGameObject(game.assets.getTexture("background2"),
+                -width / 2 + 1.59f * height -3f,  -height / 2, 1.6f * height, height);
         background1.setSpeedX(-1f);
         background2.setSpeedX(-1f);
         playButton = new Button(game.assets.getTexture("playButton"),
@@ -48,11 +50,12 @@ public class MainMenuController {
                 1.5f * 2.9f - 3f * 1.275f, -4f, 3f * 1.275f, 3f);
         exitButton = new Button(game.assets.getTexture("exitButton"),
                 -1.5f * 2.9f, -8f, 3f * 2.9f, 3f);
-        buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
+        buttonSound = Gdx.audio.newSound(Gdx.files.internal("audio/soundButton.ogg"));
 
         game.assets.playMusic("theme", 0.5f);
     }
 
+    @Override
     public void handle(float dt) {
         backgroundHandle(dt);
 
@@ -85,7 +88,7 @@ public class MainMenuController {
                 if (game.prefs.getBoolean("musicAllowed", true)) {
                     game.prefs.putBoolean("musicAllowed", false).flush();
                     musicButton.setSprite(game.assets.getTexture("musicButtonOff"));
-                    game.assets.pauseMusic("theme");
+                    game.assets.pauseMusic();
                 }
                 else {
                     game.prefs.putBoolean("musicAllowed", true).flush();
@@ -132,6 +135,7 @@ public class MainMenuController {
         soundButton.setSprite(game.assets.getTexture(game.prefs.getBoolean("soundAllowed", true) ? "soundButtonOn" : "soundButtonOff"));
     }
 
+    @Override
     public void draw(SpriteBatch batch) {
         background1.draw(batch);
         background2.draw(batch);
@@ -142,6 +146,7 @@ public class MainMenuController {
         exitButton.draw(batch);
     }
 
+    @Override
     public void dispose() {
         buttonSound.dispose();
         game.dispose();

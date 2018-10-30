@@ -17,6 +17,8 @@ public class Blood extends GameObject {
     public Blood(Enemy enemy, Random random) {
         this(enemy.getX() - enemy.getWidth() / 2 - 0.5f + random.nextFloat(),
                 enemy.getY(), enemy.getWidth() * 2, enemy.getWidth() * 2);
+        getBounds().setRotation(random.nextFloat() * 360f);
+        getSprite().setAlpha(0.7f);
     }
 
     public static void setTextureRegion(TextureRegion texture) {

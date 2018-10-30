@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bow.game.BowGame;
-import com.bow.game.model.Button;
+import com.bow.game.model.ui.Button;
 import com.bow.game.model.GameObject;
-import com.bow.game.view.PauseMenuScreen;
+import com.bow.game.screens.PauseMenuScreen;
 
-public class PauseMenuController {
+public class PauseMenuController implements Controller {
     private BowGame game;
 
     private Sound buttonSound;
@@ -22,14 +22,16 @@ public class PauseMenuController {
     private float xp = 0;
     private float yp = 0;
 
-    private float width = PauseMenuScreen.cameraWidth;
-    private float height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
+    private float width;
+    private float height;
 
     public PauseMenuController(BowGame game) {
         this.game = game;
+        width = PauseMenuScreen.cameraWidth;
+        height = width * (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-        background = new GameObject(game.assets.getTexture("menuBack"),
-                -width / 2,  -height / 2, 1.6f * height, height);
+        background = new GameObject(game.assets.getTexture("background2"),
+                -width,  -height / 2, 1.6f * height, height);
         resumeButton = new Button(game.assets.getTexture("resumeButton"),
                 -1.5f * 2.9f, 0, 3f * 2.9f, 3f);
         musicButton = new Button(game.assets.getTexture(game.prefs.getBoolean("musicAllowed", true) ? "musicButtonOn" : "musicButtonOff"),
@@ -38,10 +40,11 @@ public class PauseMenuController {
                 1.5f * 2.9f - 3f * 1.275f, -4f, 3f * 1.275f, 3f);
         exitMenuButton = new Button(game.assets.getTexture("mainMenuButton"),
                 -1.5f * 2.9f, -8f, 3f * 2.9f, 3f);
-        buttonSound = Gdx.audio.newSound(Gdx.files.internal("soundButton.ogg"));
+        buttonSound = Gdx.audio.newSound(Gdx.files.internal("audio/soundButton.ogg"));
     }
 
-    public void handle() {
+    @Override
+    public void handle(float dt) {
         if (Gdx.input.justTouched()) {
             float x = (float) Gdx.input.getX() / Gdx.graphics.getWidth() * width - width / 2;
             float y = height - (float) Gdx.input.getY() / Gdx.graphics.getHeight() * height - height / 2;
@@ -90,7 +93,6 @@ public class PauseMenuController {
             else if (exitMenuButton.isToggled() && exitMenuButton.getBounds().contains(xp, yp)) {
                 exitMenuButton.setToggled(false);
                 game.assets.playSound(buttonSound, 1f);
-                game.pauseScreen.pause();
                 game.setScreen(game.menuScreen);
             }
         }
@@ -102,6 +104,7 @@ public class PauseMenuController {
         soundButton.setSprite(game.assets.getTexture(game.prefs.getBoolean("soundAllowed", true) ? "soundButtonOn" : "soundButtonOff"));
     }
 
+    @Override
     public void draw(SpriteBatch batch) {
         background.draw(batch);
         resumeButton.draw(batch);
@@ -110,6 +113,7 @@ public class PauseMenuController {
         exitMenuButton.draw(batch);
     }
 
+    @Override
     public void dispose() {
         buttonSound.dispose();
         game.dispose();

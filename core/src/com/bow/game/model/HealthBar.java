@@ -13,6 +13,14 @@ public class HealthBar extends DynamicGameObject {
     private float maxHealthPoints;
     private int percentHealthPoints;
 
+    public HealthBar(float x, float y, float width, float height, float maxHealthPoints) {
+        super(textureRegions[100], x, y, width, height);
+        hide();
+        this.maxHealthPoints = maxHealthPoints;
+        setHealthPoints(maxHealthPoints);
+        setPercentHealthPoints(100);
+    }
+
     @Override
     public void handle(float dt) {
         super.handle(dt);
@@ -21,14 +29,6 @@ public class HealthBar extends DynamicGameObject {
             setPercentHealthPoints(Math.min(100, Math.max(0, (int) (100f * healthPoints / maxHealthPoints))));
             setSprite(textureRegions[percentHealthPoints]);
         }
-    }
-
-    HealthBar(float x, float y, float width, float height, float maxHealthPoints) {
-        super(textureRegions[100], x, y, width, height);
-        hide();
-        this.maxHealthPoints = maxHealthPoints;
-        setHealthPoints(maxHealthPoints);
-        setPercentHealthPoints(100);
     }
 
     public void damage(float damage) {
