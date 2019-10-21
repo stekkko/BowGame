@@ -1,5 +1,6 @@
 # BowGame
-This game is about defending yourself against zombies with your bow. Don't let them get to your walls and good luck.
+My first mobile game
+This game is about defending yourself against mobs with your bow. Don't let them get to your walls and good luck.
 
 Rules are simple:
 - Two zombies will break your wall and game restarts.
