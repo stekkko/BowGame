@@ -1,6 +1,7 @@
 package com.bow.game.model.mobs;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.bow.game.model.mobs.Ally;
 
 public class Knight extends Ally {
     public Knight(TextureRegion texture, float x, float y, float width, float height, float maxHealthPoints, float damage, float repelPower) {

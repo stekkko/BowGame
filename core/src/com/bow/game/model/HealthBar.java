@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class HealthBar extends GameObject {
+public class HealthBar extends DynamicGameObject {
 
     private static TextureRegion[] textureRegions;
     private boolean shown;
@@ -13,22 +13,22 @@ public class HealthBar extends GameObject {
     private float maxHealthPoints;
     private int percentHealthPoints;
 
-    @Override
-    public void handle() {
-        super.handle();
-        if (healthPoints < maxHealthPoints) show();
-        if (percentHealthPoints != (int) (100f * healthPoints / maxHealthPoints)) {
-            setPercentHealthPoints(Math.min(100, Math.max(0, (int) (100f * healthPoints / maxHealthPoints))));
-            setSprite(textureRegions[percentHealthPoints]);
-        }
-    }
-
-    HealthBar(float x, float y, float width, float height, float maxHealthPoints) {
+    public HealthBar(float x, float y, float width, float height, float maxHealthPoints) {
         super(textureRegions[100], x, y, width, height);
         hide();
         this.maxHealthPoints = maxHealthPoints;
         setHealthPoints(maxHealthPoints);
         setPercentHealthPoints(100);
+    }
+
+    @Override
+    public void handle(float dt) {
+        super.handle(dt);
+        if (healthPoints < maxHealthPoints) show();
+        if (percentHealthPoints != (int) (100f * healthPoints / maxHealthPoints)) {
+            setPercentHealthPoints(Math.min(100, Math.max(0, (int) (100f * healthPoints / maxHealthPoints))));
+            setSprite(textureRegions[percentHealthPoints]);
+        }
     }
 
     public void damage(float damage) {

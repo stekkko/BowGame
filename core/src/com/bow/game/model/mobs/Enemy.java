@@ -2,7 +2,7 @@ package com.bow.game.model.mobs;
 
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.bow.game.model.Mob;
+import com.bow.game.model.mobs.Mob;
 
 public class Enemy extends Mob {
 
